@@ -1,13 +1,7 @@
 // Game State
-let gameState = {
-    week: 1,
-    cash: 1000, // Starting cash
-    currentJob: 'unemployed',
-    expenses: {
-        living: 500,
-        studentLoans: 200
-    }
-};
+let week = 1;
+let cash = 1000;
+let currentJob = 'unemployed';
 
 // Job salary mapping
 const jobSalaries = {
@@ -22,139 +16,42 @@ const jobSalaries = {
     'financial-analyst': 900
 };
 
-// DOM Elements
-let elements = {};
-
-// Initialize Game
-function initGame() {
-    try {
-        console.log('Initializing game...');
-        
-        // Get all DOM elements
-        elements = {
-            // Game Info
-            currentWeek: document.getElementById('current-week'),
-            currentBalance: document.getElementById('current-balance'),
-            
-            // Job Selection
-            jobDropdown: document.getElementById('job-dropdown'),
-            
-            // Turn Control
-            advanceTurn: document.getElementById('advance-turn'),
-            
-            // Financial Display
-            cashAmount: document.getElementById('cash-amount'),
-            totalAssets: document.getElementById('total-assets'),
-            livingExpenses: document.getElementById('living-expenses'),
-            studentLoans: document.getElementById('student-loans'),
-            totalExpenses: document.getElementById('total-expenses'),
-            jobIncome: document.getElementById('job-income'),
-            totalIncome: document.getElementById('total-income'),
-            weeklyChange: document.getElementById('weekly-change'),
-            netWorth: document.getElementById('net-worth')
-        };
-        
-        // Check if all elements were found
-        for (const [key, element] of Object.entries(elements)) {
-            if (!element) {
-                console.error(`Element not found: ${key}`);
-                alert(`Error: Could not find element ${key}`);
-                return;
-            }
-        }
-        
-        console.log('All elements found successfully');
-        
-        // Job Selection Event
-        elements.jobDropdown.addEventListener('change', function() {
-            console.log('Job changed to:', elements.jobDropdown.value);
-            updateJob();
-        });
-        
-        // Turn Advancement - using both click and touchstart for mobile
-        elements.advanceTurn.addEventListener('click', function(e) {
-            e.preventDefault();
-            console.log('Advance button clicked');
-            advanceTurn();
-        });
-        
-        elements.advanceTurn.addEventListener('touchstart', function(e) {
-            e.preventDefault();
-            console.log('Advance button touched');
-            advanceTurn();
-        });
-        
-        // Initial display update
-        updateAllDisplays();
-        console.log('Game initialized successfully');
-        
-    } catch (error) {
-        console.error('Error initializing game:', error);
-        alert('Error initializing game: ' + error.message);
-    }
+function log(message) {
+    console.log(message);
 }
 
 function updateJob() {
-    try {
-        gameState.currentJob = elements.jobDropdown.value;
-        console.log('Updated job to:', gameState.currentJob);
+    log('updateJob called');
+    const dropdown = document.getElementById('job-dropdown');
+    if (dropdown) {
+        currentJob = dropdown.value;
+        log('Job changed to: ' + currentJob);
         updateAllDisplays();
-    } catch (error) {
-        console.error('Error updating job:', error);
+    } else {
+        log('ERROR: job-dropdown not found');
     }
 }
 
 function advanceTurn() {
+    log('advanceTurn called');
+    
     try {
-        console.log('Advancing turn...');
+        // Increment week
+        week++;
+        log('Week is now: ' + week);
         
-        // Increment week immediately
-        gameState.week++;
-        console.log('Week is now:', gameState.week);
+        // Calculate income and expenses
+        const income = jobSalaries[currentJob] || 0;
+        const expenses = 700; // 500 living + 200 student loans
+        const netChange = income - expenses;
         
-        // Calculate weekly income and expenses
-        const income = jobSalaries[gameState.currentJob] || 0;
-        const totalExpenses = gameState.expenses.living + gameState.expenses.studentLoans;
-        const netWeekly = income - totalExpenses;
+        log('Income: $' + income + ', Expenses: $' + expenses + ', Net: $' + netChange);
         
-        console.log('Income:', income, 'Expenses:', totalExpenses, 'Net:', netWeekly);
+        // Update cash
+        cash += netChange;
+        log('New cash: $' + cash);
         
-        // Update cash immediately
-        gameState.cash += netWeekly;
-        console.log('New cash:', gameState.cash);
-        
-        // Check for random events and apply immediately
-        const randomEvent = generateRandomEvent();
-        if (randomEvent) {
-            console.log('Random event:', randomEvent);
-        }
-        
-        // Update ALL displays immediately - no delays
-        updateAllDisplays();
-        
-        // Provide instant visual feedback on button
-        elements.advanceTurn.textContent = randomEvent ? randomEvent : 'Week Advanced!';
-        elements.advanceTurn.style.backgroundColor = '#27ae60';
-        elements.advanceTurn.style.transform = 'scale(0.98)';
-        
-        // Reset button appearance after brief moment (doesn't affect data updates)
-        setTimeout(() => {
-            elements.advanceTurn.textContent = 'Advance 1 Week';
-            elements.advanceTurn.style.backgroundColor = '';
-            elements.advanceTurn.style.transform = '';
-        }, 800);
-        
-        console.log('Turn advanced successfully');
-        
-    } catch (error) {
-        console.error('Error advancing turn:', error);
-        alert('Error advancing turn: ' + error.message);
-    }
-}
-
-function generateRandomEvent() {
-    try {
-        // Only 25% chance of random event to keep it interesting but not overwhelming
+        // Random events (25% chance)
         if (Math.random() < 0.25) {
             const events = [
                 { text: "Found $50!", effect: 50 },
@@ -166,82 +63,129 @@ function generateRandomEvent() {
             ];
             
             const event = events[Math.floor(Math.random() * events.length)];
-            
-            // Apply effect immediately
-            gameState.cash += event.effect;
-            
-            return event.text;
+            cash += event.effect;
+            log('Random event: ' + event.text + ' (effect: ' + event.effect + ')');
         }
-        return null;
+        
+        // Update all displays
+        updateAllDisplays();
+        
+        // Button feedback
+        const btn = document.getElementById('advance-turn');
+        if (btn) {
+            btn.textContent = 'Week Advanced!';
+            btn.style.backgroundColor = '#27ae60';
+            
+            setTimeout(() => {
+                btn.textContent = 'Advance 1 Week';
+                btn.style.backgroundColor = '';
+            }, 1000);
+        }
+        
+        log('Turn advanced successfully');
+        
     } catch (error) {
-        console.error('Error in random event:', error);
-        return null;
+        log('ERROR in advanceTurn: ' + error.message);
+        alert('Error: ' + error.message);
     }
 }
 
 function updateAllDisplays() {
+    log('updateAllDisplays called');
+    
     try {
-        console.log('Updating displays...');
+        // Calculate values
+        const income = jobSalaries[currentJob] || 0;
+        const expenses = 700;
+        const weeklyChange = income - expenses;
         
-        // Calculate financial values
-        const income = jobSalaries[gameState.currentJob] || 0;
-        const totalExpenses = gameState.expenses.living + gameState.expenses.studentLoans;
-        const weeklyChange = income - totalExpenses;
+        // Update each element
+        const elements = [
+            { id: 'current-week', text: 'Week: ' + week },
+            { id: 'current-balance', text: 'Net Worth: $' + cash },
+            { id: 'cash-amount', text: '$' + cash },
+            { id: 'total-assets', text: '$' + cash },
+            { id: 'living-expenses', text: '-$500' },
+            { id: 'student-loans', text: '-$200' },
+            { id: 'total-expenses', text: '-$' + expenses },
+            { id: 'job-income', text: '$' + income },
+            { id: 'total-income', text: '$' + income },
+            { id: 'weekly-change', text: (weeklyChange >= 0 ? '+' : '') + '$' + weeklyChange },
+            { id: 'net-worth', text: '$' + cash }
+        ];
         
-        // Update ALL text elements immediately with textContent (fastest DOM update)
-        if (elements.currentWeek) elements.currentWeek.textContent = `Week: ${gameState.week}`;
-        if (elements.currentBalance) elements.currentBalance.textContent = `Net Worth: $${gameState.cash}`;
-        if (elements.cashAmount) elements.cashAmount.textContent = `$${gameState.cash}`;
-        if (elements.totalAssets) elements.totalAssets.textContent = `$${gameState.cash}`;
-        if (elements.livingExpenses) elements.livingExpenses.textContent = `-$${gameState.expenses.living}`;
-        if (elements.studentLoans) elements.studentLoans.textContent = `-$${gameState.expenses.studentLoans}`;
-        if (elements.totalExpenses) elements.totalExpenses.textContent = `-$${totalExpenses}`;
-        if (elements.jobIncome) elements.jobIncome.textContent = `$${income}`;
-        if (elements.totalIncome) elements.totalIncome.textContent = `$${income}`;
-        if (elements.weeklyChange) elements.weeklyChange.textContent = `${weeklyChange >= 0 ? '+' : ''}$${weeklyChange}`;
-        if (elements.netWorth) elements.netWorth.textContent = `$${gameState.cash}`;
+        elements.forEach(item => {
+            const element = document.getElementById(item.id);
+            if (element) {
+                element.textContent = item.text;
+                log('Updated ' + item.id + ' to: ' + item.text);
+            } else {
+                log('WARNING: Element not found: ' + item.id);
+            }
+        });
         
-        // Apply color coding immediately
-        if (elements.weeklyChange) {
+        // Color coding for weekly change
+        const weeklyChangeEl = document.getElementById('weekly-change');
+        if (weeklyChangeEl) {
             if (weeklyChange < 0) {
-                elements.weeklyChange.style.color = '#e74c3c';
+                weeklyChangeEl.style.color = '#e74c3c';
             } else if (weeklyChange > 0) {
-                elements.weeklyChange.style.color = '#27ae60';
+                weeklyChangeEl.style.color = '#27ae60';
             } else {
-                elements.weeklyChange.style.color = '#f39c12';
+                weeklyChangeEl.style.color = '#f39c12';
             }
         }
         
-        // Color code net worth in header
-        if (elements.currentBalance) {
-            if (gameState.cash < 0) {
-                elements.currentBalance.style.color = '#ff6b6b';
-            } else if (gameState.cash > 5000) {
-                elements.currentBalance.style.color = '#51cf66';
+        // Color coding for net worth in header
+        const balanceEl = document.getElementById('current-balance');
+        if (balanceEl) {
+            if (cash < 0) {
+                balanceEl.style.color = '#ff6b6b';
+            } else if (cash > 5000) {
+                balanceEl.style.color = '#51cf66';
             } else {
-                elements.currentBalance.style.color = 'white';
+                balanceEl.style.color = 'white';
             }
         }
         
-        console.log('Displays updated successfully');
+        log('All displays updated successfully');
         
     } catch (error) {
-        console.error('Error updating displays:', error);
-        alert('Error updating displays: ' + error.message);
+        log('ERROR in updateAllDisplays: ' + error.message);
+        alert('Display update error: ' + error.message);
     }
 }
 
-// Start the game when page loads
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('DOM loaded, starting game...');
-    initGame();
-});
-
-// Also try with window.onload as backup for mobile
+// Initialize when page loads
 window.onload = function() {
-    console.log('Window loaded');
-    if (!elements.currentWeek) {
-        console.log('Retrying initialization...');
-        initGame();
+    log('Page loaded, initializing...');
+    
+    try {
+        // Set up event handlers using onclick (more reliable)
+        const advanceBtn = document.getElementById('advance-turn');
+        const jobDropdown = document.getElementById('job-dropdown');
+        
+        if (advanceBtn) {
+            advanceBtn.onclick = advanceTurn;
+            log('Advance button handler set');
+        } else {
+            log('ERROR: advance-turn button not found');
+        }
+        
+        if (jobDropdown) {
+            jobDropdown.onchange = updateJob;
+            log('Job dropdown handler set');
+        } else {
+            log('ERROR: job-dropdown not found');
+        }
+        
+        // Initial display update
+        updateAllDisplays();
+        
+        log('Initialization complete!');
+        
+    } catch (error) {
+        log('ERROR during initialization: ' + error.message);
+        alert('Initialization error: ' + error.message);
     }
 };
