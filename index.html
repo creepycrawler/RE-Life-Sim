@@ -1961,7 +1961,7 @@
                 </div>
             </div>
             <div class="header-right">
-                <button id="advance-btn" onclick="advanceWeek()" class="btn header-advance-btn">Advance 1 Week</button>
+                                 <button id="advance-btn" onclick="debugAdvanceWeek()" class="btn header-advance-btn">Advance 1 Week</button>
             </div>
         </div>
         
@@ -3215,6 +3215,23 @@
              }
          }
          
+         function debugAdvanceWeek() {
+             console.log('Debug: Button clicked!');
+             console.log('gameStarted:', gameStarted);
+             console.log('negativeBalanceWeeks:', negativeBalanceWeeks);
+             console.log('cash:', cash);
+             console.log('week:', week);
+             
+             if (!gameStarted) {
+                 console.log('Error: Game not started yet!');
+                 alert('Please complete character creation first!');
+                 return;
+             }
+             
+             // Call the actual advance week function
+             advanceWeek();
+         }
+
          function advanceWeek() {
              // Prevent advancing if account has been negative for 2+ weeks
              if (negativeBalanceWeeks >= 2) {
@@ -4647,7 +4664,7 @@
                  document.getElementById('main-game').style.display = 'block';
                  
                  // Set up event handlers
-                 document.getElementById('advance-btn').onclick = advanceWeek;
+                 // Note: advance-btn uses onclick HTML attribute
                  document.getElementById('job-select').onchange = changeJob;
                  
                  // Initialize loan terms
@@ -4676,7 +4693,7 @@
              // Only initialize game if character creation is completed
              if (gameStarted) {
                  // Set up event handlers
-                 document.getElementById('advance-btn').onclick = advanceWeek;
+                 // Note: advance-btn uses onclick HTML attribute
                  document.getElementById('job-select').onchange = changeJob;
                  
                  // Initialize loan terms
