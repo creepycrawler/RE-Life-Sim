@@ -4397,8 +4397,15 @@
              const typeVal = typeFilter.value;
              const weekVal = parseInt(weekRange.value);
              
-             // Get all transactions from both accounts
-             const allTransactions = [...bankAccounts.checking.transactions, ...bankAccounts.savings.transactions];
+             // Get transactions based on current view
+             let allTransactions;
+             if (document.getElementById('bank-account-detail').style.display === 'block') {
+                 // Show only transactions for the active account when in detail view
+                 allTransactions = bankAccounts[activeAccount].transactions;
+             } else {
+                 // Show all transactions when in overview
+                 allTransactions = [...bankAccounts.checking.transactions, ...bankAccounts.savings.transactions];
+             }
              
              // Filter transactions
              let filteredTransactions = allTransactions.filter(t => t.week > week - weekVal);
@@ -4675,6 +4682,33 @@
                  
                  tbody.appendChild(row);
              });
+         }
+         
+         // Banking navigation functions
+         function showAccountDetail(accountId) {
+             // Hide bank overview and show detail view
+             document.getElementById('bank-overview').style.display = 'none';
+             document.getElementById('bank-account-detail').style.display = 'block';
+             
+             // Set active account
+             activeAccount = accountId;
+             
+             // Update detail view title and balance
+             const accountName = bankAccounts[accountId].name;
+             document.getElementById('account-detail-title').textContent = accountName + ' Details';
+             document.getElementById('detail-account-balance').textContent = '$' + bankAccounts[accountId].balance.toLocaleString();
+             
+             // Update transactions for this specific account
+             filterTransactions();
+         }
+         
+         function showBankOverview() {
+             // Show bank overview and hide detail view
+             document.getElementById('bank-overview').style.display = 'block';
+             document.getElementById('bank-account-detail').style.display = 'none';
+             
+             // Reset active account to checking
+             activeAccount = 'checking';
          }
          
          // Character creation functions
