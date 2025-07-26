@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business RPG - Corporate Climber</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Corporate Climber</h1>
+            <div class="game-info">
+                <span id="current-week">Week: 1</span>
+                <span id="current-balance">Net Worth: $0</span>
+            </div>
+        </header>
+
+        <!-- Character Creation Screen -->
+        <div id="character-creation" class="screen active">
+            <h2>Create Your Character</h2>
+            <div class="form-group">
+                <label for="player-name">Name:</label>
+                <input type="text" id="player-name" placeholder="Enter your name">
+            </div>
+            <div class="form-group">
+                <label for="college-degree">College Degree:</label>
+                <select id="college-degree">
+                    <option value="">Select your degree</option>
+                    <option value="business">Business Administration</option>
+                    <option value="computer-science">Computer Science</option>
+                    <option value="engineering">Engineering</option>
+                    <option value="finance">Finance</option>
+                    <option value="marketing">Marketing</option>
+                    <option value="economics">Economics</option>
+                    <option value="liberal-arts">Liberal Arts</option>
+                </select>
+            </div>
+            <button id="start-game" class="btn primary">Start Career</button>
+        </div>
+
+        <!-- Main Game Screen -->
+        <div id="main-game" class="screen">
+            <div class="game-layout">
+                <!-- Navigation -->
+                <nav class="game-nav">
+                    <button class="nav-btn active" data-screen="overview">Overview</button>
+                    <button class="nav-btn" data-screen="jobs">Jobs</button>
+                    <button class="nav-btn" data-screen="finances">Finances</button>
+                </nav>
+
+                <!-- Content Area -->
+                <main class="content">
+                    <!-- Overview Tab -->
+                    <div id="overview" class="tab-content active">
+                        <h3>Character Overview</h3>
+                        <div class="character-info">
+                            <p><strong>Name:</strong> <span id="display-name">-</span></p>
+                            <p><strong>Degree:</strong> <span id="display-degree">-</span></p>
+                            <p><strong>Current Job:</strong> <span id="current-job">Unemployed</span></p>
+                            <p><strong>Weekly Salary:</strong> <span id="weekly-salary">$0</span></p>
+                        </div>
+                        
+                        <div class="turn-controls">
+                            <button id="advance-turn" class="btn primary large">Advance 1 Week</button>
+                            <div class="turn-info">
+                                <p>Click to advance time and process weekly events</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Jobs Tab -->
+                    <div id="jobs" class="tab-content">
+                        <h3>Available Jobs</h3>
+                        <div id="job-listings">
+                            <!-- Jobs will be populated by JavaScript -->
+                        </div>
+                    </div>
+
+                    <!-- Finances Tab -->
+                    <div id="finances" class="tab-content">
+                        <h3>Financial Summary</h3>
+                        <div class="balance-sheet">
+                            <div class="financial-section">
+                                <h4>Assets</h4>
+                                <div class="financial-item">
+                                    <span>Cash:</span>
+                                    <span id="cash-amount">$0</span>
+                                </div>
+                                <div class="financial-item total">
+                                    <span>Total Assets:</span>
+                                    <span id="total-assets">$0</span>
+                                </div>
+                            </div>
+                            
+                            <div class="financial-section">
+                                <h4>Weekly Expenses</h4>
+                                <div class="financial-item">
+                                    <span>Living Expenses:</span>
+                                    <span id="living-expenses">-$500</span>
+                                </div>
+                                <div class="financial-item">
+                                    <span>Student Loans:</span>
+                                    <span id="student-loans">-$200</span>
+                                </div>
+                                <div class="financial-item total">
+                                    <span>Total Expenses:</span>
+                                    <span id="total-expenses">-$700</span>
+                                </div>
+                            </div>
+
+                            <div class="financial-section">
+                                <h4>Income</h4>
+                                <div class="financial-item">
+                                    <span>Job Salary:</span>
+                                    <span id="job-income">$0</span>
+                                </div>
+                                <div class="financial-item total">
+                                    <span>Total Income:</span>
+                                    <span id="total-income">$0</span>
+                                </div>
+                            </div>
+
+                            <div class="financial-section net-worth">
+                                <h4>Net Worth</h4>
+                                <div class="financial-item total large">
+                                    <span>Net Worth:</span>
+                                    <span id="net-worth">$0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </main>
+            </div>
+        </div>
+
+        <!-- Game Events Modal -->
+        <div id="event-modal" class="modal">
+            <div class="modal-content">
+                <h3 id="event-title">Weekly Update</h3>
+                <div id="event-description"></div>
+                <button id="close-modal" class="btn primary">Continue</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
