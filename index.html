@@ -247,9 +247,53 @@
             color: #dc3545 !important;
         }
         
-        .neutral {
-            color: #ffc107 !important;
-        }
+                 .neutral {
+             color: #ffc107 !important;
+         }
+         
+         /* History Page Styles */
+         .time-range-btn {
+             background: #e9ecef;
+             color: #495057;
+             border: none;
+             padding: 10px 20px;
+             border-radius: 20px;
+             font-size: 14px;
+             font-weight: 600;
+             cursor: pointer;
+             transition: all 0.3s ease;
+         }
+         
+         .time-range-btn:hover {
+             background: #dee2e6;
+         }
+         
+         .time-range-btn.active {
+             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+             color: white;
+         }
+         
+         .stat-item {
+             text-align: center;
+             padding: 15px;
+             background: #f8f9fa;
+             border-radius: 8px;
+             border-left: 3px solid #667eea;
+         }
+         
+         .stat-label {
+             font-size: 12px;
+             color: #6c757d;
+             margin-bottom: 5px;
+             text-transform: uppercase;
+             letter-spacing: 1px;
+         }
+         
+         .stat-value {
+             font-size: 18px;
+             font-weight: 600;
+             color: #2c3e50;
+         }
         
                  /* Balance Sheet Grid for Mobile */
          @media (max-width: 768px) {
@@ -306,11 +350,12 @@
             </div>
         </div>
         
-        <!-- Menu Navigation -->
-        <div class="menu">
-            <button class="menu-item active" onclick="showPage('job')">Job</button>
-            <button class="menu-item" onclick="showPage('balance')">Balance</button>
-        </div>
+                 <!-- Menu Navigation -->
+         <div class="menu">
+             <button class="menu-item active" onclick="showPage('job')">Job</button>
+             <button class="menu-item" onclick="showPage('balance')">Balance</button>
+             <button class="menu-item" onclick="showPage('history')">History</button>
+         </div>
         
         <!-- Job Page -->
         <div id="job-page" class="page active">
@@ -496,13 +541,104 @@
                  </div>
              </div>
          </div>
+         
+         <!-- History Page -->
+         <div id="history-page" class="page">
+             <!-- History Title and Controls -->
+             <div style="text-align: center; margin-bottom: 30px;">
+                 <h2 style="color: #2c3e50; margin: 0; font-size: 1.5rem;">Financial History</h2>
+                 <p style="color: #6c757d; margin: 5px 0 0 0;">Track your progress over time</p>
+             </div>
+             
+             <!-- Time Range Controls -->
+             <div class="balance-section" style="margin-bottom: 20px;">
+                 <div class="section-content" style="padding: 15px;">
+                     <div style="display: flex; gap: 10px; flex-wrap: wrap; justify-content: center;">
+                         <button class="time-range-btn active" onclick="setTimeRange(4)">Last 4 Weeks</button>
+                         <button class="time-range-btn" onclick="setTimeRange(12)">Last 12 Weeks</button>
+                         <button class="time-range-btn" onclick="setTimeRange(52)">Last 52 Weeks</button>
+                         <button class="time-range-btn" onclick="setTimeRange(-1)">All Time</button>
+                     </div>
+                 </div>
+             </div>
+             
+             <!-- Chart Container -->
+             <div class="balance-section">
+                 <div class="section-header">Net Worth Over Time</div>
+                 <div class="section-content">
+                     <div id="chart-container" style="height: 300px; position: relative; background: #f8f9fa; border-radius: 8px; overflow: hidden;">
+                         <canvas id="financial-chart" width="100%" height="300"></canvas>
+                     </div>
+                 </div>
+             </div>
+             
+             <!-- Summary Stats -->
+             <div class="balance-section">
+                 <div class="section-header">Period Summary</div>
+                 <div class="section-content">
+                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                         <div class="stat-item">
+                             <div class="stat-label">Period Length</div>
+                             <div class="stat-value" id="period-length">4 weeks</div>
+                         </div>
+                         <div class="stat-item">
+                             <div class="stat-label">Starting Net Worth</div>
+                             <div class="stat-value" id="period-start">-$39,000</div>
+                         </div>
+                         <div class="stat-item">
+                             <div class="stat-label">Current Net Worth</div>
+                             <div class="stat-value" id="period-current">-$39,000</div>
+                         </div>
+                         <div class="stat-item">
+                             <div class="stat-label">Total Change</div>
+                             <div class="stat-value" id="period-change">$0</div>
+                         </div>
+                         <div class="stat-item">
+                             <div class="stat-label">Best Week</div>
+                             <div class="stat-value" id="period-best">Week 1</div>
+                         </div>
+                         <div class="stat-item">
+                             <div class="stat-label">Worst Week</div>
+                             <div class="stat-value" id="period-worst">Week 1</div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             
+             <!-- Weekly Details Table -->
+             <div class="balance-section">
+                 <div class="section-header">Weekly Breakdown</div>
+                 <div class="section-content">
+                     <div id="history-table" style="overflow-x: auto;">
+                         <table style="width: 100%; border-collapse: collapse;">
+                             <thead>
+                                 <tr style="background: #f8f9fa;">
+                                     <th style="padding: 12px; text-align: left; border-bottom: 2px solid #dee2e6;">Week</th>
+                                     <th style="padding: 12px; text-align: right; border-bottom: 2px solid #dee2e6;">Job</th>
+                                     <th style="padding: 12px; text-align: right; border-bottom: 2px solid #dee2e6;">Income</th>
+                                     <th style="padding: 12px; text-align: right; border-bottom: 2px solid #dee2e6;">Net Change</th>
+                                     <th style="padding: 12px; text-align: right; border-bottom: 2px solid #dee2e6;">Net Worth</th>
+                                 </tr>
+                             </thead>
+                             <tbody id="history-table-body">
+                                 <!-- Table rows will be populated by JavaScript -->
+                             </tbody>
+                         </table>
+                     </div>
+                 </div>
+             </div>
+         </div>
     </div>
 
     <script>
-        // Simple game state
-        let week = 1;
-        let cash = 1000;
-        let currentJob = 'unemployed';
+                 // Simple game state
+         let week = 1;
+         let cash = 1000;
+         let currentJob = 'unemployed';
+         
+         // History tracking
+         let gameHistory = [];
+         let currentTimeRange = 4;
         
         const jobs = {
             'unemployed': { name: 'Unemployed', salary: 0 },
@@ -627,9 +763,13 @@
                 cash += event.effect;
             }
             
-            updateDisplay();
-            
-            // Visual feedback
+                         updateDisplay();
+             
+             // Add to history
+             addToHistory();
+             updateHistoryDisplay();
+             
+             // Visual feedback
             const btn = document.getElementById('advance-btn');
             btn.textContent = 'Week Advanced!';
             btn.style.background = '#28a745';
@@ -646,15 +786,209 @@
             updateDisplay();
         }
         
-        // Initialize when page loads
-        window.onload = function() {
-            // Set up event handlers
-            document.getElementById('advance-btn').onclick = advanceWeek;
-            document.getElementById('job-select').onchange = changeJob;
-            
-            // Initial display
-            updateDisplay();
-        };
+                 // History and Chart Functions
+         function addToHistory() {
+             const salary = jobs[currentJob].salary;
+             const expenses = 700;
+             const netChange = salary - expenses;
+             const studentDebt = 40000;
+             const totalAssets = Math.max(cash, 0);
+             const totalLiabilities = studentDebt + Math.max(-cash, 0);
+             const netWorth = totalAssets - totalLiabilities;
+             
+             gameHistory.push({
+                 week: week,
+                 job: jobs[currentJob].name,
+                 salary: salary,
+                 netChange: netChange,
+                 cash: cash,
+                 netWorth: netWorth
+             });
+         }
+         
+         function setTimeRange(weeks) {
+             currentTimeRange = weeks;
+             
+             // Update button states
+             document.querySelectorAll('.time-range-btn').forEach(btn => {
+                 btn.classList.remove('active');
+             });
+             event.target.classList.add('active');
+             
+             updateHistoryDisplay();
+         }
+         
+         function updateHistoryDisplay() {
+             if (gameHistory.length === 0) return;
+             
+             // Get data for selected time range
+             let displayData = gameHistory;
+             if (currentTimeRange > 0) {
+                 displayData = gameHistory.slice(-currentTimeRange);
+             }
+             
+             // Update chart
+             drawChart(displayData);
+             
+             // Update summary stats
+             updateSummaryStats(displayData);
+             
+             // Update table
+             updateHistoryTable(displayData);
+         }
+         
+         function drawChart(data) {
+             const canvas = document.getElementById('financial-chart');
+             const ctx = canvas.getContext('2d');
+             const container = document.getElementById('chart-container');
+             
+             // Set canvas size
+             canvas.width = container.offsetWidth;
+             canvas.height = 300;
+             
+             if (data.length === 0) return;
+             
+             // Clear canvas
+             ctx.clearRect(0, 0, canvas.width, canvas.height);
+             
+             // Chart settings
+             const padding = 40;
+             const chartWidth = canvas.width - (padding * 2);
+             const chartHeight = canvas.height - (padding * 2);
+             
+             // Find min and max values
+             const netWorths = data.map(d => d.netWorth);
+             const minValue = Math.min(...netWorths);
+             const maxValue = Math.max(...netWorths);
+             const range = maxValue - minValue || 1000; // Minimum range
+             
+             // Draw grid lines and labels
+             ctx.strokeStyle = '#dee2e6';
+             ctx.lineWidth = 1;
+             ctx.font = '12px Arial';
+             ctx.fillStyle = '#6c757d';
+             
+             // Horizontal grid lines
+             for (let i = 0; i <= 5; i++) {
+                 const y = padding + (chartHeight * i / 5);
+                 const value = maxValue - (range * i / 5);
+                 
+                 ctx.beginPath();
+                 ctx.moveTo(padding, y);
+                 ctx.lineTo(padding + chartWidth, y);
+                 ctx.stroke();
+                 
+                 // Label
+                 ctx.fillText('$' + Math.round(value).toLocaleString(), 5, y + 4);
+             }
+             
+             // Draw line chart
+             ctx.strokeStyle = '#667eea';
+             ctx.lineWidth = 3;
+             ctx.beginPath();
+             
+             data.forEach((point, index) => {
+                 const x = padding + (chartWidth * index / (data.length - 1 || 1));
+                 const y = padding + (chartHeight * (maxValue - point.netWorth) / range);
+                 
+                 if (index === 0) {
+                     ctx.moveTo(x, y);
+                 } else {
+                     ctx.lineTo(x, y);
+                 }
+             });
+             
+             ctx.stroke();
+             
+             // Draw data points
+             ctx.fillStyle = '#667eea';
+             data.forEach((point, index) => {
+                 const x = padding + (chartWidth * index / (data.length - 1 || 1));
+                 const y = padding + (chartHeight * (maxValue - point.netWorth) / range);
+                 
+                 ctx.beginPath();
+                 ctx.arc(x, y, 4, 0, 2 * Math.PI);
+                 ctx.fill();
+             });
+             
+             // Draw week labels on x-axis
+             ctx.fillStyle = '#6c757d';
+             data.forEach((point, index) => {
+                 if (index % Math.max(1, Math.floor(data.length / 8)) === 0) {
+                     const x = padding + (chartWidth * index / (data.length - 1 || 1));
+                     ctx.fillText('W' + point.week, x - 10, canvas.height - 10);
+                 }
+             });
+         }
+         
+         function updateSummaryStats(data) {
+             if (data.length === 0) return;
+             
+             const startNetWorth = data[0].netWorth;
+             const currentNetWorth = data[data.length - 1].netWorth;
+             const totalChange = currentNetWorth - startNetWorth;
+             
+             // Find best and worst weeks
+             let bestWeek = data[0];
+             let worstWeek = data[0];
+             
+             data.forEach(week => {
+                 if (week.netChange > bestWeek.netChange) bestWeek = week;
+                 if (week.netChange < worstWeek.netChange) worstWeek = week;
+             });
+             
+             // Update display
+             document.getElementById('period-length').textContent = data.length + ' weeks';
+             document.getElementById('period-start').textContent = '$' + startNetWorth.toLocaleString();
+             document.getElementById('period-current').textContent = '$' + currentNetWorth.toLocaleString();
+             
+             const changeEl = document.getElementById('period-change');
+             changeEl.textContent = (totalChange >= 0 ? '+' : '') + '$' + totalChange.toLocaleString();
+             changeEl.className = 'stat-value';
+             if (totalChange < 0) changeEl.classList.add('negative');
+             else if (totalChange > 0) changeEl.classList.add('positive');
+             else changeEl.classList.add('neutral');
+             
+             document.getElementById('period-best').textContent = 'Week ' + bestWeek.week + ' (+$' + bestWeek.netChange + ')';
+             document.getElementById('period-worst').textContent = 'Week ' + worstWeek.week + ' ($' + worstWeek.netChange + ')';
+         }
+         
+         function updateHistoryTable(data) {
+             const tbody = document.getElementById('history-table-body');
+             tbody.innerHTML = '';
+             
+             data.forEach(week => {
+                 const row = document.createElement('tr');
+                 row.style.borderBottom = '1px solid #f1f3f4';
+                 
+                 const netChangeClass = week.netChange >= 0 ? 'positive' : 'negative';
+                 const netWorthClass = week.netWorth >= 0 ? 'positive' : 'negative';
+                 
+                 row.innerHTML = `
+                     <td style="padding: 8px;">${week.week}</td>
+                     <td style="padding: 8px; text-align: right;">${week.job}</td>
+                     <td style="padding: 8px; text-align: right;">$${week.salary}</td>
+                     <td style="padding: 8px; text-align: right;" class="${netChangeClass}">$${week.netChange}</td>
+                     <td style="padding: 8px; text-align: right;" class="${netWorthClass}">$${week.netWorth.toLocaleString()}</td>
+                 `;
+                 
+                 tbody.appendChild(row);
+             });
+         }
+         
+         // Initialize when page loads
+         window.onload = function() {
+             // Set up event handlers
+             document.getElementById('advance-btn').onclick = advanceWeek;
+             document.getElementById('job-select').onchange = changeJob;
+             
+             // Initialize history with starting state
+             addToHistory();
+             
+             // Initial display
+             updateDisplay();
+             updateHistoryDisplay();
+         };
     </script>
 </body>
 </html>
