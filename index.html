@@ -1308,6 +1308,162 @@
                  width: 120px;
              }
          }
+
+         /* Job Application System Styles */
+         .job-listings {
+             margin-top: 30px;
+         }
+
+         .jobs-header {
+             text-align: center;
+             margin-bottom: 25px;
+             padding: 20px;
+             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+             color: white;
+             border-radius: 12px;
+         }
+
+         .jobs-header h3 {
+             margin: 0 0 10px 0;
+             font-size: 1.5rem;
+         }
+
+         .jobs-header p {
+             margin: 0;
+             opacity: 0.9;
+         }
+
+         .job-card {
+             background: white;
+             border: 2px solid #e9ecef;
+             border-radius: 12px;
+             padding: 20px;
+             margin-bottom: 15px;
+             transition: all 0.3s ease;
+             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+         }
+
+         .job-card:hover {
+             border-color: #667eea;
+             transform: translateY(-2px);
+             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.15);
+         }
+
+         .job-header {
+             display: flex;
+             justify-content: space-between;
+             align-items: flex-start;
+             margin-bottom: 10px;
+         }
+
+         .job-title {
+             font-size: 1.2rem;
+             font-weight: 700;
+             color: #2c3e50;
+         }
+
+         .job-salary {
+             font-size: 1.1rem;
+             font-weight: 600;
+             color: #27ae60;
+             background: #d4edda;
+             padding: 5px 12px;
+             border-radius: 6px;
+         }
+
+         .job-company {
+             color: #667eea;
+             font-weight: 600;
+             margin-bottom: 8px;
+         }
+
+         .job-description {
+             color: #6c757d;
+             margin-bottom: 15px;
+             line-height: 1.4;
+         }
+
+         .apply-btn {
+             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+             color: white;
+             border: none;
+             padding: 10px 20px;
+             border-radius: 6px;
+             font-weight: 600;
+             cursor: pointer;
+             transition: all 0.3s ease;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+         }
+
+         .apply-btn:hover {
+             transform: translateY(-1px);
+             box-shadow: 0 3px 10px rgba(40, 167, 69, 0.3);
+         }
+
+         .pending-application {
+             background: linear-gradient(135deg, #ffeaa7 0%, #fdcb6e 100%);
+             border-radius: 12px;
+             padding: 20px;
+             margin-bottom: 25px;
+             text-align: center;
+         }
+
+         .application-status {
+             color: #2d3436;
+         }
+
+         .status-header {
+             font-size: 1.3rem;
+             font-weight: 700;
+             margin-bottom: 10px;
+         }
+
+         .status-content {
+             font-size: 1.1rem;
+         }
+
+         .application-result {
+             border-radius: 12px;
+             padding: 20px;
+             margin-bottom: 25px;
+             text-align: center;
+         }
+
+         .result-success {
+             background: linear-gradient(135deg, #00b894 0%, #00cec9 100%);
+             color: white;
+         }
+
+         .result-failure {
+             background: linear-gradient(135deg, #e17055 0%, #fdcb6e 100%);
+             color: #2d3436;
+         }
+
+         .result-header {
+             font-size: 1.3rem;
+             font-weight: 700;
+             margin-bottom: 10px;
+         }
+
+         .result-content {
+             font-size: 1.1rem;
+         }
+
+         @media (max-width: 768px) {
+             .job-header {
+                 flex-direction: column;
+                 align-items: flex-start;
+             }
+
+             .job-salary {
+                 margin-top: 5px;
+             }
+
+             .job-card {
+                 padding: 15px;
+             }
+         }
          
          .debug-btn {
              background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
@@ -2024,7 +2180,7 @@
         <div id="job-page" class="page active">
             <div class="controls">
                 <div class="form-group">
-                    <label for="job-select">Select Your Job:</label>
+                    <label for="job-select">Current Job (Emergency Fallback):</label>
                     <select id="job-select">
                         <option value="unemployed">Unemployed ($0/week)</option>
                         <option value="intern">Intern ($400/week)</option>
@@ -2057,6 +2213,11 @@
                         <span id="quick-change">-$700</span>
                     </div>
                 </div>
+            </div>
+            
+            <!-- Job Application System -->
+            <div id="job-listings-container" class="job-listings">
+                <!-- Jobs will be populated by JavaScript -->
             </div>
         </div>
         
@@ -2903,6 +3064,27 @@
          // Current active account for transactions
          let activeAccount = 'checking';
          
+         // Job application system
+         let jobDatabase = [];
+         let pendingApplication = null; // Stores the job being applied for
+         let jobApplicationResult = null; // Stores the result after a week
+         
+         // Job title and salary ranges for random generation
+         const jobTitles = [
+             'Customer Service Rep', 'Sales Associate', 'Data Entry Clerk', 'Administrative Assistant',
+             'Marketing Assistant', 'Junior Developer', 'Content Writer', 'Social Media Coordinator',
+             'Project Coordinator', 'Financial Analyst', 'Data Analyst', 'HR Assistant',
+             'Graphic Designer', 'Account Manager', 'Business Analyst', 'Technical Support',
+             'Operations Coordinator', 'Research Assistant', 'Quality Assurance', 'Digital Marketing Specialist'
+         ];
+         
+         const salaryRanges = [
+             { min: 350, max: 500 },   // Entry level
+             { min: 450, max: 650 },   // Junior level
+             { min: 600, max: 850 },   // Mid level
+             { min: 750, max: 1200 }   // Senior level
+         ];
+         
          // Character creation
          let gameStarted = false;
          let playerProfile = {
@@ -3287,6 +3469,12 @@
              // Process loan payments and interest
              processLoanPayments();
              
+             // Process job applications
+             processJobApplication();
+             
+             // Update job database with new positions
+             updateJobDatabase();
+             
              const netChange = salary - expenses;
              cash += netChange;
              
@@ -3313,6 +3501,7 @@
              updateBankDisplay();
              updateDebugDisplay();
              updatePlayerDisplay();
+             updateJobDisplay();
              
              // Check for negative balance and handle NSF fees
              handleNegativeBalanceChecks();
@@ -4709,6 +4898,204 @@
              });
          }
          
+         // Job application system functions
+         function generateRandomJob() {
+             const title = jobTitles[Math.floor(Math.random() * jobTitles.length)];
+             const salaryRange = salaryRanges[Math.floor(Math.random() * salaryRanges.length)];
+             const salary = Math.floor(Math.random() * (salaryRange.max - salaryRange.min + 1)) + salaryRange.min;
+             
+             return {
+                 id: 'job-' + Date.now() + '-' + Math.floor(Math.random() * 1000),
+                 title: title,
+                 weeklySalary: salary,
+                 company: generateCompanyName(),
+                 description: generateJobDescription(title)
+             };
+         }
+         
+         function generateCompanyName() {
+             const prefixes = ['Tech', 'Global', 'Dynamic', 'Innovative', 'Strategic', 'Advanced', 'Premier', 'Elite'];
+             const suffixes = ['Solutions', 'Systems', 'Corp', 'Industries', 'Enterprises', 'Group', 'Associates', 'Partners'];
+             return prefixes[Math.floor(Math.random() * prefixes.length)] + ' ' + 
+                    suffixes[Math.floor(Math.random() * suffixes.length)];
+         }
+         
+         function generateJobDescription(title) {
+             const descriptions = {
+                 'Customer Service Rep': 'Handle customer inquiries and resolve issues',
+                 'Sales Associate': 'Drive sales and build customer relationships',
+                 'Data Entry Clerk': 'Accurately input and maintain data records',
+                 'Administrative Assistant': 'Provide administrative support to the team',
+                 'Marketing Assistant': 'Support marketing campaigns and initiatives',
+                 'Junior Developer': 'Develop and maintain software applications',
+                 'Content Writer': 'Create engaging content for various platforms',
+                 'Social Media Coordinator': 'Manage social media presence and engagement',
+                 'Project Coordinator': 'Coordinate project activities and timelines',
+                 'Financial Analyst': 'Analyze financial data and create reports',
+                 'Data Analyst': 'Analyze data to support business decisions',
+                 'HR Assistant': 'Support human resources operations',
+                 'Graphic Designer': 'Create visual designs and marketing materials',
+                 'Account Manager': 'Manage client relationships and accounts',
+                 'Business Analyst': 'Analyze business processes and requirements',
+                 'Technical Support': 'Provide technical assistance to users',
+                 'Operations Coordinator': 'Coordinate operational activities',
+                 'Research Assistant': 'Conduct research and analysis',
+                 'Quality Assurance': 'Ensure product quality and standards',
+                 'Digital Marketing Specialist': 'Manage digital marketing campaigns'
+             };
+             return descriptions[title] || 'Exciting opportunity in ' + title.toLowerCase();
+         }
+         
+         function initializeJobDatabase() {
+             jobDatabase = [];
+             for (let i = 0; i < 10; i++) {
+                 jobDatabase.push(generateRandomJob());
+             }
+         }
+         
+         function updateJobDatabase() {
+             // Determine how many jobs to replace (20-50%)
+             const replaceCount = Math.floor(Math.random() * 4) + 2; // 2-5 jobs
+             
+             // Remove random jobs and replace with new ones
+             for (let i = 0; i < replaceCount; i++) {
+                 const randomIndex = Math.floor(Math.random() * jobDatabase.length);
+                 jobDatabase[randomIndex] = generateRandomJob();
+             }
+         }
+         
+         function applyForJob(jobId) {
+             const job = jobDatabase.find(j => j.id === jobId);
+             if (job) {
+                 pendingApplication = job;
+                 jobApplicationResult = null;
+                 updateJobDisplay();
+                 
+                 // Show confirmation
+                 alert(`Applied for ${job.title} at ${job.company}!\n\nYou'll hear back next week about your application.`);
+             }
+         }
+         
+         function processJobApplication() {
+             if (pendingApplication) {
+                 // 10% chance of getting the job
+                 const gotJob = Math.random() < 0.1;
+                 
+                 if (gotJob) {
+                     // Get the job!
+                     const oldJob = jobs[currentJob].name;
+                     currentJob = 'custom-job';
+                     jobs['custom-job'] = {
+                         name: pendingApplication.title,
+                         salary: pendingApplication.weeklySalary
+                     };
+                     
+                     jobApplicationResult = {
+                         success: true,
+                         job: pendingApplication
+                     };
+                     
+                     addTransaction('income', `New Job: ${pendingApplication.title}`, 0, `Hired at ${pendingApplication.company}`);
+                     
+                     alert(`🎉 CONGRATULATIONS! 🎉\n\nYou got the job!\n\n${pendingApplication.title} at ${pendingApplication.company}\nSalary: $${pendingApplication.weeklySalary}/week\n\nYour new salary will start this week!`);
+                 } else {
+                     // Didn't get the job
+                     jobApplicationResult = {
+                         success: false,
+                         job: pendingApplication
+                     };
+                     
+                     alert(`📧 Application Update\n\nUnfortunately, you weren't selected for the ${pendingApplication.title} position at ${pendingApplication.company}.\n\nKeep applying - you'll find the right opportunity!`);
+                 }
+                 
+                 pendingApplication = null;
+                 updateJobDisplay();
+             }
+         }
+         
+         function updateJobDisplay() {
+             const container = document.getElementById('job-listings-container');
+             if (!container) return;
+             
+             container.innerHTML = '';
+             
+             // Show pending application status
+             if (pendingApplication) {
+                 const pendingDiv = document.createElement('div');
+                 pendingDiv.className = 'pending-application';
+                 pendingDiv.innerHTML = `
+                     <div class="application-status">
+                         <div class="status-header">📋 Pending Application</div>
+                         <div class="status-content">
+                             <strong>${pendingApplication.title}</strong> at ${pendingApplication.company}<br>
+                             <span style="color: #667eea;">You'll hear back next week!</span>
+                         </div>
+                     </div>
+                 `;
+                 container.appendChild(pendingDiv);
+             }
+             
+             // Show job application result
+             if (jobApplicationResult) {
+                 const resultDiv = document.createElement('div');
+                 resultDiv.className = 'application-result';
+                 if (jobApplicationResult.success) {
+                     resultDiv.innerHTML = `
+                         <div class="result-success">
+                             <div class="result-header">🎉 Job Offer Accepted!</div>
+                             <div class="result-content">
+                                 You are now working as <strong>${jobApplicationResult.job.title}</strong><br>
+                                 at ${jobApplicationResult.job.company} for $${jobApplicationResult.job.weeklySalary}/week
+                             </div>
+                         </div>
+                     `;
+                 } else {
+                     resultDiv.innerHTML = `
+                         <div class="result-failure">
+                             <div class="result-header">📧 Application Update</div>
+                             <div class="result-content">
+                                 Not selected for <strong>${jobApplicationResult.job.title}</strong><br>
+                                 Keep applying to available positions below!
+                             </div>
+                         </div>
+                     `;
+                 }
+                 container.appendChild(resultDiv);
+                 
+                 // Clear result after showing it
+                 setTimeout(() => {
+                     jobApplicationResult = null;
+                     updateJobDisplay();
+                 }, 5000);
+             }
+             
+             // Show available jobs (only if not waiting for application result)
+             if (!pendingApplication) {
+                 const jobsHeader = document.createElement('div');
+                 jobsHeader.className = 'jobs-header';
+                 jobsHeader.innerHTML = `
+                     <h3>💼 Available Positions</h3>
+                     <p>Click "Apply" to submit your application. You have a 10% chance of getting each job!</p>
+                 `;
+                 container.appendChild(jobsHeader);
+                 
+                 jobDatabase.forEach(job => {
+                     const jobCard = document.createElement('div');
+                     jobCard.className = 'job-card';
+                     jobCard.innerHTML = `
+                         <div class="job-header">
+                             <div class="job-title">${job.title}</div>
+                             <div class="job-salary">$${job.weeklySalary}/week</div>
+                         </div>
+                         <div class="job-company">${job.company}</div>
+                         <div class="job-description">${job.description}</div>
+                         <button class="apply-btn" onclick="applyForJob('${job.id}')">Apply</button>
+                     `;
+                     container.appendChild(jobCard);
+                 });
+             }
+         }
+
          // Banking navigation functions
          function showAccountDetail(accountId) {
              // Hide bank overview and show detail view
@@ -4782,6 +5169,9 @@
                  
                  // Initialize player
                  initializePlayer();
+                 
+                 // Initialize job database
+                 initializeJobDatabase();
                  
                  // Initialize history with starting state
                  addToHistory();
