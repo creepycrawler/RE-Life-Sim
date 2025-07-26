@@ -3,106 +3,377 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business RPG - Corporate Climber</title>
-    <link rel="stylesheet" href="styles.css">
+    <title>Corporate Climber - Business RPG</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            margin: 0;
+        }
+        
+        .container {
+            max-width: 700px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        
+        h1 {
+            text-align: center;
+            color: #2c3e50;
+            margin-bottom: 30px;
+            font-size: 2.5rem;
+            font-weight: 300;
+        }
+        
+        .game-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin: 25px 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #6c757d;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .controls {
+            background: #f8f9fa;
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #495057;
+        }
+        
+        select {
+            width: 100%;
+            padding: 12px 15px;
+            font-size: 16px;
+            border: 2px solid #dee2e6;
+            border-radius: 8px;
+            background: white;
+            transition: border-color 0.3s ease;
+        }
+        
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 8px;
+            font-size: 18px;
+            font-weight: 600;
+            cursor: pointer;
+            width: 100%;
+            margin: 15px 0;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+        }
+        
+        .btn:active {
+            transform: translateY(0);
+        }
+        
+        .balance-sheet {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            overflow: hidden;
+            margin: 25px 0;
+        }
+        
+        .balance-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            font-size: 1.3rem;
+            font-weight: 300;
+        }
+        
+        .balance-content {
+            padding: 20px;
+        }
+        
+        .financial-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 12px 0;
+            border-bottom: 1px solid #f1f3f4;
+            font-size: 16px;
+        }
+        
+        .financial-row:last-child {
+            border-bottom: none;
+        }
+        
+        .financial-row.total {
+            font-weight: 600;
+            font-size: 18px;
+            background: #f8f9fa;
+            margin: 10px -20px;
+            padding: 15px 20px;
+            border-top: 2px solid #667eea;
+        }
+        
+        .financial-label {
+            color: #495057;
+        }
+        
+        .financial-value {
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .positive {
+            color: #28a745 !important;
+        }
+        
+        .negative {
+            color: #dc3545 !important;
+        }
+        
+        .neutral {
+            color: #ffc107 !important;
+        }
+        
+        /* Mobile responsive */
+        @media (max-width: 768px) {
+            body {
+                padding: 10px;
+            }
+            
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 2rem;
+            }
+            
+            .game-stats {
+                grid-template-columns: 1fr;
+            }
+            
+            .btn {
+                padding: 18px;
+                font-size: 16px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
-        <header>
-            <h1>Corporate Climber</h1>
-            <div class="game-info">
-                <span id="current-week">Week: 1</span>
-                <span id="current-balance">Net Worth: $1000</span>
+        <h1>Corporate Climber</h1>
+        
+        <div class="game-stats">
+            <div class="stat-card">
+                <div class="stat-label">Current Week</div>
+                <div class="stat-value" id="week">1</div>
             </div>
-        </header>
-
-        <!-- Main Game Screen -->
-        <div id="main-game" class="screen active">
-            <div class="game-layout">
-                <!-- Job Selection and Turn Control -->
-                <div class="control-panel">
-                    <div class="job-selection">
-                        <label for="job-dropdown">Current Job:</label>
-                        <select id="job-dropdown">
-                            <option value="unemployed">Unemployed ($0/week)</option>
-                            <option value="intern">Intern ($400/week)</option>
-                            <option value="customer-service">Customer Service Rep ($450/week)</option>
-                            <option value="entry-sales">Sales Associate ($600/week)</option>
-                            <option value="project-coordinator">Project Coordinator ($650/week)</option>
-                            <option value="marketing-coordinator">Marketing Coordinator ($700/week)</option>
-                            <option value="data-analyst">Data Analyst ($750/week)</option>
-                            <option value="junior-dev">Junior Developer ($800/week)</option>
-                            <option value="financial-analyst">Financial Analyst ($900/week)</option>
-                        </select>
-                    </div>
-                    
-                    <div class="turn-controls">
-                        <button id="advance-turn" class="btn primary large">Advance 1 Week</button>
-                    </div>
+            <div class="stat-card">
+                <div class="stat-label">Net Worth</div>
+                <div class="stat-value" id="cash">$1,000</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-label">Current Job</div>
+                <div class="stat-value" id="job-display">Unemployed</div>
+            </div>
+        </div>
+        
+        <div class="controls">
+            <div class="form-group">
+                <label for="job-select">Select Your Job:</label>
+                <select id="job-select">
+                    <option value="unemployed">Unemployed ($0/week)</option>
+                    <option value="intern">Intern ($400/week)</option>
+                    <option value="customer-service">Customer Service Rep ($450/week)</option>
+                    <option value="entry-sales">Sales Associate ($600/week)</option>
+                    <option value="project-coordinator">Project Coordinator ($650/week)</option>
+                    <option value="marketing-coordinator">Marketing Coordinator ($700/week)</option>
+                    <option value="data-analyst">Data Analyst ($750/week)</option>
+                    <option value="junior-dev">Junior Developer ($800/week)</option>
+                    <option value="financial-analyst">Financial Analyst ($900/week)</option>
+                </select>
+            </div>
+            
+            <button class="btn" id="advance-btn">Advance 1 Week</button>
+        </div>
+        
+        <div class="balance-sheet">
+            <div class="balance-header">
+                Weekly Financial Summary
+            </div>
+            <div class="balance-content">
+                <div class="financial-row">
+                    <span class="financial-label">Weekly Income:</span>
+                    <span class="financial-value" id="weekly-income">$0</span>
                 </div>
-
-                <!-- Balance Sheet -->
-                <div class="balance-sheet">
-                    <h2>Financial Summary</h2>
-                    
-                    <div class="financial-section">
-                        <h3>Assets</h3>
-                        <div class="financial-item">
-                            <span>Cash:</span>
-                            <span id="cash-amount">$1000</span>
-                        </div>
-                        <div class="financial-item total">
-                            <span>Total Assets:</span>
-                            <span id="total-assets">$1000</span>
-                        </div>
-                    </div>
-                    
-                    <div class="financial-section">
-                        <h3>Weekly Income</h3>
-                        <div class="financial-item">
-                            <span>Job Salary:</span>
-                            <span id="job-income">$0</span>
-                        </div>
-                        <div class="financial-item total">
-                            <span>Total Income:</span>
-                            <span id="total-income">$0</span>
-                        </div>
-                    </div>
-
-                    <div class="financial-section">
-                        <h3>Weekly Expenses</h3>
-                        <div class="financial-item">
-                            <span>Living Expenses:</span>
-                            <span id="living-expenses">-$500</span>
-                        </div>
-                        <div class="financial-item">
-                            <span>Student Loans:</span>
-                            <span id="student-loans">-$200</span>
-                        </div>
-                        <div class="financial-item total">
-                            <span>Total Expenses:</span>
-                            <span id="total-expenses">-$700</span>
-                        </div>
-                    </div>
-
-                    <div class="financial-section net-worth">
-                        <h3>Net Weekly Change</h3>
-                        <div class="financial-item total large">
-                            <span>Weekly Change:</span>
-                            <span id="weekly-change">-$700</span>
-                        </div>
-                        <div class="financial-item total large">
-                            <span>Net Worth:</span>
-                            <span id="net-worth">$1000</span>
-                        </div>
-                    </div>
+                <div class="financial-row">
+                    <span class="financial-label">Living Expenses:</span>
+                    <span class="financial-value negative">-$500</span>
+                </div>
+                <div class="financial-row">
+                    <span class="financial-label">Student Loans:</span>
+                    <span class="financial-value negative">-$200</span>
+                </div>
+                <div class="financial-row total">
+                    <span class="financial-label">Net Weekly Change:</span>
+                    <span class="financial-value" id="net-change">-$700</span>
                 </div>
             </div>
         </div>
-
-
     </div>
 
-    <script src="script.js"></script>
+    <script>
+        // Simple game state
+        let week = 1;
+        let cash = 1000;
+        let currentJob = 'unemployed';
+        
+        const jobs = {
+            'unemployed': { name: 'Unemployed', salary: 0 },
+            'intern': { name: 'Intern', salary: 400 },
+            'customer-service': { name: 'Customer Service Rep', salary: 450 },
+            'entry-sales': { name: 'Sales Associate', salary: 600 },
+            'project-coordinator': { name: 'Project Coordinator', salary: 650 },
+            'marketing-coordinator': { name: 'Marketing Coordinator', salary: 700 },
+            'data-analyst': { name: 'Data Analyst', salary: 750 },
+            'junior-dev': { name: 'Junior Developer', salary: 800 },
+            'financial-analyst': { name: 'Financial Analyst', salary: 900 }
+        };
+        
+        function updateDisplay() {
+            const salary = jobs[currentJob].salary;
+            const expenses = 700;
+            const netChange = salary - expenses;
+            
+            // Update main stats
+            document.getElementById('week').textContent = week;
+            document.getElementById('cash').textContent = '$' + cash.toLocaleString();
+            document.getElementById('job-display').textContent = jobs[currentJob].name;
+            
+            // Update financial summary
+            document.getElementById('weekly-income').textContent = '$' + salary;
+            const netChangeEl = document.getElementById('net-change');
+            netChangeEl.textContent = (netChange >= 0 ? '+' : '') + '$' + netChange;
+            
+            // Color coding for net change
+            netChangeEl.className = 'financial-value';
+            if (netChange < 0) {
+                netChangeEl.classList.add('negative');
+            } else if (netChange > 0) {
+                netChangeEl.classList.add('positive');
+            } else {
+                netChangeEl.classList.add('neutral');
+            }
+            
+            // Color coding for cash
+            const cashEl = document.getElementById('cash');
+            if (cash < 0) {
+                cashEl.style.color = '#dc3545';
+            } else if (cash > 5000) {
+                cashEl.style.color = '#28a745';
+            } else {
+                cashEl.style.color = '#2c3e50';
+            }
+        }
+        
+        function advanceWeek() {
+            week++;
+            const salary = jobs[currentJob].salary;
+            const expenses = 700;
+            const netChange = salary - expenses;
+            cash += netChange;
+            
+            // Random events (25% chance)
+            if (Math.random() < 0.25) {
+                const events = [
+                    { text: "Found $50!", effect: 50 },
+                    { text: "Car repair: -$150", effect: -150 },
+                    { text: "Tax refund: +$120", effect: 120 },
+                    { text: "Medical bill: -$80", effect: -80 },
+                    { text: "Side gig: +$100", effect: 100 },
+                    { text: "Utility spike: -$60", effect: -60 }
+                ];
+                
+                const event = events[Math.floor(Math.random() * events.length)];
+                cash += event.effect;
+            }
+            
+            updateDisplay();
+            
+            // Visual feedback
+            const btn = document.getElementById('advance-btn');
+            btn.textContent = 'Week Advanced!';
+            btn.style.background = '#28a745';
+            
+            setTimeout(() => {
+                btn.textContent = 'Advance 1 Week';
+                btn.style.background = '';
+            }, 1000);
+        }
+        
+        function changeJob() {
+            const select = document.getElementById('job-select');
+            currentJob = select.value;
+            updateDisplay();
+        }
+        
+        // Initialize when page loads
+        window.onload = function() {
+            // Set up event handlers
+            document.getElementById('advance-btn').onclick = advanceWeek;
+            document.getElementById('job-select').onchange = changeJob;
+            
+            // Initial display
+            updateDisplay();
+        };
+    </script>
 </body>
 </html>

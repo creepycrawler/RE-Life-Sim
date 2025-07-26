@@ -1,33 +1,26 @@
-# Corporate Climber - Business RPG (Simplified)
+# Corporate Climber - Business RPG
 
-A streamlined web-based turn-based business RPG focused on financial management and job selection.
+A streamlined web-based business simulation game focused on financial management and career progression.
 
-## How to Play
+## 🎮 How to Play
 
-1. **Open the Game**: Simply open `index.html` in any modern web browser
-2. **Select Your Job**: Use the dropdown to choose your current employment
-3. **Advance Time**: Click "Advance 1 Week" to progress and process finances
-4. **Manage Your Money**: Monitor your balance sheet and try to build wealth
+1. **Open the Game**: Simply open `index.html` in any web browser (mobile or desktop)
+2. **Select Your Job**: Use the dropdown to instantly switch between different jobs
+3. **Advance Time**: Click "Advance 1 Week" to progress and earn/spend money
+4. **Manage Finances**: Watch your net worth grow or decline based on your job choices
 
-## Features
+## ✨ Features
 
-### ✅ **Simplified MVP:**
-- **Direct Job Selection**: Dropdown menu with 9 job options (including unemployed)
-- **Single Action Button**: Only "Advance 1 Week" button for streamlined gameplay
-- **Real-time Balance Sheet**: Complete financial tracking with live updates
-- **Weekly Financial Reports**: Detailed breakdown of income, expenses, and changes
-- **Random Events**: Occasional financial surprises to keep gameplay interesting
+### **Simple & Effective Gameplay:**
+- **Instant Job Switching**: Select any job immediately from the dropdown
+- **One-Click Progression**: Single "Advance 1 Week" button for streamlined gameplay
+- **Live Financial Updates**: All numbers update instantly when you change jobs
+- **Clean Interface**: Modern, card-based layout that works perfectly on mobile
+- **Random Events**: Occasional financial surprises to keep things interesting
 
-### 🎯 **Game Mechanics:**
-
-**Starting Conditions:**
-- Initial cash: $1,000
-- Weekly expenses: $700 ($500 living + $200 student loans)
-- Goal: Select profitable jobs and build wealth over time
-
-**Available Jobs & Weekly Salaries:**
-- **Unemployed**: $0/week
-- **Intern**: $400/week  
+### **Available Jobs & Weekly Salaries:**
+- **Unemployed**: $0/week  
+- **Intern**: $400/week
 - **Customer Service Rep**: $450/week
 - **Sales Associate**: $600/week
 - **Project Coordinator**: $650/week
@@ -36,55 +29,68 @@ A streamlined web-based turn-based business RPG focused on financial management 
 - **Junior Developer**: $800/week
 - **Financial Analyst**: $900/week
 
-**Financial Tracking:**
-- **Assets**: Current cash balance
-- **Weekly Income**: Job salary
-- **Weekly Expenses**: Living costs ($500) + Student loans ($200)
-- **Net Weekly Change**: Income minus expenses
-- **Net Worth**: Total cash (with color coding for financial health)
+### **Financial Mechanics:**
+- **Starting Money**: $1,000
+- **Weekly Expenses**: $700 (Living: $500 + Student Loans: $200)
+- **Goal**: Choose jobs that generate positive cash flow and build wealth
+- **Color Coding**: Red for losses, green for gains, automatic visual feedback
 
-### 🎮 **Simplified Gameplay:**
-1. Start with $1,000 but face $700/week in expenses
-2. Use dropdown to select any job immediately (no applications/rejections)
-3. Click "Advance 1 Week" to:
-   - Earn your selected job's salary
-   - Pay weekly expenses
-   - Experience occasional random events
-   - View detailed financial report
-4. Monitor your balance sheet and adjust job selection as needed
-5. Build wealth or watch finances decline based on your choices
+## 🎯 Gameplay Flow
 
-### 🎨 **Interface Features:**
-- **Clean Single-Screen Layout**: No navigation between multiple screens
-- **Real-time Updates**: Balance sheet updates immediately when job changes
-- **Visual Feedback**: Color-coded financial indicators
-- **Professional Design**: Modern business-focused styling
-- **Mobile Responsive**: Works on all devices
+1. **Start unemployed** with $1,000 but facing $700/week in expenses
+2. **Select a job** from the dropdown to start earning income
+3. **Click "Advance 1 Week"** to:
+   - Earn your job's salary
+   - Pay weekly expenses ($700)
+   - Possibly experience random events
+   - See your net worth change
+4. **Monitor your finances** and switch jobs as needed
+5. **Build wealth** by maintaining positive cash flow
 
-## Technical Details
+## 📱 Mobile-Friendly Design
 
-- **Pure Web Technologies**: HTML5, CSS3, JavaScript (ES6+)
-- **No Dependencies**: Runs entirely in the browser
-- **Simplified Logic**: Streamlined game mechanics
-- **Instant Job Changes**: No artificial barriers or requirements
+- **Responsive Layout**: Works perfectly on phones, tablets, and desktops
+- **Touch-Optimized**: Large buttons and dropdowns for easy mobile interaction
+- **Clean Typography**: Easy to read financial information
+- **Gradient Background**: Professional appearance with modern styling
 
-## Files
+## 🔧 Technical Details
 
-- `index.html` - Simplified single-screen interface
-- `styles.css` - Clean, modern styling
-- `script.js` - Streamlined game logic
-- `README.md` - This documentation
+- **Single File**: Everything contained in `index.html` - no external dependencies
+- **Pure Web Tech**: HTML5, CSS3, JavaScript (ES6+)
+- **Instant Updates**: All text changes happen immediately when buttons are pressed
+- **Cross-Browser**: Works in all modern browsers
+- **No Installation**: Just open and play
 
-## Key Simplifications Made
+## 📁 File Structure
 
-✅ **Removed**: Character creation, college degrees, job applications, navigation tabs
-✅ **Added**: Direct job selection dropdown, simplified single-button interface
-✅ **Enhanced**: Real-time financial updates, streamlined balance sheet display
+```
+📁 Corporate Climber/
+├── 📄 index.html (Complete game - HTML, CSS, and JavaScript)
+├── 📄 README.md (This documentation)
+└── 📄 LICENSE
+```
 
-## Playing the Game
+## 🚀 Getting Started
 
-Simply open `index.html` in your web browser. Select a job from the dropdown and start advancing weeks to see how your financial situation evolves!
+Simply open `index.html` in any web browser and start playing! No setup, no installation, no complexity.
+
+## 🎨 Visual Design
+
+- **Card-Based Layout**: Clean stats displayed in modern cards
+- **Professional Colors**: Business-appropriate color scheme
+- **Gradient Backgrounds**: Attractive visual depth
+- **Color-Coded Feedback**: Instant visual indication of financial health
+- **Smooth Animations**: Button feedback and hover effects
+
+## 📈 Strategy Tips
+
+- **Start with any job** to avoid going negative immediately
+- **Higher-paying jobs** like Financial Analyst ($900) give you $200 profit per week
+- **Lower-paying jobs** like Intern ($400) result in $300 loss per week
+- **Break-even point** is around $700/week income
+- **Random events** can help or hurt, so maintain some cash buffer
 
 ---
 
-*A simplified business RPG focused on core financial mechanics*
+*A simplified business RPG that focuses on core financial decision-making without complexity*
