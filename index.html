@@ -1939,8 +1939,12 @@
                         <div class="mini-stat-value" id="header-week">1</div>
                     </div>
                     <div class="mini-stat">
-                        <div class="mini-stat-label">Cash</div>
+                        <div class="mini-stat-label">Checking</div>
                         <div class="mini-stat-value" id="header-cash">$1,000</div>
+                    </div>
+                    <div class="mini-stat">
+                        <div class="mini-stat-label">Net Worth</div>
+                        <div class="mini-stat-value" id="header-net-worth">-$39,000</div>
                     </div>
                     <div class="mini-stat">
                         <div class="mini-stat-label">Job</div>
@@ -3024,23 +3028,35 @@
               const expenses = 700;
               const netChange = salary - expenses;
               const totalLoanDebt = Object.values(activeLoans).reduce((sum, loan) => sum + loan.currentBalance, 0);
-              const totalAssets = Math.max(cash, 0); // Only positive cash counts as assets
-              const totalLiabilities = totalLoanDebt + Math.max(-cash, 0); // Add negative cash as liability
+              const totalBankAssets = bankAccounts.checking.balance + bankAccounts.savings.balance;
+              const totalAssets = Math.max(totalBankAssets, 0); // Only positive assets count
+              const totalLiabilities = totalLoanDebt + Math.max(-totalBankAssets, 0); // Add negative assets as liability
               const netWorth = totalAssets - totalLiabilities;
              
              // Update header stats
              document.getElementById('header-week').textContent = week;
-             document.getElementById('header-cash').textContent = '$' + cash.toLocaleString();
+             document.getElementById('header-cash').textContent = '$' + bankAccounts.checking.balance.toLocaleString();
+             document.getElementById('header-net-worth').textContent = (netWorth >= 0 ? '$' : '-$') + Math.abs(netWorth).toLocaleString();
              document.getElementById('header-job').textContent = jobs[currentJob].name;
              
-             // Color coding for header cash
+             // Color coding for header checking balance
              const headerCashElement = document.getElementById('header-cash');
-             if (cash >= 0) {
+             if (bankAccounts.checking.balance >= 0) {
                  headerCashElement.style.color = '#28a745'; // Green for positive
                  headerCashElement.style.fontWeight = '600';
              } else {
                  headerCashElement.style.color = '#dc3545'; // Red for negative
                  headerCashElement.style.fontWeight = '700';
+             }
+             
+             // Color coding for header net worth
+             const headerNetWorthElement = document.getElementById('header-net-worth');
+             if (netWorth >= 0) {
+                 headerNetWorthElement.style.color = '#28a745'; // Green for positive
+                 headerNetWorthElement.style.fontWeight = '600';
+             } else {
+                 headerNetWorthElement.style.color = '#dc3545'; // Red for negative
+                 headerNetWorthElement.style.fontWeight = '700';
              }
              
              // Update job page
@@ -3060,13 +3076,13 @@
              
              // Update balance sheet
                            document.getElementById('balance-week').textContent = week;
-              document.getElementById('balance-cash').textContent = '$' + Math.max(cash, 0).toLocaleString();
+              document.getElementById('balance-cash').textContent = '$' + Math.max(bankAccounts.checking.balance, 0).toLocaleString();
               document.getElementById('total-assets').textContent = '$' + totalAssets.toLocaleString();
               document.getElementById('student-debt').textContent = '$' + activeLoans['student-loan'].currentBalance.toLocaleString();
               document.getElementById('total-liabilities').textContent = '$' + totalLiabilities.toLocaleString();
              
              // Update new balance sheet elements
-             document.getElementById('checking-balance-display').textContent = '$' + cash.toLocaleString();
+             document.getElementById('checking-balance-display').textContent = '$' + bankAccounts.checking.balance.toLocaleString();
              document.getElementById('savings-balance-display').textContent = '$' + bankAccounts.savings.balance.toLocaleString();
              document.getElementById('current-assets-total').textContent = '$' + totalAssets.toLocaleString();
              document.getElementById('non-current-assets-total').textContent = '$0';
@@ -3115,7 +3131,7 @@
              // Reset warning flag for new week
              hasShownNSFWarning = false;
              
-             if (cash < 0) {
+             if (bankAccounts.checking.balance < 0) {
                  negativeBalanceWeeks++;
                  
                  // Show NSF warning and charge fee on first negative week
@@ -3142,7 +3158,7 @@
              const warningMessage = `
                  ⚠️ INSUFFICIENT FUNDS WARNING ⚠️
                  
-                 Your account balance is negative: $${cash.toLocaleString()}
+                 Your account balance is negative: $${bankAccounts.checking.balance.toLocaleString()}
                  
                  • A $50 NSF (Non-Sufficient Funds) fee has been charged
                  • If your balance remains negative for another week, you won't be able to advance time
@@ -4226,11 +4242,11 @@
              totalHappiness += housing.happinessBonus;
              
              // Financial stress
-             if (cash < 0) {
+             if (bankAccounts.checking.balance < 0) {
                  totalHappiness -= 20; // Negative balance stress
-             } else if (cash < 500) {
+             } else if (bankAccounts.checking.balance < 500) {
                  totalHappiness -= 10; // Low cash stress
-             } else if (cash > 5000) {
+             } else if (bankAccounts.checking.balance > 5000) {
                  totalHappiness += 10; // Financial security boost
              }
              
@@ -4286,11 +4302,11 @@
              addHappinessFactor(container, 'Housing', housingOption.happinessBonus);
              
              // Financial factors
-             if (cash < 0) {
+             if (bankAccounts.checking.balance < 0) {
                  addHappinessFactor(container, 'Negative Balance', -20);
-             } else if (cash < 500) {
+             } else if (bankAccounts.checking.balance < 500) {
                  addHappinessFactor(container, 'Low Cash', -10);
-             } else if (cash > 5000) {
+             } else if (bankAccounts.checking.balance > 5000) {
                  addHappinessFactor(container, 'Financial Security', 10);
              }
              
