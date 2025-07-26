@@ -373,6 +373,115 @@
              background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
              transition: width 0.3s ease;
          }
+         
+         /* Bank Account Styles */
+         .account-stat {
+             text-align: center;
+             padding: 15px;
+             background: #f8f9fa;
+             border-radius: 8px;
+             border-left: 3px solid #007bff;
+         }
+         
+         .account-label {
+             font-size: 12px;
+             color: #6c757d;
+             margin-bottom: 5px;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+         }
+         
+         .account-value {
+             font-size: 18px;
+             font-weight: 600;
+             color: #2c3e50;
+         }
+         
+         .transaction-item {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             padding: 15px 20px;
+             border-bottom: 1px solid #f1f3f4;
+             transition: background-color 0.2s ease;
+         }
+         
+         .transaction-item:hover {
+             background-color: #f8f9fa;
+         }
+         
+         .transaction-item:last-child {
+             border-bottom: none;
+         }
+         
+         .transaction-details {
+             display: flex;
+             align-items: center;
+             gap: 15px;
+         }
+         
+         .transaction-icon {
+             width: 40px;
+             height: 40px;
+             border-radius: 50%;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             font-size: 18px;
+             font-weight: bold;
+         }
+         
+         .transaction-icon.income {
+             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+             color: white;
+         }
+         
+         .transaction-icon.expense {
+             background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+             color: white;
+         }
+         
+         .transaction-icon.loan {
+             background: linear-gradient(135deg, #fd7e14 0%, #e55a4e 100%);
+             color: white;
+         }
+         
+         .transaction-icon.random {
+             background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%);
+             color: white;
+         }
+         
+         .transaction-info {
+             flex: 1;
+         }
+         
+         .transaction-description {
+             font-weight: 600;
+             color: #2c3e50;
+             margin-bottom: 2px;
+         }
+         
+         .transaction-meta {
+             font-size: 12px;
+             color: #6c757d;
+         }
+         
+         .transaction-amount {
+             font-size: 16px;
+             font-weight: 600;
+             text-align: right;
+         }
+         
+         .week-separator {
+             background: linear-gradient(135deg, #495057 0%, #6c757d 100%);
+             color: white;
+             padding: 10px 20px;
+             font-weight: 600;
+             font-size: 14px;
+             text-transform: uppercase;
+             letter-spacing: 1px;
+             margin: 0;
+         }
         
                  /* Balance Sheet Grid for Mobile */
          @media (max-width: 768px) {
@@ -434,6 +543,7 @@
              <button class="menu-item active" onclick="showPage('job')">Job</button>
              <button class="menu-item" onclick="showPage('balance')">Balance</button>
              <button class="menu-item" onclick="showPage('loans')">Loans</button>
+             <button class="menu-item" onclick="showPage('bank')">Bank</button>
              <button class="menu-item" onclick="showPage('history')">History</button>
          </div>
         
@@ -682,6 +792,84 @@
              </div>
          </div>
          
+         <!-- Bank Account Page -->
+         <div id="bank-page" class="page">
+             <!-- Bank Account Title -->
+             <div style="text-align: center; margin-bottom: 30px;">
+                 <h2 style="color: #2c3e50; margin: 0; font-size: 1.5rem;">Bank Account Summary</h2>
+                 <p style="color: #6c757d; margin: 5px 0 0 0;">Transaction history for the past 8 weeks</p>
+             </div>
+             
+             <!-- Account Summary -->
+             <div class="balance-section" style="margin-bottom: 30px;">
+                 <div class="section-header">Account Overview</div>
+                 <div class="section-content">
+                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                         <div class="account-stat">
+                             <div class="account-label">Current Balance</div>
+                             <div class="account-value" id="account-balance">$1,000</div>
+                         </div>
+                         <div class="account-stat">
+                             <div class="account-label">Total Income (8 weeks)</div>
+                             <div class="account-value positive" id="total-income-8w">$0</div>
+                         </div>
+                         <div class="account-stat">
+                             <div class="account-label">Total Expenses (8 weeks)</div>
+                             <div class="account-value negative" id="total-expenses-8w">$0</div>
+                         </div>
+                         <div class="account-stat">
+                             <div class="account-label">Net Change (8 weeks)</div>
+                             <div class="account-value" id="net-change-8w">$0</div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             
+             <!-- Transaction Filter -->
+             <div class="balance-section" style="margin-bottom: 20px;">
+                 <div class="section-content" style="padding: 15px;">
+                     <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                         <div>
+                             <label style="font-weight: 600; margin-right: 10px;">Filter:</label>
+                             <select id="transaction-filter" onchange="filterTransactions()" 
+                                     style="padding: 8px; border: 2px solid #dee2e6; border-radius: 6px;">
+                                 <option value="all">All Transactions</option>
+                                 <option value="income">Income Only</option>
+                                 <option value="expenses">Expenses Only</option>
+                                 <option value="loans">Loan Payments</option>
+                                 <option value="random">Random Events</option>
+                             </select>
+                         </div>
+                         <div>
+                             <label style="font-weight: 600; margin-right: 10px;">Week Range:</label>
+                             <select id="week-range-filter" onchange="filterTransactions()"
+                                     style="padding: 8px; border: 2px solid #dee2e6; border-radius: 6px;">
+                                 <option value="8">Last 8 Weeks</option>
+                                 <option value="4">Last 4 Weeks</option>
+                                 <option value="2">Last 2 Weeks</option>
+                                 <option value="1">This Week</option>
+                             </select>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             
+             <!-- Transactions List -->
+             <div class="balance-section">
+                 <div class="section-header">
+                     <div style="display: flex; justify-content: space-between; align-items: center;">
+                         <span>Recent Transactions</span>
+                         <span id="transaction-count" style="font-size: 0.9rem; opacity: 0.8;">0 transactions</span>
+                     </div>
+                 </div>
+                 <div class="section-content" style="padding: 0;">
+                     <div id="transactions-container">
+                         <!-- Transactions will be populated by JavaScript -->
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
          <!-- History Page -->
          <div id="history-page" class="page">
              <!-- History Title and Controls -->
@@ -779,6 +967,9 @@
          // History tracking
          let gameHistory = [];
          let currentTimeRange = 4;
+         
+         // Transaction tracking (keep last 8 weeks)
+         let transactionLog = [];
          
          // Loan system
          let activeLoans = {
@@ -901,6 +1092,20 @@
              const salary = jobs[currentJob].salary;
              const expenses = 700;
              
+             // Clear old transactions (keep only last 8 weeks)
+             transactionLog = transactionLog.filter(t => t.week > week - 8);
+             
+             // Record salary income
+             if (salary > 0) {
+                 addTransaction('income', `Salary - ${jobs[currentJob].name}`, salary, 'Payroll deposit');
+             }
+             
+             // Record living expenses
+             addTransaction('expense', 'Living Expenses', -500, 'Housing, food, utilities');
+             
+             // Record student loan payment
+             addTransaction('expense', 'Student Loan Payment', -200, 'Monthly loan payment');
+             
              // Process loan payments and interest
              processLoanPayments();
              
@@ -910,20 +1115,25 @@
              // Random events (25% chance)
              if (Math.random() < 0.25) {
                  const events = [
-                     { text: "Found $50!", effect: 50 },
-                     { text: "Car repair: -$150", effect: -150 },
-                     { text: "Tax refund: +$120", effect: 120 },
-                     { text: "Medical bill: -$80", effect: -80 },
-                     { text: "Side gig: +$100", effect: 100 },
-                     { text: "Utility spike: -$60", effect: -60 }
+                     { text: "Found $50!", effect: 50, desc: "Lucky find" },
+                     { text: "Car repair: -$150", effect: -150, desc: "Unexpected maintenance" },
+                     { text: "Tax refund: +$120", effect: 120, desc: "Government refund" },
+                     { text: "Medical bill: -$80", effect: -80, desc: "Healthcare expense" },
+                     { text: "Side gig: +$100", effect: 100, desc: "Freelance work" },
+                     { text: "Utility spike: -$60", effect: -60, desc: "High electric bill" }
                  ];
                  
                  const event = events[Math.floor(Math.random() * events.length)];
                  cash += event.effect;
+                 
+                 // Record random event transaction
+                 const type = event.effect > 0 ? 'income' : 'expense';
+                 addTransaction('random', event.text, event.effect, event.desc);
              }
              
              updateDisplay();
              updateLoansDisplay();
+             updateBankDisplay();
              
              // Add to history
              addToHistory();
@@ -993,12 +1203,16 @@
              loan.currentBalance -= actualPayment;
              cash -= actualPayment;
              
+             // Record transaction
+             addTransaction('loan', `Extra Payment - ${loan.name}`, -actualPayment, 'Additional principal payment');
+             
              // Clear the input
              document.getElementById('payment-amount').value = '';
              
              // Update displays
              updateDisplay();
              updateLoansDisplay();
+             updateBankDisplay();
              
              alert(`Payment of $${actualPayment.toLocaleString()} applied to ${loan.name}`);
          }
@@ -1089,6 +1303,124 @@
                              <div class="progress-fill" style="width: ${progressPercent}%"></div>
                          </div>
                      </div>
+                 </div>
+             `;
+             
+             return div;
+         }
+         
+         // Bank Account Functions
+         function addTransaction(type, description, amount, details) {
+             transactionLog.push({
+                 week: week,
+                 type: type, // 'income', 'expense', 'loan', 'random'
+                 description: description,
+                 amount: amount,
+                 details: details,
+                 balance: cash + amount, // Balance after this transaction
+                 timestamp: new Date().toLocaleString()
+             });
+         }
+         
+         function updateBankDisplay() {
+             // Update account balance
+             document.getElementById('account-balance').textContent = '$' + cash.toLocaleString();
+             
+             // Calculate 8-week totals
+             const last8Weeks = transactionLog.filter(t => t.week > week - 8);
+             const totalIncome = last8Weeks.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0);
+             const totalExpenses = Math.abs(last8Weeks.filter(t => t.amount < 0).reduce((sum, t) => sum + t.amount, 0));
+             const netChange = totalIncome - totalExpenses;
+             
+             document.getElementById('total-income-8w').textContent = '$' + totalIncome.toLocaleString();
+             document.getElementById('total-expenses-8w').textContent = '$' + totalExpenses.toLocaleString();
+             
+             const netChangeEl = document.getElementById('net-change-8w');
+             netChangeEl.textContent = (netChange >= 0 ? '+' : '') + '$' + netChange.toLocaleString();
+             netChangeEl.className = 'account-value';
+             if (netChange < 0) netChangeEl.classList.add('negative');
+             else if (netChange > 0) netChangeEl.classList.add('positive');
+             else netChangeEl.classList.add('neutral');
+             
+             // Update transactions list
+             filterTransactions();
+         }
+         
+         function filterTransactions() {
+             const typeFilter = document.getElementById('transaction-filter').value;
+             const weekRange = parseInt(document.getElementById('week-range-filter').value);
+             const container = document.getElementById('transactions-container');
+             
+             // Filter transactions
+             let filteredTransactions = transactionLog.filter(t => t.week > week - weekRange);
+             
+             if (typeFilter !== 'all') {
+                 if (typeFilter === 'income') {
+                     filteredTransactions = filteredTransactions.filter(t => t.amount > 0);
+                 } else if (typeFilter === 'expenses') {
+                     filteredTransactions = filteredTransactions.filter(t => t.amount < 0 && t.type !== 'loan');
+                 } else {
+                     filteredTransactions = filteredTransactions.filter(t => t.type === typeFilter);
+                 }
+             }
+             
+             // Sort by week (newest first)
+             filteredTransactions.sort((a, b) => b.week - a.week);
+             
+             // Update transaction count
+             document.getElementById('transaction-count').textContent = 
+                 filteredTransactions.length + ' transaction' + (filteredTransactions.length !== 1 ? 's' : '');
+             
+             // Group by week and render
+             container.innerHTML = '';
+             let currentWeek = null;
+             
+             filteredTransactions.forEach(transaction => {
+                 // Add week separator if needed
+                 if (currentWeek !== transaction.week) {
+                     currentWeek = transaction.week;
+                     const separator = document.createElement('div');
+                     separator.className = 'week-separator';
+                     separator.textContent = `Week ${transaction.week}`;
+                     container.appendChild(separator);
+                 }
+                 
+                 // Add transaction item
+                 const transactionEl = createTransactionElement(transaction);
+                 container.appendChild(transactionEl);
+             });
+             
+             if (filteredTransactions.length === 0) {
+                 container.innerHTML = '<div style="text-align: center; padding: 40px; color: #6c757d;"><p>No transactions found for the selected criteria.</p></div>';
+             }
+         }
+         
+         function createTransactionElement(transaction) {
+             const div = document.createElement('div');
+             div.className = 'transaction-item';
+             
+             // Determine icon and colors
+             let icon, iconClass, amountClass;
+             if (transaction.amount > 0) {
+                 icon = '+';
+                 iconClass = transaction.type === 'random' ? 'random' : 'income';
+                 amountClass = 'positive';
+             } else {
+                 icon = '-';
+                 iconClass = transaction.type === 'loan' ? 'loan' : (transaction.type === 'random' ? 'random' : 'expense');
+                 amountClass = 'negative';
+             }
+             
+             div.innerHTML = `
+                 <div class="transaction-details">
+                     <div class="transaction-icon ${iconClass}">${icon}</div>
+                     <div class="transaction-info">
+                         <div class="transaction-description">${transaction.description}</div>
+                         <div class="transaction-meta">${transaction.details}</div>
+                     </div>
+                 </div>
+                 <div class="transaction-amount ${amountClass}">
+                     ${transaction.amount >= 0 ? '+' : ''}$${Math.abs(transaction.amount).toLocaleString()}
                  </div>
              `;
              
@@ -1297,6 +1629,7 @@
              // Initial display
              updateDisplay();
              updateLoansDisplay();
+             updateBankDisplay();
              updateHistoryDisplay();
          };
     </script>
