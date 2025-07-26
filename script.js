@@ -64,6 +64,7 @@ function updateJob() {
 }
 
 function advanceTurn() {
+    // Increment week immediately
     gameState.week++;
     
     // Calculate weekly income and expenses
@@ -71,86 +72,59 @@ function advanceTurn() {
     const totalExpenses = gameState.expenses.living + gameState.expenses.studentLoans;
     const netWeekly = income - totalExpenses;
     
-    // Update cash
+    // Update cash immediately
     gameState.cash += netWeekly;
     
-    // Add random events occasionally
-    if (Math.random() < 0.3) {
-        generateRandomEvent();
-    }
+    // Check for random events and apply immediately
+    const randomEvent = generateRandomEvent();
     
-    // Update all displays immediately
+    // Update ALL displays immediately - no delays
     updateAllDisplays();
     
-    // Add a brief visual feedback
-    elements.advanceTurn.textContent = 'Week Advanced!';
+    // Provide instant visual feedback on button
+    elements.advanceTurn.textContent = randomEvent ? randomEvent : 'Week Advanced!';
     elements.advanceTurn.style.backgroundColor = '#27ae60';
+    elements.advanceTurn.style.transform = 'scale(0.98)';
     
+    // Reset button appearance after brief moment (doesn't affect data updates)
     setTimeout(() => {
         elements.advanceTurn.textContent = 'Advance 1 Week';
         elements.advanceTurn.style.backgroundColor = '';
-    }, 1000);
+        elements.advanceTurn.style.transform = '';
+    }, 800);
 }
 
 function generateRandomEvent() {
-    const events = [
-        {
-            text: "Found $50 in old jacket!",
-            effect: 50
-        },
-        {
-            text: "Car repair cost $200",
-            effect: -200
-        },
-        {
-            text: "Tax refund: $150",
-            effect: 150
-        },
-        {
-            text: "Medical bill: $100",
-            effect: -100
-        },
-        {
-            text: "Sold textbooks: $75",
-            effect: 75
-        },
-        {
-            text: "High utility bill: $80",
-            effect: -80
-        },
-        {
-            text: "Freelance work: $120",
-            effect: 120
-        }
-    ];
-    
-    if (Math.random() < 0.7) { // 70% chance of an event
+    // Only 25% chance of random event to keep it interesting but not overwhelming
+    if (Math.random() < 0.25) {
+        const events = [
+            { text: "Found $50!", effect: 50 },
+            { text: "Car repair: -$150", effect: -150 },
+            { text: "Tax refund: +$120", effect: 120 },
+            { text: "Medical bill: -$80", effect: -80 },
+            { text: "Side gig: +$100", effect: 100 },
+            { text: "Utility spike: -$60", effect: -60 }
+        ];
+        
         const event = events[Math.floor(Math.random() * events.length)];
+        
+        // Apply effect immediately
         gameState.cash += event.effect;
         
-        // Show event as a brief notification in the button
-        const originalText = elements.advanceTurn.textContent;
-        elements.advanceTurn.textContent = event.text;
-        elements.advanceTurn.style.backgroundColor = event.effect > 0 ? '#27ae60' : '#e74c3c';
-        
-        setTimeout(() => {
-            elements.advanceTurn.textContent = 'Week Advanced!';
-            elements.advanceTurn.style.backgroundColor = '#27ae60';
-        }, 2000);
+        return event.text;
     }
+    return null;
 }
 
 function updateAllDisplays() {
-    // Update header info
-    elements.currentWeek.textContent = `Week: ${gameState.week}`;
-    elements.currentBalance.textContent = `Net Worth: $${gameState.cash}`;
-    
     // Calculate financial values
     const income = jobSalaries[gameState.currentJob];
     const totalExpenses = gameState.expenses.living + gameState.expenses.studentLoans;
     const weeklyChange = income - totalExpenses;
     
-    // Update financial display
+    // Update ALL text elements immediately with textContent (fastest DOM update)
+    elements.currentWeek.textContent = `Week: ${gameState.week}`;
+    elements.currentBalance.textContent = `Net Worth: $${gameState.cash}`;
     elements.cashAmount.textContent = `$${gameState.cash}`;
     elements.totalAssets.textContent = `$${gameState.cash}`;
     elements.livingExpenses.textContent = `-$${gameState.expenses.living}`;
@@ -161,24 +135,22 @@ function updateAllDisplays() {
     elements.weeklyChange.textContent = `${weeklyChange >= 0 ? '+' : ''}$${weeklyChange}`;
     elements.netWorth.textContent = `$${gameState.cash}`;
     
-    // Color code weekly change
-    const weeklyChangeElement = elements.weeklyChange;
+    // Apply color coding immediately
     if (weeklyChange < 0) {
-        weeklyChangeElement.style.color = '#e74c3c';
+        elements.weeklyChange.style.color = '#e74c3c';
     } else if (weeklyChange > 0) {
-        weeklyChangeElement.style.color = '#27ae60';
+        elements.weeklyChange.style.color = '#27ae60';
     } else {
-        weeklyChangeElement.style.color = '#f39c12';
+        elements.weeklyChange.style.color = '#f39c12';
     }
     
     // Color code net worth in header
-    const balanceElement = elements.currentBalance;
     if (gameState.cash < 0) {
-        balanceElement.style.color = '#ff6b6b';
+        elements.currentBalance.style.color = '#ff6b6b';
     } else if (gameState.cash > 5000) {
-        balanceElement.style.color = '#51cf66';
+        elements.currentBalance.style.color = '#51cf66';
     } else {
-        balanceElement.style.color = 'white';
+        elements.currentBalance.style.color = 'white';
     }
 }
 

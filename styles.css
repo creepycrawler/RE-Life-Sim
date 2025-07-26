@@ -118,9 +118,10 @@ header h1 {
     font-size: 1.2rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.2s ease;
     text-transform: uppercase;
     letter-spacing: 0.5px;
+    will-change: transform, background-color;
 }
 
 .btn.primary {
@@ -184,6 +185,12 @@ header h1 {
     padding: 0.75rem 0;
     border-bottom: 1px solid #f1f3f4;
     font-size: 1.1rem;
+}
+
+.financial-item span:last-child {
+    font-weight: 600;
+    min-width: 80px;
+    text-align: right;
 }
 
 .financial-item:last-child {
