@@ -43,13 +43,7 @@ const elements = {
     jobIncome: document.getElementById('job-income'),
     totalIncome: document.getElementById('total-income'),
     weeklyChange: document.getElementById('weekly-change'),
-    netWorth: document.getElementById('net-worth'),
-    
-    // Modal
-    eventModal: document.getElementById('event-modal'),
-    eventTitle: document.getElementById('event-title'),
-    eventDescription: document.getElementById('event-description'),
-    closeModal: document.getElementById('close-modal')
+    netWorth: document.getElementById('net-worth')
 };
 
 // Initialize Game
@@ -59,9 +53,6 @@ function initGame() {
     
     // Turn Advancement
     elements.advanceTurn.addEventListener('click', advanceTurn);
-    
-    // Modal Close
-    elements.closeModal.addEventListener('click', closeModal);
     
     // Initial display update
     updateAllDisplays();
@@ -84,93 +75,69 @@ function advanceTurn() {
     gameState.cash += netWeekly;
     
     // Add random events occasionally
-    let randomEventText = '';
     if (Math.random() < 0.3) {
-        const randomEvent = generateRandomEvent();
-        if (randomEvent) {
-            randomEventText = `<hr><h4>Random Event</h4><p>${randomEvent}</p>`;
-        }
+        generateRandomEvent();
     }
     
-    // Create weekly report
-    let eventText = `<h4>Week ${gameState.week} Summary</h4>`;
-    eventText += `<p><strong>Job:</strong> ${getJobDisplayName(gameState.currentJob)}</p>`;
-    eventText += `<p><strong>Weekly Income:</strong> $${income}</p>`;
-    eventText += `<p><strong>Weekly Expenses:</strong> $${totalExpenses}</p>`;
-    eventText += `<p><strong>Net Weekly Change:</strong> ${netWeekly >= 0 ? '+' : ''}$${netWeekly}</p>`;
-    eventText += `<p><strong>New Cash Balance:</strong> $${gameState.cash}</p>`;
-    
-    if (randomEventText) {
-        eventText += randomEventText;
-    }
-    
-    // Check for financial warnings
-    if (gameState.cash < 0) {
-        eventText += `<hr><p style="color: red; font-weight: bold;">⚠️ WARNING: You're in debt! Find a better job or reduce expenses!</p>`;
-    } else if (gameState.cash < 500) {
-        eventText += `<hr><p style="color: orange; font-weight: bold;">⚠️ CAUTION: Your cash is running low!</p>`;
-    } else if (gameState.cash > 5000) {
-        eventText += `<hr><p style="color: green; font-weight: bold;">🎉 Excellent! You're building wealth!</p>`;
-    }
-    
-    showModal('Weekly Update', eventText);
+    // Update all displays immediately
     updateAllDisplays();
-}
-
-function getJobDisplayName(jobId) {
-    const jobNames = {
-        'unemployed': 'Unemployed',
-        'intern': 'Intern',
-        'customer-service': 'Customer Service Rep',
-        'entry-sales': 'Sales Associate', 
-        'project-coordinator': 'Project Coordinator',
-        'marketing-coordinator': 'Marketing Coordinator',
-        'data-analyst': 'Data Analyst',
-        'junior-dev': 'Junior Developer',
-        'financial-analyst': 'Financial Analyst'
-    };
-    return jobNames[jobId] || jobId;
+    
+    // Add a brief visual feedback
+    elements.advanceTurn.textContent = 'Week Advanced!';
+    elements.advanceTurn.style.backgroundColor = '#27ae60';
+    
+    setTimeout(() => {
+        elements.advanceTurn.textContent = 'Advance 1 Week';
+        elements.advanceTurn.style.backgroundColor = '';
+    }, 1000);
 }
 
 function generateRandomEvent() {
     const events = [
         {
-            text: "You found $50 in an old jacket pocket!",
-            effect: () => gameState.cash += 50
+            text: "Found $50 in old jacket!",
+            effect: 50
         },
         {
-            text: "Unexpected car repair cost you $200.",
-            effect: () => gameState.cash -= 200
+            text: "Car repair cost $200",
+            effect: -200
         },
         {
-            text: "You received a small tax refund of $150!",
-            effect: () => gameState.cash += 150
+            text: "Tax refund: $150",
+            effect: 150
         },
         {
-            text: "Medical bill arrived: $100",
-            effect: () => gameState.cash -= 100
+            text: "Medical bill: $100",
+            effect: -100
         },
         {
-            text: "You sold some old textbooks for $75!",
-            effect: () => gameState.cash += 75
+            text: "Sold textbooks: $75",
+            effect: 75
         },
         {
-            text: "Utility bill was higher this week: $80",
-            effect: () => gameState.cash -= 80
+            text: "High utility bill: $80",
+            effect: -80
         },
         {
-            text: "You got a small freelance gig: $120!",
-            effect: () => gameState.cash += 120
+            text: "Freelance work: $120",
+            effect: 120
         }
     ];
     
     if (Math.random() < 0.7) { // 70% chance of an event
         const event = events[Math.floor(Math.random() * events.length)];
-        event.effect();
-        return event.text;
+        gameState.cash += event.effect;
+        
+        // Show event as a brief notification in the button
+        const originalText = elements.advanceTurn.textContent;
+        elements.advanceTurn.textContent = event.text;
+        elements.advanceTurn.style.backgroundColor = event.effect > 0 ? '#27ae60' : '#e74c3c';
+        
+        setTimeout(() => {
+            elements.advanceTurn.textContent = 'Week Advanced!';
+            elements.advanceTurn.style.backgroundColor = '#27ae60';
+        }, 2000);
     }
-    
-    return null;
 }
 
 function updateAllDisplays() {
@@ -213,16 +180,6 @@ function updateAllDisplays() {
     } else {
         balanceElement.style.color = 'white';
     }
-}
-
-function showModal(title, content) {
-    elements.eventTitle.textContent = title;
-    elements.eventDescription.innerHTML = content;
-    elements.eventModal.classList.add('active');
-}
-
-function closeModal() {
-    elements.eventModal.classList.remove('active');
 }
 
 // Start the game when page loads
