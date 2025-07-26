@@ -294,6 +294,85 @@
              font-weight: 600;
              color: #2c3e50;
          }
+         
+         /* Loan Card Styles */
+         .loan-card {
+             background: white;
+             border: 1px solid #dee2e6;
+             border-radius: 12px;
+             margin-bottom: 20px;
+             overflow: hidden;
+             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+         }
+         
+         .loan-header {
+             background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+             color: white;
+             padding: 15px 20px;
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+         }
+         
+         .loan-title {
+             font-size: 1.2rem;
+             font-weight: 600;
+         }
+         
+         .loan-balance {
+             font-size: 1.3rem;
+             font-weight: 700;
+         }
+         
+         .loan-details {
+             padding: 20px;
+         }
+         
+         .loan-info-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+             gap: 15px;
+             margin-bottom: 20px;
+         }
+         
+         .loan-info-item {
+             text-align: center;
+             padding: 10px;
+             background: #f8f9fa;
+             border-radius: 6px;
+         }
+         
+         .loan-info-label {
+             font-size: 12px;
+             color: #6c757d;
+             margin-bottom: 5px;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+         }
+         
+         .loan-info-value {
+             font-size: 16px;
+             font-weight: 600;
+             color: #2c3e50;
+         }
+         
+         .loan-progress {
+             margin-top: 15px;
+         }
+         
+         .progress-bar {
+             width: 100%;
+             height: 8px;
+             background: #e9ecef;
+             border-radius: 4px;
+             overflow: hidden;
+         }
+         
+         .progress-fill {
+             height: 100%;
+             background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
+             transition: width 0.3s ease;
+         }
         
                  /* Balance Sheet Grid for Mobile */
          @media (max-width: 768px) {
@@ -354,6 +433,7 @@
          <div class="menu">
              <button class="menu-item active" onclick="showPage('job')">Job</button>
              <button class="menu-item" onclick="showPage('balance')">Balance</button>
+             <button class="menu-item" onclick="showPage('loans')">Loans</button>
              <button class="menu-item" onclick="showPage('history')">History</button>
          </div>
         
@@ -542,6 +622,66 @@
              </div>
          </div>
          
+         <!-- Loans Page -->
+         <div id="loans-page" class="page">
+             <!-- Loans Title -->
+             <div style="text-align: center; margin-bottom: 30px;">
+                 <h2 style="color: #2c3e50; margin: 0; font-size: 1.5rem;">Active Loans</h2>
+                 <p style="color: #6c757d; margin: 5px 0 0 0;">Manage your debt and track payments</p>
+             </div>
+             
+             <!-- Loan Summary Cards -->
+             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                 <div class="stat-item">
+                     <div class="stat-label">Total Debt</div>
+                     <div class="stat-value negative" id="total-debt">$40,000</div>
+                 </div>
+                 <div class="stat-item">
+                     <div class="stat-label">Monthly Payments</div>
+                     <div class="stat-value" id="monthly-payments">$800</div>
+                 </div>
+                 <div class="stat-item">
+                     <div class="stat-label">Interest This Week</div>
+                     <div class="stat-value negative" id="weekly-interest">$15</div>
+                 </div>
+                 <div class="stat-item">
+                     <div class="stat-label">Years Remaining</div>
+                     <div class="stat-value" id="years-remaining">10</div>
+                 </div>
+             </div>
+             
+             <!-- Active Loans List -->
+             <div id="loans-container">
+                 <!-- Loans will be populated by JavaScript -->
+             </div>
+             
+             <!-- Payment Actions -->
+             <div class="balance-section">
+                 <div class="section-header">Make Extra Payment</div>
+                 <div class="section-content">
+                     <div style="display: flex; gap: 15px; align-items: end; flex-wrap: wrap;">
+                         <div style="flex: 1; min-width: 200px;">
+                             <label style="display: block; margin-bottom: 5px; font-weight: 600;">Select Loan:</label>
+                             <select id="payment-loan-select" style="width: 100%; padding: 10px; border: 2px solid #dee2e6; border-radius: 6px;">
+                                 <option value="student-loan">Student Loan</option>
+                             </select>
+                         </div>
+                         <div style="flex: 1; min-width: 150px;">
+                             <label style="display: block; margin-bottom: 5px; font-weight: 600;">Amount:</label>
+                             <input type="number" id="payment-amount" placeholder="Enter amount" min="1" 
+                                    style="width: 100%; padding: 10px; border: 2px solid #dee2e6; border-radius: 6px;">
+                         </div>
+                         <button onclick="makeExtraPayment()" class="btn" style="width: auto; margin: 0; padding: 10px 20px;">
+                             Make Payment
+                         </button>
+                     </div>
+                     <p style="margin-top: 10px; color: #6c757d; font-size: 14px;">
+                         Extra payments go directly to principal and can significantly reduce interest costs.
+                     </p>
+                 </div>
+             </div>
+         </div>
+         
          <!-- History Page -->
          <div id="history-page" class="page">
              <!-- History Title and Controls -->
@@ -639,6 +779,21 @@
          // History tracking
          let gameHistory = [];
          let currentTimeRange = 4;
+         
+         // Loan system
+         let activeLoans = {
+             'student-loan': {
+                 id: 'student-loan',
+                 name: 'Student Loan',
+                 originalAmount: 40000,
+                 currentBalance: 40000,
+                 interestRate: 0.0650, // 6.5% annual
+                 termYears: 10,
+                 weeklyPayment: 200,
+                 paymentsRemaining: 520, // 10 years * 52 weeks
+                 type: 'fixed'
+             }
+         };
         
         const jobs = {
             'unemployed': { name: 'Unemployed', salary: 0 },
@@ -667,13 +822,13 @@
         }
         
                  function updateDisplay() {
-             const salary = jobs[currentJob].salary;
-             const expenses = 700;
-             const netChange = salary - expenses;
-             const studentDebt = 40000; // Fixed student loan debt
-             const totalAssets = Math.max(cash, 0); // Only positive cash counts as assets
-             const totalLiabilities = studentDebt + Math.max(-cash, 0); // Add negative cash as liability
-             const netWorth = totalAssets - totalLiabilities;
+                           const salary = jobs[currentJob].salary;
+              const expenses = 700;
+              const netChange = salary - expenses;
+              const totalLoanDebt = Object.values(activeLoans).reduce((sum, loan) => sum + loan.currentBalance, 0);
+              const totalAssets = Math.max(cash, 0); // Only positive cash counts as assets
+              const totalLiabilities = totalLoanDebt + Math.max(-cash, 0); // Add negative cash as liability
+              const netWorth = totalAssets - totalLiabilities;
              
              // Update header stats
              document.getElementById('header-week').textContent = week;
@@ -696,11 +851,11 @@
              }
              
              // Update balance sheet
-             document.getElementById('balance-week').textContent = week;
-             document.getElementById('balance-cash').textContent = '$' + Math.max(cash, 0).toLocaleString();
-             document.getElementById('total-assets').textContent = '$' + totalAssets.toLocaleString();
-             document.getElementById('student-debt').textContent = '$' + studentDebt.toLocaleString();
-             document.getElementById('total-liabilities').textContent = '$' + totalLiabilities.toLocaleString();
+                           document.getElementById('balance-week').textContent = week;
+              document.getElementById('balance-cash').textContent = '$' + Math.max(cash, 0).toLocaleString();
+              document.getElementById('total-assets').textContent = '$' + totalAssets.toLocaleString();
+              document.getElementById('student-debt').textContent = '$' + activeLoans['student-loan'].currentBalance.toLocaleString();
+              document.getElementById('total-liabilities').textContent = '$' + totalLiabilities.toLocaleString();
              
              // Net worth calculation
              const netWorthEl = document.getElementById('net-worth-calc');
@@ -741,59 +896,213 @@
              }
          }
         
-        function advanceWeek() {
-            week++;
-            const salary = jobs[currentJob].salary;
-            const expenses = 700;
-            const netChange = salary - expenses;
-            cash += netChange;
-            
-            // Random events (25% chance)
-            if (Math.random() < 0.25) {
-                const events = [
-                    { text: "Found $50!", effect: 50 },
-                    { text: "Car repair: -$150", effect: -150 },
-                    { text: "Tax refund: +$120", effect: 120 },
-                    { text: "Medical bill: -$80", effect: -80 },
-                    { text: "Side gig: +$100", effect: 100 },
-                    { text: "Utility spike: -$60", effect: -60 }
-                ];
-                
-                const event = events[Math.floor(Math.random() * events.length)];
-                cash += event.effect;
-            }
-            
-                         updateDisplay();
+                 function advanceWeek() {
+             week++;
+             const salary = jobs[currentJob].salary;
+             const expenses = 700;
+             
+             // Process loan payments and interest
+             processLoanPayments();
+             
+             const netChange = salary - expenses;
+             cash += netChange;
+             
+             // Random events (25% chance)
+             if (Math.random() < 0.25) {
+                 const events = [
+                     { text: "Found $50!", effect: 50 },
+                     { text: "Car repair: -$150", effect: -150 },
+                     { text: "Tax refund: +$120", effect: 120 },
+                     { text: "Medical bill: -$80", effect: -80 },
+                     { text: "Side gig: +$100", effect: 100 },
+                     { text: "Utility spike: -$60", effect: -60 }
+                 ];
+                 
+                 const event = events[Math.floor(Math.random() * events.length)];
+                 cash += event.effect;
+             }
+             
+             updateDisplay();
+             updateLoansDisplay();
              
              // Add to history
              addToHistory();
              updateHistoryDisplay();
              
              // Visual feedback
-            const btn = document.getElementById('advance-btn');
-            btn.textContent = 'Week Advanced!';
-            btn.style.background = '#28a745';
-            
-            setTimeout(() => {
-                btn.textContent = 'Advance 1 Week';
-                btn.style.background = '';
-            }, 1000);
-        }
+             const btn = document.getElementById('advance-btn');
+             btn.textContent = 'Week Advanced!';
+             btn.style.background = '#28a745';
+             
+             setTimeout(() => {
+                 btn.textContent = 'Advance 1 Week';
+                 btn.style.background = '';
+             }, 1000);
+         }
         
-        function changeJob() {
-            const select = document.getElementById('job-select');
-            currentJob = select.value;
-            updateDisplay();
-        }
+                 function changeJob() {
+             const select = document.getElementById('job-select');
+             currentJob = select.value;
+             updateDisplay();
+         }
+         
+         // Loan Management Functions
+         function processLoanPayments() {
+             Object.values(activeLoans).forEach(loan => {
+                 if (loan.currentBalance <= 0) return;
+                 
+                 // Calculate weekly interest (annual rate / 52 weeks)
+                 const weeklyInterestRate = loan.interestRate / 52;
+                 const interestCharge = loan.currentBalance * weeklyInterestRate;
+                 
+                 // Apply interest to balance
+                 loan.currentBalance += interestCharge;
+                 
+                 // Apply weekly payment
+                 const payment = Math.min(loan.weeklyPayment, loan.currentBalance);
+                 loan.currentBalance -= payment;
+                 loan.paymentsRemaining = Math.max(0, loan.paymentsRemaining - 1);
+                 
+                 // Ensure balance doesn't go negative
+                 loan.currentBalance = Math.max(0, loan.currentBalance);
+             });
+         }
+         
+         function makeExtraPayment() {
+             const loanId = document.getElementById('payment-loan-select').value;
+             const amount = parseFloat(document.getElementById('payment-amount').value);
+             
+             if (!amount || amount <= 0) {
+                 alert('Please enter a valid payment amount');
+                 return;
+             }
+             
+             if (amount > cash) {
+                 alert('Insufficient funds for this payment');
+                 return;
+             }
+             
+             const loan = activeLoans[loanId];
+             if (!loan || loan.currentBalance <= 0) {
+                 alert('Loan not found or already paid off');
+                 return;
+             }
+             
+             // Apply payment directly to principal
+             const actualPayment = Math.min(amount, loan.currentBalance);
+             loan.currentBalance -= actualPayment;
+             cash -= actualPayment;
+             
+             // Clear the input
+             document.getElementById('payment-amount').value = '';
+             
+             // Update displays
+             updateDisplay();
+             updateLoansDisplay();
+             
+             alert(`Payment of $${actualPayment.toLocaleString()} applied to ${loan.name}`);
+         }
+         
+         function updateLoansDisplay() {
+             const container = document.getElementById('loans-container');
+             container.innerHTML = '';
+             
+             // Calculate totals
+             let totalDebt = 0;
+             let totalWeeklyPayments = 0;
+             let totalWeeklyInterest = 0;
+             let avgYearsRemaining = 0;
+             
+             Object.values(activeLoans).forEach(loan => {
+                 totalDebt += loan.currentBalance;
+                 totalWeeklyPayments += loan.weeklyPayment;
+                 totalWeeklyInterest += loan.currentBalance * (loan.interestRate / 52);
+                 avgYearsRemaining += loan.paymentsRemaining / 52;
+             });
+             
+             // Update summary cards
+             document.getElementById('total-debt').textContent = '$' + totalDebt.toLocaleString();
+             document.getElementById('monthly-payments').textContent = '$' + (totalWeeklyPayments * 4.33).toFixed(0);
+             document.getElementById('weekly-interest').textContent = '$' + totalWeeklyInterest.toFixed(2);
+             document.getElementById('years-remaining').textContent = (avgYearsRemaining / Object.keys(activeLoans).length).toFixed(1);
+             
+             // Create loan cards
+             Object.values(activeLoans).forEach(loan => {
+                 if (loan.currentBalance > 0) {
+                     const loanCard = createLoanCard(loan);
+                     container.appendChild(loanCard);
+                 }
+             });
+             
+             if (totalDebt === 0) {
+                 container.innerHTML = '<div class="balance-section"><div class="section-content" style="text-align: center; padding: 40px;"><h3 style="color: #28a745;">🎉 Congratulations!</h3><p>You have paid off all your loans!</p></div></div>';
+             }
+         }
+         
+         function createLoanCard(loan) {
+             const div = document.createElement('div');
+             div.className = 'loan-card';
+             
+             const progressPercent = ((loan.originalAmount - loan.currentBalance) / loan.originalAmount) * 100;
+             const monthlyPayment = loan.weeklyPayment * 4.33;
+             const weeklyInterest = loan.currentBalance * (loan.interestRate / 52);
+             const yearsRemaining = loan.paymentsRemaining / 52;
+             
+             div.innerHTML = `
+                 <div class="loan-header">
+                     <div class="loan-title">${loan.name}</div>
+                     <div class="loan-balance">$${loan.currentBalance.toLocaleString()}</div>
+                 </div>
+                 <div class="loan-details">
+                     <div class="loan-info-grid">
+                         <div class="loan-info-item">
+                             <div class="loan-info-label">Interest Rate</div>
+                             <div class="loan-info-value">${(loan.interestRate * 100).toFixed(2)}%</div>
+                         </div>
+                         <div class="loan-info-item">
+                             <div class="loan-info-label">Monthly Payment</div>
+                             <div class="loan-info-value">$${monthlyPayment.toFixed(0)}</div>
+                         </div>
+                         <div class="loan-info-item">
+                             <div class="loan-info-label">Weekly Interest</div>
+                             <div class="loan-info-value">$${weeklyInterest.toFixed(2)}</div>
+                         </div>
+                         <div class="loan-info-item">
+                             <div class="loan-info-label">Years Remaining</div>
+                             <div class="loan-info-value">${yearsRemaining.toFixed(1)}</div>
+                         </div>
+                         <div class="loan-info-item">
+                             <div class="loan-info-label">Original Amount</div>
+                             <div class="loan-info-value">$${loan.originalAmount.toLocaleString()}</div>
+                         </div>
+                         <div class="loan-info-item">
+                             <div class="loan-info-label">Paid Off</div>
+                             <div class="loan-info-value">${progressPercent.toFixed(1)}%</div>
+                         </div>
+                     </div>
+                     <div class="loan-progress">
+                         <div style="display: flex; justify-content: space-between; margin-bottom: 5px;">
+                             <span style="font-size: 14px; color: #6c757d;">Progress</span>
+                             <span style="font-size: 14px; color: #6c757d;">${progressPercent.toFixed(1)}% paid</span>
+                         </div>
+                         <div class="progress-bar">
+                             <div class="progress-fill" style="width: ${progressPercent}%"></div>
+                         </div>
+                     </div>
+                 </div>
+             `;
+             
+             return div;
+         }
         
                  // History and Chart Functions
          function addToHistory() {
              const salary = jobs[currentJob].salary;
              const expenses = 700;
              const netChange = salary - expenses;
-             const studentDebt = 40000;
+             const totalLoanDebt = Object.values(activeLoans).reduce((sum, loan) => sum + loan.currentBalance, 0);
              const totalAssets = Math.max(cash, 0);
-             const totalLiabilities = studentDebt + Math.max(-cash, 0);
+             const totalLiabilities = totalLoanDebt + Math.max(-cash, 0);
              const netWorth = totalAssets - totalLiabilities;
              
              gameHistory.push({
@@ -987,6 +1296,7 @@
              
              // Initial display
              updateDisplay();
+             updateLoansDisplay();
              updateHistoryDisplay();
          };
     </script>
