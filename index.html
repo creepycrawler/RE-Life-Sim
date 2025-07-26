@@ -963,6 +963,270 @@
              font-weight: 600;
              color: #2c3e50;
          }
+         
+         /* Player Page Styles */
+         .player-tabs {
+             display: flex;
+             border-bottom: 2px solid #dee2e6;
+             margin-bottom: 30px;
+             gap: 5px;
+         }
+         
+         .player-tab {
+             background: #f8f9fa;
+             border: 1px solid #dee2e6;
+             border-bottom: none;
+             padding: 12px 20px;
+             cursor: pointer;
+             border-radius: 8px 8px 0 0;
+             font-weight: 500;
+             color: #6c757d;
+             transition: all 0.2s ease;
+         }
+         
+         .player-tab:hover {
+             background: #e9ecef;
+             color: #495057;
+         }
+         
+         .player-tab.active {
+             background: white;
+             color: #2c3e50;
+             border-color: #007bff;
+             transform: translateY(2px);
+         }
+         
+         .player-tab-content {
+             display: none;
+         }
+         
+         .player-tab-content.active {
+             display: block;
+         }
+         
+         /* Stats Styles */
+         .stat-container {
+             background: white;
+             border: 1px solid #dee2e6;
+             border-radius: 12px;
+             padding: 20px;
+             margin-bottom: 20px;
+         }
+         
+         .stat-header {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             margin-bottom: 15px;
+         }
+         
+         .stat-name {
+             font-size: 18px;
+             font-weight: 600;
+             color: #2c3e50;
+         }
+         
+         .stat-value {
+             font-size: 24px;
+             font-weight: 700;
+             color: #007bff;
+         }
+         
+         .stat-bar {
+             width: 100%;
+             height: 20px;
+             background: #e9ecef;
+             border-radius: 10px;
+             overflow: hidden;
+             margin-bottom: 10px;
+         }
+         
+         .stat-fill {
+             height: 100%;
+             transition: width 0.5s ease;
+             border-radius: 10px;
+         }
+         
+         .happiness-fill {
+             background: linear-gradient(90deg, #dc3545 0%, #ffc107 50%, #28a745 100%);
+         }
+         
+         .stat-description {
+             font-size: 14px;
+             color: #6c757d;
+         }
+         
+         .factors-list {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+             gap: 10px;
+         }
+         
+         .happiness-factor {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             padding: 10px 15px;
+             background: #f8f9fa;
+             border-radius: 6px;
+             border-left: 3px solid #007bff;
+         }
+         
+         .factor-name {
+             font-weight: 500;
+             color: #2c3e50;
+         }
+         
+         .factor-value {
+             font-weight: 600;
+         }
+         
+         .factor-value.positive {
+             color: #28a745;
+         }
+         
+         .factor-value.negative {
+             color: #dc3545;
+         }
+         
+         .factor-value.neutral {
+             color: #6c757d;
+         }
+         
+         /* Housing Styles */
+         .housing-options {
+             display: grid;
+             gap: 20px;
+             margin-bottom: 30px;
+         }
+         
+         .housing-option {
+             border: 2px solid #dee2e6;
+             border-radius: 12px;
+             padding: 20px;
+             background: white;
+             transition: all 0.3s ease;
+             cursor: pointer;
+         }
+         
+         .housing-option:hover {
+             border-color: #007bff;
+             box-shadow: 0 4px 12px rgba(0, 123, 255, 0.1);
+         }
+         
+         .housing-option.selected {
+             border-color: #28a745;
+             background: linear-gradient(135deg, #f8fff9 0%, #e8f5e8 100%);
+         }
+         
+         .housing-header {
+             display: flex;
+             align-items: center;
+             gap: 15px;
+             margin-bottom: 15px;
+         }
+         
+         .housing-icon {
+             font-size: 32px;
+             width: 50px;
+             text-align: center;
+         }
+         
+         .housing-info {
+             flex: 1;
+         }
+         
+         .housing-name {
+             font-size: 18px;
+             font-weight: 600;
+             color: #2c3e50;
+             margin-bottom: 5px;
+         }
+         
+         .housing-cost {
+             font-size: 16px;
+             font-weight: 500;
+             color: #dc3545;
+         }
+         
+         .housing-happiness {
+             font-size: 16px;
+             font-weight: 600;
+             padding: 5px 10px;
+             border-radius: 20px;
+             background: #f8f9fa;
+             color: #6c757d;
+         }
+         
+         .housing-description {
+             color: #6c757d;
+             line-height: 1.5;
+             margin-bottom: 15px;
+         }
+         
+         .housing-select-btn {
+             background: #007bff;
+             color: white;
+             border: none;
+             padding: 10px 20px;
+             border-radius: 6px;
+             font-weight: 500;
+             cursor: pointer;
+             transition: all 0.2s ease;
+         }
+         
+         .housing-select-btn:hover {
+             background: #0056b3;
+         }
+         
+         .housing-select-btn.selected {
+             background: #28a745;
+             cursor: default;
+         }
+         
+         .housing-select-btn.selected:hover {
+             background: #28a745;
+         }
+         
+         .current-housing-summary {
+             background: #f8f9fa;
+             border: 1px solid #dee2e6;
+             border-radius: 12px;
+             overflow: hidden;
+         }
+         
+         .summary-header {
+             background: #e9ecef;
+             padding: 15px 20px;
+             font-weight: 600;
+             color: #2c3e50;
+             border-bottom: 1px solid #dee2e6;
+         }
+         
+         .summary-content {
+             padding: 20px;
+         }
+         
+         .summary-item {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             margin-bottom: 10px;
+         }
+         
+         .summary-item:last-child {
+             margin-bottom: 0;
+         }
+         
+         .summary-label {
+             font-weight: 500;
+             color: #6c757d;
+         }
+         
+         .summary-value {
+             font-weight: 600;
+             color: #2c3e50;
+         }
         
                  /* Balance Sheet Grid for Mobile */
          @media (max-width: 768px) {
@@ -1204,6 +1468,7 @@
              <button class="menu-item" onclick="showPage('balance')">Balance</button>
              <button class="menu-item" onclick="showPage('loans')">Loans</button>
              <button class="menu-item" onclick="showPage('bank')">Bank</button>
+             <button class="menu-item" onclick="showPage('player')">Player</button>
              <button class="menu-item" onclick="showPage('history')">History</button>
              <button class="menu-item debug-tab" onclick="showPage('debug')">Debug</button>
          </div>
@@ -1231,6 +1496,10 @@
                      <button class="mobile-menu-item" onclick="showPage('bank'); toggleMobileMenu()">
                          <span class="menu-icon">💳</span>
                          <span>Bank</span>
+                     </button>
+                     <button class="mobile-menu-item" onclick="showPage('player'); toggleMobileMenu()">
+                         <span class="menu-icon">👤</span>
+                         <span>Player</span>
                      </button>
                      <button class="mobile-menu-item" onclick="showPage('history'); toggleMobileMenu()">
                          <span class="menu-icon">📈</span>
@@ -1635,6 +1904,138 @@
              </div>
          </div>
          
+         <!-- Player Page -->
+         <div id="player-page" class="page">
+             <!-- Player Title -->
+             <div style="text-align: center; margin-bottom: 30px;">
+                 <h2 style="color: #2c3e50; margin: 0; font-size: 1.5rem;">👤 Player Profile</h2>
+                 <p style="color: #6c757d; margin: 5px 0 0 0;">Manage your character's stats and lifestyle</p>
+             </div>
+             
+             <!-- Player Subtabs -->
+             <div class="player-tabs">
+                 <button class="player-tab active" onclick="showPlayerTab('stats')">📊 Stats</button>
+                 <button class="player-tab" onclick="showPlayerTab('lifestyle')">🏠 Lifestyle</button>
+             </div>
+             
+             <!-- Stats Subtab -->
+             <div id="player-stats-tab" class="player-tab-content active">
+                 <div class="balance-section">
+                     <div class="section-header">📊 Character Statistics</div>
+                     <div class="section-content">
+                         <div style="text-align: center; margin-bottom: 30px;">
+                             <h3 style="color: #2c3e50; margin-bottom: 20px;">Current Stats</h3>
+                         </div>
+                         
+                         <!-- Happiness Stat -->
+                         <div class="stat-container">
+                             <div class="stat-header">
+                                 <div class="stat-name">😊 Happiness</div>
+                                 <div class="stat-value" id="happiness-value">50</div>
+                             </div>
+                             <div class="stat-bar">
+                                 <div class="stat-fill happiness-fill" id="happiness-bar" style="width: 50%;"></div>
+                             </div>
+                             <div class="stat-description">
+                                 <span id="happiness-status">Neutral</span> - 
+                                 <span id="happiness-factors">Base happiness level</span>
+                             </div>
+                         </div>
+                         
+                         <!-- Happiness Factors -->
+                         <div style="margin-top: 30px;">
+                             <h4 style="color: #2c3e50; margin-bottom: 15px;">Happiness Factors</h4>
+                             <div id="happiness-factors-list" class="factors-list">
+                                 <!-- Factors will be populated by JavaScript -->
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             
+             <!-- Lifestyle Subtab -->
+             <div id="player-lifestyle-tab" class="player-tab-content">
+                 <div class="balance-section">
+                     <div class="section-header">🏠 Housing & Lifestyle</div>
+                     <div class="section-content">
+                         <div style="margin-bottom: 30px;">
+                             <h3 style="color: #2c3e50; margin-bottom: 20px;">Choose Your Housing</h3>
+                             <p style="color: #6c757d; margin-bottom: 20px;">
+                                 Your housing choice affects both your weekly expenses and happiness level.
+                             </p>
+                         </div>
+                         
+                         <!-- Housing Options -->
+                         <div class="housing-options">
+                             <div class="housing-option" data-type="weekly-motel">
+                                 <div class="housing-header">
+                                     <div class="housing-icon">🏨</div>
+                                     <div class="housing-info">
+                                         <div class="housing-name">Weekly Motel Room</div>
+                                         <div class="housing-cost">$120/week</div>
+                                     </div>
+                                     <div class="housing-happiness">-10 😊</div>
+                                 </div>
+                                 <div class="housing-description">
+                                     Basic motel accommodation with minimal amenities. Cheapest option but impacts happiness negatively.
+                                 </div>
+                                 <button onclick="selectHousing('weekly-motel')" class="housing-select-btn">Select</button>
+                             </div>
+                             
+                             <div class="housing-option selected" data-type="monthly-room">
+                                 <div class="housing-header">
+                                     <div class="housing-icon">🏠</div>
+                                     <div class="housing-info">
+                                         <div class="housing-name">Monthly Room Rental</div>
+                                         <div class="housing-cost">$150/week</div>
+                                     </div>
+                                     <div class="housing-happiness">+0 😊</div>
+                                 </div>
+                                 <div class="housing-description">
+                                     Shared living space with basic amenities. Neutral impact on happiness and moderate cost.
+                                 </div>
+                                 <button onclick="selectHousing('monthly-room')" class="housing-select-btn selected">Selected</button>
+                             </div>
+                             
+                             <div class="housing-option" data-type="monthly-apartment">
+                                 <div class="housing-header">
+                                     <div class="housing-icon">🏢</div>
+                                     <div class="housing-info">
+                                         <div class="housing-name">Monthly Apartment</div>
+                                         <div class="housing-cost">$200/week</div>
+                                     </div>
+                                     <div class="housing-happiness">+15 😊</div>
+                                 </div>
+                                 <div class="housing-description">
+                                     Private apartment with full amenities and comfort. Higher cost but significantly boosts happiness.
+                                 </div>
+                                 <button onclick="selectHousing('monthly-apartment')" class="housing-select-btn">Select</button>
+                             </div>
+                         </div>
+                         
+                         <!-- Current Selection Summary -->
+                         <div class="current-housing-summary">
+                             <div class="summary-header">📋 Current Housing Summary</div>
+                             <div class="summary-content">
+                                 <div class="summary-item">
+                                     <span class="summary-label">Current Housing:</span>
+                                     <span class="summary-value" id="current-housing-name">Monthly Room Rental</span>
+                                 </div>
+                                 <div class="summary-item">
+                                     <span class="summary-label">Weekly Cost:</span>
+                                     <span class="summary-value" id="current-housing-cost">$150</span>
+                                 </div>
+                                 <div class="summary-item">
+                                     <span class="summary-label">Happiness Impact:</span>
+                                     <span class="summary-value" id="current-housing-happiness">Neutral (0)</span>
+                                 </div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         
          <!-- Debug Page -->
          <div id="debug-page" class="page">
              <!-- Debug Title -->
@@ -1828,6 +2229,39 @@
          // Negative balance tracking
          let negativeBalanceWeeks = 0; // Consecutive weeks with negative balance
          let hasShownNSFWarning = false; // Prevent multiple warnings per week
+         
+         // Player stats and lifestyle
+         let playerStats = {
+             happiness: 50 // Scale of 0-100
+         };
+         
+         let housing = {
+             type: 'monthly-room', // 'weekly-motel', 'monthly-room', 'monthly-apartment'
+             weeklyCost: 0, // Will be calculated based on type
+             happinessBonus: 0 // Happiness modifier from housing choice
+         };
+         
+         // Housing options configuration
+         const housingOptions = {
+             'weekly-motel': {
+                 name: 'Weekly Motel Room',
+                 weeklyCost: 120,
+                 happinessBonus: -10,
+                 description: 'Basic motel accommodation with minimal amenities'
+             },
+             'monthly-room': {
+                 name: 'Monthly Room Rental',
+                 weeklyCost: 150,
+                 happinessBonus: 0,
+                 description: 'Shared living space with basic amenities'
+             },
+             'monthly-apartment': {
+                 name: 'Monthly Apartment',
+                 weeklyCost: 200,
+                 happinessBonus: 15,
+                 description: 'Private apartment with full amenities and comfort'
+             }
+         };
          
          // Loan system
          let activeLoans = {
@@ -2113,7 +2547,7 @@
              
              week++;
              const salary = jobs[currentJob].salary;
-             const expenses = 700;
+             const expenses = housing.weeklyCost + 350; // Housing + other living expenses
              
              // Clear old transactions (keep only last 8 weeks)
              transactionLog = transactionLog.filter(t => t.week > week - 8);
@@ -2123,8 +2557,12 @@
                  addTransaction('income', `Salary - ${jobs[currentJob].name}`, salary, 'Payroll deposit');
              }
              
-             // Record living expenses
-             addTransaction('expense', 'Living Expenses', -500, 'Housing, food, utilities');
+             // Record housing costs
+             addTransaction('expense', housingOptions[housing.type].name, -housing.weeklyCost, 'Weekly housing cost');
+             
+             // Record other living expenses (food, utilities, etc.)
+             const otherExpenses = 350; // Reduced since housing is separate now
+             addTransaction('expense', 'Living Expenses', -otherExpenses, 'Food, utilities, transportation');
              
              // Note: Loan payments are recorded in processLoanPayments()
              
@@ -2156,6 +2594,7 @@
              updateLoansDisplay();
              updateBankDisplay();
              updateDebugDisplay();
+             updatePlayerDisplay();
              
              // Check for negative balance and handle NSF fees
              handleNegativeBalanceChecks();
@@ -2963,6 +3402,11 @@
                      transactionLog = [];
                      gameHistory = [];
                      
+                     // Reset player stats
+                     playerStats.happiness = 50;
+                     housing.type = 'monthly-room';
+                     updateHousingCosts();
+                     
                      // Reset loans
                      activeLoans['student-loan'].currentBalance = 40000;
                      activeLoans['student-loan'].totalInterestAccrued = 0;
@@ -2982,11 +3426,204 @@
                      updateBankDisplay();
                      updateHistoryDisplay();
                      updateDebugDisplay();
+                     updatePlayerDisplay();
                      enableAdvanceButton();
                      
                      alert('Game completely reset to starting state');
                  }
              }
+         }
+         
+         // Player Management Functions
+         function showPlayerTab(tabName) {
+             // Update tab buttons
+             document.querySelectorAll('.player-tab').forEach(tab => {
+                 tab.classList.remove('active');
+             });
+             event.target.classList.add('active');
+             
+             // Update tab content
+             document.querySelectorAll('.player-tab-content').forEach(content => {
+                 content.classList.remove('active');
+             });
+             document.getElementById('player-' + tabName + '-tab').classList.add('active');
+         }
+         
+         function initializePlayer() {
+             // Set default housing
+             updateHousingCosts();
+             updatePlayerDisplay();
+         }
+         
+         function updateHousingCosts() {
+             const option = housingOptions[housing.type];
+             housing.weeklyCost = option.weeklyCost;
+             housing.happinessBonus = option.happinessBonus;
+         }
+         
+         function selectHousing(type) {
+             if (type === housing.type) return; // Already selected
+             
+             const oldCost = housing.weeklyCost;
+             housing.type = type;
+             updateHousingCosts();
+             
+             // Update housing display
+             updateHousingDisplay();
+             
+             // Update happiness and other displays
+             updatePlayerDisplay();
+             updateDisplay(); // Update main displays
+             
+             const costDiff = housing.weeklyCost - oldCost;
+             const option = housingOptions[type];
+             
+             alert(`Housing changed to ${option.name}!\nWeekly cost change: ${costDiff >= 0 ? '+' : ''}$${costDiff}\nHappiness change: ${option.happinessBonus >= 0 ? '+' : ''}${option.happinessBonus}`);
+         }
+         
+         function updateHousingDisplay() {
+             // Remove selected class from all options
+             document.querySelectorAll('.housing-option').forEach(option => {
+                 option.classList.remove('selected');
+             });
+             document.querySelectorAll('.housing-select-btn').forEach(btn => {
+                 btn.classList.remove('selected');
+                 btn.textContent = 'Select';
+             });
+             
+             // Add selected class to current option
+             const selectedOption = document.querySelector(`[data-type="${housing.type}"]`);
+             if (selectedOption) {
+                 selectedOption.classList.add('selected');
+                 const btn = selectedOption.querySelector('.housing-select-btn');
+                 btn.classList.add('selected');
+                 btn.textContent = 'Selected';
+             }
+             
+             // Update summary
+             const option = housingOptions[housing.type];
+             document.getElementById('current-housing-name').textContent = option.name;
+             document.getElementById('current-housing-cost').textContent = '$' + option.weeklyCost;
+             
+             let happinessText = 'Neutral (0)';
+             if (option.happinessBonus > 0) {
+                 happinessText = `Positive (+${option.happinessBonus})`;
+             } else if (option.happinessBonus < 0) {
+                 happinessText = `Negative (${option.happinessBonus})`;
+             }
+             document.getElementById('current-housing-happiness').textContent = happinessText;
+         }
+         
+         function calculateHappiness() {
+             let totalHappiness = 50; // Base happiness
+             
+             // Housing bonus
+             totalHappiness += housing.happinessBonus;
+             
+             // Financial stress
+             if (cash < 0) {
+                 totalHappiness -= 20; // Negative balance stress
+             } else if (cash < 500) {
+                 totalHappiness -= 10; // Low cash stress
+             } else if (cash > 5000) {
+                 totalHappiness += 10; // Financial security boost
+             }
+             
+             // Employment happiness
+             if (currentJob === 'unemployed') {
+                 totalHappiness -= 15;
+             } else {
+                 totalHappiness += 5; // Having a job
+             }
+             
+             // NSF stress
+             if (negativeBalanceWeeks > 0) {
+                 totalHappiness -= (negativeBalanceWeeks * 5);
+             }
+             
+             // Clamp between 0 and 100
+             totalHappiness = Math.max(0, Math.min(100, totalHappiness));
+             
+             return Math.round(totalHappiness);
+         }
+         
+         function updatePlayerDisplay() {
+             // Calculate current happiness
+             const happiness = calculateHappiness();
+             playerStats.happiness = happiness;
+             
+             // Update happiness display
+             document.getElementById('happiness-value').textContent = happiness;
+             document.getElementById('happiness-bar').style.width = happiness + '%';
+             
+             // Update happiness status
+             let status = 'Miserable';
+             if (happiness >= 80) status = 'Very Happy';
+             else if (happiness >= 60) status = 'Happy';
+             else if (happiness >= 40) status = 'Content';
+             else if (happiness >= 20) status = 'Unhappy';
+             
+             document.getElementById('happiness-status').textContent = status;
+             
+             // Update happiness factors
+             updateHappinessFactors();
+             
+             // Update housing display
+             updateHousingDisplay();
+         }
+         
+         function updateHappinessFactors() {
+             const container = document.getElementById('happiness-factors-list');
+             container.innerHTML = '';
+             
+             // Housing factor
+             const housingOption = housingOptions[housing.type];
+             addHappinessFactor(container, 'Housing', housingOption.happinessBonus);
+             
+             // Financial factors
+             if (cash < 0) {
+                 addHappinessFactor(container, 'Negative Balance', -20);
+             } else if (cash < 500) {
+                 addHappinessFactor(container, 'Low Cash', -10);
+             } else if (cash > 5000) {
+                 addHappinessFactor(container, 'Financial Security', 10);
+             }
+             
+             // Employment factor
+             if (currentJob === 'unemployed') {
+                 addHappinessFactor(container, 'Unemployment', -15);
+             } else {
+                 addHappinessFactor(container, 'Employment', 5);
+             }
+             
+             // NSF stress
+             if (negativeBalanceWeeks > 0) {
+                 addHappinessFactor(container, 'Financial Stress', -(negativeBalanceWeeks * 5));
+             }
+             
+             // Base happiness
+             addHappinessFactor(container, 'Base Level', 50);
+         }
+         
+         function addHappinessFactor(container, name, value) {
+             const factor = document.createElement('div');
+             factor.className = 'happiness-factor';
+             
+             let valueClass = 'neutral';
+             let valueText = value.toString();
+             if (value > 0) {
+                 valueClass = 'positive';
+                 valueText = '+' + value;
+             } else if (value < 0) {
+                 valueClass = 'negative';
+             }
+             
+             factor.innerHTML = `
+                 <span class="factor-name">${name}</span>
+                 <span class="factor-value ${valueClass}">${valueText}</span>
+             `;
+             
+             container.appendChild(factor);
          }
          
          // Bank Account Functions
@@ -3308,6 +3945,9 @@
                  recalculateLoanTerms(loanId);
              });
              
+             // Initialize player
+             initializePlayer();
+             
              // Initialize history with starting state
              addToHistory();
              
@@ -3317,6 +3957,7 @@
              updateBankDisplay();
              updateHistoryDisplay();
              updateDebugDisplay();
+             updatePlayerDisplay();
          };
     </script>
 </body>
