@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            padding: 20px;
+            padding: 0;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             margin: 0;
@@ -17,48 +17,90 @@
             max-width: 700px;
             margin: 0 auto;
             background: white;
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            min-height: 100vh;
+            box-shadow: 0 0 30px rgba(0,0,0,0.2);
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 20px;
+            text-align: center;
         }
         
         h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
-            font-size: 2.5rem;
+            margin: 0;
+            font-size: 2rem;
             font-weight: 300;
         }
         
         .game-stats {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-            gap: 15px;
-            margin: 25px 0;
+            display: flex;
+            justify-content: space-around;
+            margin-top: 15px;
+            flex-wrap: wrap;
+            gap: 10px;
         }
         
-        .stat-card {
-            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-            padding: 20px;
-            border-radius: 10px;
+        .mini-stat {
             text-align: center;
-            border-left: 4px solid #667eea;
         }
         
-        .stat-label {
-            font-size: 14px;
-            color: #6c757d;
-            margin-bottom: 5px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
+        .mini-stat-label {
+            font-size: 12px;
+            opacity: 0.8;
         }
         
-        .stat-value {
-            font-size: 24px;
+        .mini-stat-value {
+            font-size: 16px;
             font-weight: 600;
-            color: #2c3e50;
         }
         
+        /* Menu Navigation */
+        .menu {
+            background: #f8f9fa;
+            display: flex;
+            border-bottom: 1px solid #dee2e6;
+        }
+        
+        .menu-item {
+            flex: 1;
+            padding: 15px;
+            text-align: center;
+            background: none;
+            border: none;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            color: #6c757d;
+        }
+        
+        .menu-item.active {
+            background: white;
+            color: #2c3e50;
+            border-bottom: 3px solid #667eea;
+        }
+        
+        .menu-item:hover {
+            background: #e9ecef;
+        }
+        
+        .menu-item.active:hover {
+            background: white;
+        }
+        
+        /* Page Content */
+        .page {
+            display: none;
+            padding: 30px;
+        }
+        
+        .page.active {
+            display: block;
+        }
+        
+        /* Job Page Styles */
         .controls {
             background: #f8f9fa;
             padding: 25px;
@@ -118,7 +160,7 @@
             transform: translateY(0);
         }
         
-        .balance-sheet {
+        .quick-summary {
             background: white;
             border: 1px solid #dee2e6;
             border-radius: 12px;
@@ -126,16 +168,43 @@
             margin: 25px 0;
         }
         
-        .balance-header {
-            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        .summary-header {
+            background: linear-gradient(135deg, #28a745 0%, #20c997 100%);
             color: white;
-            padding: 20px;
+            padding: 15px;
             text-align: center;
-            font-size: 1.3rem;
-            font-weight: 300;
+            font-weight: 600;
         }
         
-        .balance-content {
+        .summary-content {
+            padding: 20px;
+        }
+        
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            font-size: 16px;
+        }
+        
+        /* Balance Page Styles */
+        .balance-section {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            margin: 20px 0;
+            overflow: hidden;
+        }
+        
+        .section-header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 15px 20px;
+            font-size: 1.1rem;
+            font-weight: 600;
+        }
+        
+        .section-content {
             padding: 20px;
         }
         
@@ -185,86 +254,168 @@
         /* Mobile responsive */
         @media (max-width: 768px) {
             body {
-                padding: 10px;
+                padding: 0;
             }
             
-            .container {
+            .page {
                 padding: 20px;
             }
             
             h1 {
-                font-size: 2rem;
-            }
-            
-            .game-stats {
-                grid-template-columns: 1fr;
+                font-size: 1.5rem;
             }
             
             .btn {
                 padding: 18px;
                 font-size: 16px;
             }
+            
+            .mini-stat-value {
+                font-size: 14px;
+            }
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h1>Corporate Climber</h1>
-        
-        <div class="game-stats">
-            <div class="stat-card">
-                <div class="stat-label">Current Week</div>
-                <div class="stat-value" id="week">1</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Net Worth</div>
-                <div class="stat-value" id="cash">$1,000</div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-label">Current Job</div>
-                <div class="stat-value" id="job-display">Unemployed</div>
+        <!-- Header with basic stats -->
+        <div class="header">
+            <h1>Corporate Climber</h1>
+            <div class="game-stats">
+                <div class="mini-stat">
+                    <div class="mini-stat-label">Week</div>
+                    <div class="mini-stat-value" id="header-week">1</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-label">Net Worth</div>
+                    <div class="mini-stat-value" id="header-cash">$1,000</div>
+                </div>
+                <div class="mini-stat">
+                    <div class="mini-stat-label">Job</div>
+                    <div class="mini-stat-value" id="header-job">Unemployed</div>
+                </div>
             </div>
         </div>
         
-        <div class="controls">
-            <div class="form-group">
-                <label for="job-select">Select Your Job:</label>
-                <select id="job-select">
-                    <option value="unemployed">Unemployed ($0/week)</option>
-                    <option value="intern">Intern ($400/week)</option>
-                    <option value="customer-service">Customer Service Rep ($450/week)</option>
-                    <option value="entry-sales">Sales Associate ($600/week)</option>
-                    <option value="project-coordinator">Project Coordinator ($650/week)</option>
-                    <option value="marketing-coordinator">Marketing Coordinator ($700/week)</option>
-                    <option value="data-analyst">Data Analyst ($750/week)</option>
-                    <option value="junior-dev">Junior Developer ($800/week)</option>
-                    <option value="financial-analyst">Financial Analyst ($900/week)</option>
-                </select>
+        <!-- Menu Navigation -->
+        <div class="menu">
+            <button class="menu-item active" onclick="showPage('job')">Job</button>
+            <button class="menu-item" onclick="showPage('balance')">Balance</button>
+        </div>
+        
+        <!-- Job Page -->
+        <div id="job-page" class="page active">
+            <div class="controls">
+                <div class="form-group">
+                    <label for="job-select">Select Your Job:</label>
+                    <select id="job-select">
+                        <option value="unemployed">Unemployed ($0/week)</option>
+                        <option value="intern">Intern ($400/week)</option>
+                        <option value="customer-service">Customer Service Rep ($450/week)</option>
+                        <option value="entry-sales">Sales Associate ($600/week)</option>
+                        <option value="project-coordinator">Project Coordinator ($650/week)</option>
+                        <option value="marketing-coordinator">Marketing Coordinator ($700/week)</option>
+                        <option value="data-analyst">Data Analyst ($750/week)</option>
+                        <option value="junior-dev">Junior Developer ($800/week)</option>
+                        <option value="financial-analyst">Financial Analyst ($900/week)</option>
+                    </select>
+                </div>
+                
+                <button class="btn" id="advance-btn">Advance 1 Week</button>
             </div>
             
-            <button class="btn" id="advance-btn">Advance 1 Week</button>
+            <div class="quick-summary">
+                <div class="summary-header">
+                    Quick Financial Summary
+                </div>
+                <div class="summary-content">
+                    <div class="summary-row">
+                        <span>Weekly Income:</span>
+                        <span id="quick-income">$0</span>
+                    </div>
+                    <div class="summary-row">
+                        <span>Weekly Expenses:</span>
+                        <span class="negative">-$700</span>
+                    </div>
+                    <div class="summary-row" style="font-weight: 600; border-top: 1px solid #dee2e6; padding-top: 12px; margin-top: 8px;">
+                        <span>Net Weekly Change:</span>
+                        <span id="quick-change">-$700</span>
+                    </div>
+                </div>
+            </div>
         </div>
         
-        <div class="balance-sheet">
-            <div class="balance-header">
-                Weekly Financial Summary
+        <!-- Balance Page -->
+        <div id="balance-page" class="page">
+            <div class="balance-section">
+                <div class="section-header">Assets</div>
+                <div class="section-content">
+                    <div class="financial-row">
+                        <span class="financial-label">Cash:</span>
+                        <span class="financial-value" id="balance-cash">$1,000</span>
+                    </div>
+                    <div class="financial-row total">
+                        <span class="financial-label">Total Assets:</span>
+                        <span class="financial-value" id="total-assets">$1,000</span>
+                    </div>
+                </div>
             </div>
-            <div class="balance-content">
-                <div class="financial-row">
-                    <span class="financial-label">Weekly Income:</span>
-                    <span class="financial-value" id="weekly-income">$0</span>
+            
+            <div class="balance-section">
+                <div class="section-header">Weekly Income</div>
+                <div class="section-content">
+                    <div class="financial-row">
+                        <span class="financial-label">Job Salary:</span>
+                        <span class="financial-value" id="job-salary">$0</span>
+                    </div>
+                    <div class="financial-row">
+                        <span class="financial-label">Other Income:</span>
+                        <span class="financial-value">$0</span>
+                    </div>
+                    <div class="financial-row total">
+                        <span class="financial-label">Total Weekly Income:</span>
+                        <span class="financial-value" id="total-income">$0</span>
+                    </div>
                 </div>
-                <div class="financial-row">
-                    <span class="financial-label">Living Expenses:</span>
-                    <span class="financial-value negative">-$500</span>
+            </div>
+            
+            <div class="balance-section">
+                <div class="section-header">Weekly Expenses</div>
+                <div class="section-content">
+                    <div class="financial-row">
+                        <span class="financial-label">Living Expenses:</span>
+                        <span class="financial-value negative">-$500</span>
+                    </div>
+                    <div class="financial-row">
+                        <span class="financial-label">Student Loan Payment:</span>
+                        <span class="financial-value negative">-$200</span>
+                    </div>
+                    <div class="financial-row">
+                        <span class="financial-label">Other Expenses:</span>
+                        <span class="financial-value">$0</span>
+                    </div>
+                    <div class="financial-row total">
+                        <span class="financial-label">Total Weekly Expenses:</span>
+                        <span class="financial-value negative">-$700</span>
+                    </div>
                 </div>
-                <div class="financial-row">
-                    <span class="financial-label">Student Loans:</span>
-                    <span class="financial-value negative">-$200</span>
-                </div>
-                <div class="financial-row total">
-                    <span class="financial-label">Net Weekly Change:</span>
-                    <span class="financial-value" id="net-change">-$700</span>
+            </div>
+            
+            <div class="balance-section">
+                <div class="section-header">Net Worth Summary</div>
+                <div class="section-content">
+                    <div class="financial-row">
+                        <span class="financial-label">Current Net Worth:</span>
+                        <span class="financial-value" id="net-worth">$1,000</span>
+                    </div>
+                    <div class="financial-row">
+                        <span class="financial-label">Weekly Change:</span>
+                        <span class="financial-value" id="weekly-change">-$700</span>
+                    </div>
+                    <div class="financial-row total">
+                        <span class="financial-label">Projected Next Week:</span>
+                        <span class="financial-value" id="projected-worth">$300</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -288,39 +439,80 @@
             'financial-analyst': { name: 'Financial Analyst', salary: 900 }
         };
         
+        function showPage(pageName) {
+            // Update menu items
+            document.querySelectorAll('.menu-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            // Update pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.remove('active');
+            });
+            document.getElementById(pageName + '-page').classList.add('active');
+        }
+        
         function updateDisplay() {
             const salary = jobs[currentJob].salary;
             const expenses = 700;
             const netChange = salary - expenses;
+            const projectedWorth = cash + netChange;
             
-            // Update main stats
-            document.getElementById('week').textContent = week;
-            document.getElementById('cash').textContent = '$' + cash.toLocaleString();
-            document.getElementById('job-display').textContent = jobs[currentJob].name;
+            // Update header stats
+            document.getElementById('header-week').textContent = week;
+            document.getElementById('header-cash').textContent = '$' + cash.toLocaleString();
+            document.getElementById('header-job').textContent = jobs[currentJob].name;
             
-            // Update financial summary
-            document.getElementById('weekly-income').textContent = '$' + salary;
-            const netChangeEl = document.getElementById('net-change');
-            netChangeEl.textContent = (netChange >= 0 ? '+' : '') + '$' + netChange;
+            // Update job page
+            document.getElementById('quick-income').textContent = '$' + salary;
+            const quickChangeEl = document.getElementById('quick-change');
+            quickChangeEl.textContent = (netChange >= 0 ? '+' : '') + '$' + netChange;
             
-            // Color coding for net change
-            netChangeEl.className = 'financial-value';
+            // Color coding for quick change
+            quickChangeEl.className = '';
             if (netChange < 0) {
-                netChangeEl.classList.add('negative');
+                quickChangeEl.classList.add('negative');
             } else if (netChange > 0) {
-                netChangeEl.classList.add('positive');
+                quickChangeEl.classList.add('positive');
             } else {
-                netChangeEl.classList.add('neutral');
+                quickChangeEl.classList.add('neutral');
             }
             
-            // Color coding for cash
-            const cashEl = document.getElementById('cash');
+            // Update balance page
+            document.getElementById('balance-cash').textContent = '$' + cash.toLocaleString();
+            document.getElementById('total-assets').textContent = '$' + cash.toLocaleString();
+            document.getElementById('job-salary').textContent = '$' + salary;
+            document.getElementById('total-income').textContent = '$' + salary;
+            document.getElementById('net-worth').textContent = '$' + cash.toLocaleString();
+            
+            const weeklyChangeEl = document.getElementById('weekly-change');
+            weeklyChangeEl.textContent = (netChange >= 0 ? '+' : '') + '$' + netChange;
+            
+            const projectedEl = document.getElementById('projected-worth');
+            projectedEl.textContent = '$' + projectedWorth.toLocaleString();
+            
+            // Color coding for balance page
+            [weeklyChangeEl, projectedEl].forEach(el => {
+                el.className = 'financial-value';
+                const value = parseInt(el.textContent.replace(/[$,+]/g, ''));
+                if (value < 0) {
+                    el.classList.add('negative');
+                } else if (value > 0) {
+                    el.classList.add('positive');
+                } else {
+                    el.classList.add('neutral');
+                }
+            });
+            
+            // Color coding for header cash
+            const headerCashEl = document.getElementById('header-cash');
             if (cash < 0) {
-                cashEl.style.color = '#dc3545';
+                headerCashEl.style.color = '#ff6b6b';
             } else if (cash > 5000) {
-                cashEl.style.color = '#28a745';
+                headerCashEl.style.color = '#51cf66';
             } else {
-                cashEl.style.color = '#2c3e50';
+                headerCashEl.style.color = 'white';
             }
         }
         
