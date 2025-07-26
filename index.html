@@ -900,6 +900,191 @@
              background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%) !important;
              color: white !important;
          }
+
+         /* Welcome Screen Styles */
+         .welcome-screen {
+             min-height: 100vh;
+             background: #f8f9fa;
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             padding: 20px;
+         }
+
+         .welcome-container {
+             background: white;
+             border-radius: 12px;
+             box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+             padding: 40px;
+             max-width: 800px;
+             width: 100%;
+         }
+
+         .welcome-header h1 {
+             color: #2c3e50;
+             margin-bottom: 10px;
+             text-align: center;
+         }
+
+         .welcome-header p {
+             color: #6c757d;
+             text-align: center;
+             margin-bottom: 30px;
+         }
+
+         .creation-form h2 {
+             color: #2c3e50;
+             margin-bottom: 25px;
+             text-align: center;
+         }
+
+         .form-group {
+             margin-bottom: 25px;
+         }
+
+         .form-group label {
+             display: block;
+             margin-bottom: 8px;
+             font-weight: 600;
+             color: #2c3e50;
+         }
+
+         .form-group select {
+             width: 100%;
+             padding: 12px;
+             border: 2px solid #dee2e6;
+             border-radius: 8px;
+             font-size: 1rem;
+             background: white;
+         }
+
+         .form-group select:focus {
+             outline: none;
+             border-color: #667eea;
+         }
+
+         .error-message {
+             color: #dc3545;
+             font-size: 0.9rem;
+             margin-top: 5px;
+             font-weight: 500;
+         }
+
+         .difficulty-options {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+             gap: 15px;
+             margin-top: 15px;
+         }
+
+         .difficulty-card {
+             border: 2px solid #dee2e6;
+             border-radius: 12px;
+             padding: 20px;
+             cursor: pointer;
+             transition: all 0.3s ease;
+             position: relative;
+             background: white;
+         }
+
+         .difficulty-card:hover {
+             border-color: #667eea;
+             transform: translateY(-2px);
+             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.15);
+         }
+
+         .difficulty-card input[type="radio"] {
+             position: absolute;
+             top: 15px;
+             right: 15px;
+             transform: scale(1.2);
+         }
+
+         .difficulty-card input[type="radio"]:checked + .difficulty-content {
+             opacity: 1;
+         }
+
+         .difficulty-card:has(input[type="radio"]:checked) {
+             border-color: #667eea;
+             background: linear-gradient(135deg, #f8f9ff 0%, #e8ecff 100%);
+         }
+
+         .difficulty-content {
+             opacity: 0.8;
+             transition: opacity 0.3s ease;
+         }
+
+         .difficulty-icon {
+             font-size: 2rem;
+             margin-bottom: 10px;
+         }
+
+         .difficulty-name {
+             font-size: 1.25rem;
+             font-weight: 600;
+             color: #2c3e50;
+             margin-bottom: 8px;
+         }
+
+         .difficulty-goal {
+             font-weight: 600;
+             color: #667eea;
+             margin-bottom: 8px;
+         }
+
+         .difficulty-details {
+             color: #6c757d;
+             font-size: 0.9rem;
+         }
+
+         .start-btn {
+             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+             color: white;
+             padding: 15px 30px;
+             border: none;
+             border-radius: 8px;
+             font-size: 1.1rem;
+             font-weight: 600;
+             cursor: pointer;
+             width: 100%;
+             margin-top: 30px;
+             transition: all 0.3s ease;
+         }
+
+         .start-btn:hover {
+             transform: translateY(-2px);
+             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+         }
+
+         .objectives-section {
+             margin-top: 40px;
+             text-align: center;
+         }
+
+         .objectives-section h3 {
+             color: #2c3e50;
+             margin-bottom: 20px;
+         }
+
+         .objectives-grid {
+             display: grid;
+             grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+             gap: 20px;
+         }
+
+         .objective-item {
+             text-align: center;
+         }
+
+         .objective-icon {
+             font-size: 2rem;
+             margin-bottom: 10px;
+         }
+
+         .objective-text {
+             color: #6c757d;
+             font-size: 0.9rem;
+         }
          
          .debug-btn {
              background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
@@ -1421,66 +1606,75 @@
     </style>
   </head>
   <body>
-    <!-- Character Creation Screen -->
-    <div id="character-creation" class="welcome-screen">
-        <div class="welcome-container">
-            <!-- Welcome Header -->
-            <div class="welcome-header">
-                <h1>🎓 Welcome to Corporate Climber</h1>
-                <p>Your journey to financial success starts here!</p>
-            </div>
-            
-            <!-- Character Creation Form -->
-            <div class="creation-form">
-                <h2>Create Your Character</h2>
-                
-                <!-- Name Input -->
-                <div class="form-group">
-                    <label for="player-name">Your Name:</label>
-                    <input type="text" id="player-name" placeholder="Enter your name" maxlength="20">
-                </div>
-                
-                <!-- College Degree Selection -->
-                <div class="form-group">
-                    <label for="college-degree">College Degree:</label>
-                    <select id="college-degree">
-                        <option value="">Select your degree...</option>
-                        <option value="business">Business Administration</option>
-                        <option value="computer-science">Computer Science</option>
-                        <option value="engineering">Engineering</option>
-                    </select>
-                </div>
-                
-                <!-- Difficulty Selection -->
-                <div class="form-group">
-                    <label>Choose Your Challenge:</label>
-                    <div class="difficulty-options">
-                        <div class="difficulty-card easy" onclick="selectDifficulty('easy')">
-                            <div class="difficulty-icon">🟢</div>
-                            <div class="difficulty-name">Easy</div>
-                            <div class="difficulty-goal">Earn $1,000,000 by Year 10</div>
-                            <div class="difficulty-details">Relaxed pace, moderate goals</div>
-                        </div>
-                        <div class="difficulty-card medium" onclick="selectDifficulty('medium')">
-                            <div class="difficulty-icon">🟡</div>
-                            <div class="difficulty-name">Medium</div>
-                            <div class="difficulty-goal">Earn $2,500,000 by Year 8</div>
-                            <div class="difficulty-details">Balanced challenge, good rewards</div>
-                        </div>
-                        <div class="difficulty-card hard" onclick="selectDifficulty('hard')">
-                            <div class="difficulty-icon">🔴</div>
-                            <div class="difficulty-name">Hard</div>
-                            <div class="difficulty-goal">Earn $5,000,000 by Year 6</div>
-                            <div class="difficulty-details">Intense pressure, maximum rewards</div>
-                        </div>
+                <!-- Character Creation Screen -->
+            <div id="character-creation" class="welcome-screen">
+                <div class="welcome-container">
+                    <!-- Welcome Header -->
+                    <div class="welcome-header">
+                        <h1>🎓 Welcome to the Game</h1>
+                        <p>Your journey to financial success starts here!</p>
                     </div>
-                </div>
-                
-                <!-- Start Game Button -->
-                <button id="start-game-btn" onclick="startGame()" class="start-btn" disabled>
-                    Start Your Journey
-                </button>
-            </div>
+                    
+                    <!-- Character Creation Form -->
+                    <div class="creation-form">
+                        <h2>Setup Your Game</h2>
+                        
+                        <!-- College Degree Selection -->
+                        <div class="form-group">
+                            <label for="college-degree">College Degree:</label>
+                            <select id="college-degree">
+                                <option value="">Select your degree...</option>
+                                <option value="business">Business Administration</option>
+                                <option value="computer-science">Computer Science</option>
+                                <option value="engineering">Engineering</option>
+                            </select>
+                            <div id="degree-error" class="error-message" style="display: none;">
+                                Please select a college degree to continue.
+                            </div>
+                        </div>
+                        
+                        <!-- Difficulty Selection -->
+                        <div class="form-group">
+                            <label>Choose Your Challenge:</label>
+                            <div class="difficulty-options">
+                                <label class="difficulty-card easy">
+                                    <input type="radio" name="difficulty" value="easy" checked onchange="selectDifficulty('easy')">
+                                    <div class="difficulty-content">
+                                        <div class="difficulty-icon">🟢</div>
+                                        <div class="difficulty-name">Easy</div>
+                                        <div class="difficulty-goal">Earn $1,000,000 by Year 10</div>
+                                        <div class="difficulty-details">Relaxed pace, moderate goals</div>
+                                    </div>
+                                </label>
+                                <label class="difficulty-card medium">
+                                    <input type="radio" name="difficulty" value="medium" onchange="selectDifficulty('medium')">
+                                    <div class="difficulty-content">
+                                        <div class="difficulty-icon">🟡</div>
+                                        <div class="difficulty-name">Medium</div>
+                                        <div class="difficulty-goal">Earn $2,500,000 by Year 8</div>
+                                        <div class="difficulty-details">Balanced challenge, good rewards</div>
+                                    </div>
+                                </label>
+                                <label class="difficulty-card hard">
+                                    <input type="radio" name="difficulty" value="hard" onchange="selectDifficulty('hard')">
+                                    <div class="difficulty-content">
+                                        <div class="difficulty-icon">🔴</div>
+                                        <div class="difficulty-name">Hard</div>
+                                        <div class="difficulty-goal">Earn $5,000,000 by Year 6</div>
+                                        <div class="difficulty-details">Intense pressure, maximum rewards</div>
+                                    </div>
+                                </label>
+                            </div>
+                            <div id="difficulty-error" class="error-message" style="display: none;">
+                                Please select a challenge level to continue.
+                            </div>
+                        </div>
+                        
+                        <!-- Start Game Button -->
+                        <button id="start-game-btn" onclick="startGame()" class="start-btn">
+                            Start Your Journey
+                        </button>
+                    </div>
             
             <!-- Game Objectives -->
             <div class="objectives-section">
@@ -2404,9 +2598,8 @@
          // Character creation
          let gameStarted = false;
          let playerProfile = {
-             name: '',
              degree: '',
-             difficulty: 'easy'
+             difficulty: 'easy' // Default to easy
          };
          
          // Negative balance tracking
@@ -4117,30 +4310,93 @@
              });
          }
          
+         // Character creation functions
+         function selectDifficulty(difficulty) {
+             playerProfile.difficulty = difficulty;
+             // Clear any previous error
+             document.getElementById('difficulty-error').style.display = 'none';
+         }
+
+         function startGame() {
+             // Hide any previous errors
+             document.getElementById('degree-error').style.display = 'none';
+             document.getElementById('difficulty-error').style.display = 'none';
+             
+             let hasErrors = false;
+             
+             // Validate college degree
+             const degree = document.getElementById('college-degree').value;
+             if (!degree) {
+                 document.getElementById('degree-error').style.display = 'block';
+                 hasErrors = true;
+             } else {
+                 playerProfile.degree = degree;
+             }
+             
+             // Validate difficulty (should always be set due to default, but check anyway)
+             if (!playerProfile.difficulty) {
+                 document.getElementById('difficulty-error').style.display = 'block';
+                 hasErrors = true;
+             }
+             
+             // Only proceed if no errors
+             if (!hasErrors) {
+                 gameStarted = true;
+                 document.getElementById('character-creation').style.display = 'none';
+                 document.getElementById('main-game').style.display = 'block';
+                 
+                 // Set up event handlers
+                 document.getElementById('advance-btn').onclick = advanceWeek;
+                 document.getElementById('job-select').onchange = changeJob;
+                 
+                 // Initialize loan terms
+                 Object.keys(activeLoans).forEach(loanId => {
+                     recalculateLoanTerms(loanId);
+                 });
+                 
+                 // Initialize player
+                 initializePlayer();
+                 
+                 // Initialize history with starting state
+                 addToHistory();
+                 
+                 // Initialize the game after character creation
+                 updateDisplay();
+                 updateLoansDisplay();
+                 updateBankDisplay();
+                 updateHistoryDisplay();
+                 updateDebugDisplay();
+                 updatePlayerDisplay();
+             }
+         }
+
          // Initialize when page loads
          window.onload = function() {
-             // Set up event handlers
-             document.getElementById('advance-btn').onclick = advanceWeek;
-             document.getElementById('job-select').onchange = changeJob;
-             
-             // Initialize loan terms
-             Object.keys(activeLoans).forEach(loanId => {
-                 recalculateLoanTerms(loanId);
-             });
-             
-             // Initialize player
-             initializePlayer();
-             
-             // Initialize history with starting state
-             addToHistory();
-             
-             // Initial display
-             updateDisplay();
-             updateLoansDisplay();
-             updateBankDisplay();
-             updateHistoryDisplay();
-             updateDebugDisplay();
-             updatePlayerDisplay();
+             // Only initialize game if character creation is completed
+             if (gameStarted) {
+                 // Set up event handlers
+                 document.getElementById('advance-btn').onclick = advanceWeek;
+                 document.getElementById('job-select').onchange = changeJob;
+                 
+                 // Initialize loan terms
+                 Object.keys(activeLoans).forEach(loanId => {
+                     recalculateLoanTerms(loanId);
+                 });
+                 
+                 // Initialize player
+                 initializePlayer();
+                 
+                 // Initialize history with starting state
+                 addToHistory();
+                 
+                 // Initial display
+                 updateDisplay();
+                 updateLoansDisplay();
+                 updateBankDisplay();
+                 updateHistoryDisplay();
+                 updateDebugDisplay();
+                 updatePlayerDisplay();
+             }
          };
     </script>
 </body>
