@@ -38,10 +38,63 @@
             flex: 1;
         }
         
-        .header-right {
-            display: flex;
-            align-items: center;
-        }
+                 .header-right {
+             display: flex;
+             align-items: center;
+         }
+         
+         .header-center {
+             display: flex;
+             align-items: center;
+             justify-content: center;
+             flex: 1;
+         }
+         
+         /* Header Warning Styles */
+         .header-warning {
+             background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+             color: white;
+             padding: 10px 15px;
+             border-radius: 8px;
+             display: flex;
+             align-items: center;
+             gap: 10px;
+             box-shadow: 0 2px 8px rgba(220, 53, 69, 0.3);
+             animation: warningPulse 2s infinite;
+             max-width: 400px;
+         }
+         
+         .warning-icon {
+             font-size: 20px;
+             animation: warningShake 1s infinite;
+         }
+         
+         .warning-text {
+             flex: 1;
+         }
+         
+         .warning-title {
+             font-weight: 700;
+             font-size: 14px;
+             margin-bottom: 2px;
+         }
+         
+         .warning-details {
+             font-size: 12px;
+             opacity: 0.9;
+             line-height: 1.2;
+         }
+         
+         @keyframes warningPulse {
+             0%, 100% { opacity: 1; }
+             50% { opacity: 0.8; }
+         }
+         
+         @keyframes warningShake {
+             0%, 100% { transform: translateX(0); }
+             25% { transform: translateX(-2px); }
+             75% { transform: translateX(2px); }
+         }
         
                  h1 {
              margin: 0;
@@ -840,6 +893,76 @@
          .detail-value.warning {
              color: #dc3545 !important;
          }
+         
+         /* Debug Tab Styles */
+         .debug-tab {
+             background: linear-gradient(135deg, #6f42c1 0%, #e83e8c 100%) !important;
+             color: white !important;
+         }
+         
+         .debug-btn {
+             background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
+             border: none;
+             color: white;
+             padding: 10px 15px;
+             border-radius: 6px;
+             font-weight: 500;
+             cursor: pointer;
+             transition: all 0.2s ease;
+             font-size: 14px;
+         }
+         
+         .debug-btn:hover {
+             transform: translateY(-1px);
+             box-shadow: 0 4px 8px rgba(23, 162, 184, 0.3);
+         }
+         
+         .debug-btn.negative {
+             background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+         }
+         
+         .debug-btn.negative:hover {
+             box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+         }
+         
+         .debug-btn.reset {
+             background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%);
+             color: #212529;
+         }
+         
+         .debug-btn.reset:hover {
+             box-shadow: 0 4px 8px rgba(255, 193, 7, 0.3);
+         }
+         
+         .debug-btn.danger {
+             background: linear-gradient(135deg, #dc3545 0%, #c82333 100%);
+         }
+         
+         .debug-btn.danger:hover {
+             box-shadow: 0 4px 8px rgba(220, 53, 69, 0.3);
+         }
+         
+         .debug-stat {
+             text-align: center;
+             padding: 15px;
+             background: #f8f9fa;
+             border-radius: 8px;
+             border-left: 3px solid #6f42c1;
+         }
+         
+         .debug-label {
+             font-size: 12px;
+             color: #6c757d;
+             margin-bottom: 5px;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+         }
+         
+         .debug-value {
+             font-size: 18px;
+             font-weight: 600;
+             color: #2c3e50;
+         }
         
                  /* Balance Sheet Grid for Mobile */
          @media (max-width: 768px) {
@@ -1058,6 +1181,18 @@
                     </div>
                 </div>
             </div>
+            <div class="header-center">
+                <!-- Account Warning in Header -->
+                <div id="header-warning" class="header-warning" style="display: none;">
+                    <div class="warning-icon">⚠️</div>
+                    <div class="warning-text">
+                        <div class="warning-title">Account Overdrawn</div>
+                        <div class="warning-details" id="header-warning-details">
+                            Your account has been negative for 1 week(s). NSF fee charged.
+                        </div>
+                    </div>
+                </div>
+            </div>
             <div class="header-right">
                 <button id="advance-btn" onclick="advanceWeek()" class="btn header-advance-btn">Advance 1 Week</button>
             </div>
@@ -1070,6 +1205,7 @@
              <button class="menu-item" onclick="showPage('loans')">Loans</button>
              <button class="menu-item" onclick="showPage('bank')">Bank</button>
              <button class="menu-item" onclick="showPage('history')">History</button>
+             <button class="menu-item debug-tab" onclick="showPage('debug')">Debug</button>
          </div>
          
          <!-- Mobile Menu Overlay -->
@@ -1099,6 +1235,10 @@
                      <button class="mobile-menu-item" onclick="showPage('history'); toggleMobileMenu()">
                          <span class="menu-icon">📈</span>
                          <span>History</span>
+                     </button>
+                     <button class="mobile-menu-item debug-tab" onclick="showPage('debug'); toggleMobileMenu()">
+                         <span class="menu-icon">🔧</span>
+                         <span>Debug</span>
                      </button>
                  </div>
              </div>
@@ -1495,6 +1635,95 @@
              </div>
          </div>
          
+         <!-- Debug Page -->
+         <div id="debug-page" class="page">
+             <!-- Debug Title -->
+             <div style="text-align: center; margin-bottom: 30px;">
+                 <h2 style="color: #2c3e50; margin: 0; font-size: 1.5rem;">🔧 Debug Tools</h2>
+                 <p style="color: #6c757d; margin: 5px 0 0 0;">Development and testing utilities</p>
+             </div>
+             
+             <!-- Cash Management -->
+             <div class="balance-section">
+                 <div class="section-header">💰 Cash Management</div>
+                 <div class="section-content">
+                     <div style="margin-bottom: 20px;">
+                         <label style="display: block; margin-bottom: 5px; font-weight: 600;">Add Cash to Account:</label>
+                         <div style="display: flex; gap: 15px; align-items: end; flex-wrap: wrap;">
+                             <div style="flex: 1; min-width: 200px;">
+                                 <input type="number" id="debug-cash-amount" placeholder="Enter amount to add" 
+                                        style="width: 100%; padding: 10px; border: 2px solid #dee2e6; border-radius: 6px;">
+                             </div>
+                             <button onclick="addDebugCash()" class="btn" style="width: auto; margin: 0; padding: 10px 20px;">
+                                 Add Cash
+                             </button>
+                         </div>
+                         <p style="margin-top: 10px; color: #6c757d; font-size: 14px;">
+                             Add money directly to your cash balance for testing purposes.
+                         </p>
+                     </div>
+                     
+                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(120px, 1fr)); gap: 10px; margin-top: 20px;">
+                         <button onclick="addDebugCash(100)" class="debug-btn">+$100</button>
+                         <button onclick="addDebugCash(500)" class="debug-btn">+$500</button>
+                         <button onclick="addDebugCash(1000)" class="debug-btn">+$1,000</button>
+                         <button onclick="addDebugCash(5000)" class="debug-btn">+$5,000</button>
+                         <button onclick="addDebugCash(10000)" class="debug-btn">+$10,000</button>
+                         <button onclick="addDebugCash(-1000)" class="debug-btn negative">-$1,000</button>
+                     </div>
+                 </div>
+             </div>
+             
+             <!-- Game State Info -->
+             <div class="balance-section">
+                 <div class="section-header">📊 Game State Information</div>
+                 <div class="section-content">
+                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                         <div class="debug-stat">
+                             <div class="debug-label">Current Week</div>
+                             <div class="debug-value" id="debug-week">1</div>
+                         </div>
+                         <div class="debug-stat">
+                             <div class="debug-label">Current Cash</div>
+                             <div class="debug-value" id="debug-cash">$1,000</div>
+                         </div>
+                         <div class="debug-stat">
+                             <div class="debug-label">Negative Weeks</div>
+                             <div class="debug-value" id="debug-negative-weeks">0</div>
+                         </div>
+                         <div class="debug-stat">
+                             <div class="debug-label">Total Transactions</div>
+                             <div class="debug-value" id="debug-transactions">0</div>
+                         </div>
+                         <div class="debug-stat">
+                             <div class="debug-label">Active Loans</div>
+                             <div class="debug-value" id="debug-loans">1</div>
+                         </div>
+                         <div class="debug-stat">
+                             <div class="debug-label">History Entries</div>
+                             <div class="debug-value" id="debug-history">0</div>
+                         </div>
+                     </div>
+                 </div>
+             </div>
+             
+             <!-- Reset Options -->
+             <div class="balance-section">
+                 <div class="section-header">🔄 Reset Options</div>
+                 <div class="section-content">
+                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px;">
+                         <button onclick="resetNegativeBalance()" class="debug-btn reset">Reset NSF Status</button>
+                         <button onclick="clearTransactions()" class="debug-btn reset">Clear Transactions</button>
+                         <button onclick="resetToWeekOne()" class="debug-btn reset">Reset to Week 1</button>
+                         <button onclick="resetEntireGame()" class="debug-btn danger">Reset Entire Game</button>
+                     </div>
+                     <p style="margin-top: 15px; color: #856404; background: #fff3cd; padding: 10px; border-radius: 6px; font-size: 14px;">
+                         <strong>⚠️ Warning:</strong> Reset functions will permanently modify game state. Use with caution.
+                     </p>
+                 </div>
+             </div>
+         </div>
+         
          <!-- History Page -->
          <div id="history-page" class="page">
              <!-- History Title and Controls -->
@@ -1843,18 +2072,35 @@
              const warningDiv = document.getElementById('account-status-warning');
              const negativeWeeksSpan = document.getElementById('negative-weeks-count');
              const statusTextSpan = document.getElementById('nsf-status-text');
+             const headerWarning = document.getElementById('header-warning');
+             const headerWarningDetails = document.getElementById('header-warning-details');
              
              if (negativeBalanceWeeks > 0) {
-                 warningDiv.style.display = 'block';
-                 negativeWeeksSpan.textContent = negativeBalanceWeeks;
+                 // Update loans page warning
+                 if (warningDiv) {
+                     warningDiv.style.display = 'block';
+                     negativeWeeksSpan.textContent = negativeBalanceWeeks;
+                     
+                     if (negativeBalanceWeeks === 1) {
+                         statusTextSpan.textContent = 'NSF fee has been charged. Restore positive balance to avoid account suspension.';
+                     } else {
+                         statusTextSpan.textContent = 'Account suspended - cannot advance time until balance is positive.';
+                     }
+                 }
                  
+                 // Update header warning
+                 headerWarning.style.display = 'flex';
                  if (negativeBalanceWeeks === 1) {
-                     statusTextSpan.textContent = 'NSF fee has been charged. Restore positive balance to avoid account suspension.';
+                     headerWarningDetails.textContent = `Your account has been negative for ${negativeBalanceWeeks} week. NSF fee charged.`;
                  } else {
-                     statusTextSpan.textContent = 'Account suspended - cannot advance time until balance is positive.';
+                     headerWarningDetails.textContent = `Your account has been negative for ${negativeBalanceWeeks} weeks. Account suspended - cannot advance time until balance is positive.`;
                  }
              } else {
-                 warningDiv.style.display = 'none';
+                 // Hide both warnings
+                 if (warningDiv) {
+                     warningDiv.style.display = 'none';
+                 }
+                 headerWarning.style.display = 'none';
              }
          }
          
@@ -1909,6 +2155,7 @@
              updateDisplay();
              updateLoansDisplay();
              updateBankDisplay();
+             updateDebugDisplay();
              
              // Check for negative balance and handle NSF fees
              handleNegativeBalanceChecks();
@@ -2041,6 +2288,13 @@
              // Calculate number of payments needed
              const periods = -Math.log(1 - (principal * periodRate) / payment) / Math.log(1 + periodRate);
              return periods;
+         }
+         
+         function calculateYearsRemaining(loan) {
+             // Calculate actual years remaining based on current balance and payment schedule
+             const periodsPerYear = loan.paymentFrequency === 'weekly' ? 52 : loan.paymentFrequency === 'biweekly' ? 26 : 12;
+             const periodsRemaining = calculateLoanPaymentPeriods(loan.currentBalance, loan.interestRate, loan.weeklyPayment, loan.paymentFrequency);
+             return periodsRemaining / periodsPerYear;
          }
          
          function processLoanPayments() {
@@ -2511,7 +2765,7 @@
                              </div>
                              <div class="detail-item">
                                  <div class="detail-label">Time Remaining</div>
-                                 <div class="detail-value">${(loan.paymentsRemaining / 52).toFixed(1)} years</div>
+                                 <div class="detail-value">${calculateYearsRemaining(loan).toFixed(1)} years</div>
                              </div>
                              <div class="detail-item">
                                  <div class="detail-label">Weekly Interest Rate</div>
@@ -2626,6 +2880,113 @@
          
          function calculatePayoff(loanId) {
              alert('Individual loan payoff calculator coming soon!');
+         }
+         
+         // Debug Functions
+         function addDebugCash(amount) {
+             if (amount === undefined) {
+                 const input = document.getElementById('debug-cash-amount');
+                 amount = parseFloat(input.value);
+                 input.value = '';
+             }
+             
+             if (!amount || isNaN(amount)) {
+                 alert('Please enter a valid amount');
+                 return;
+             }
+             
+             const oldCash = cash;
+             cash += amount;
+             
+             // Record transaction
+             addTransaction('income', 'Debug Cash Addition', amount, 'Developer tool cash injection');
+             
+             // Update all displays
+             updateDisplay();
+             updateLoansDisplay();
+             updateBankDisplay();
+             updateDebugDisplay();
+             
+             alert(`Added $${amount.toLocaleString()} to cash. Previous: $${oldCash.toLocaleString()}, New: $${cash.toLocaleString()}`);
+         }
+         
+         function updateDebugDisplay() {
+             document.getElementById('debug-week').textContent = week;
+             document.getElementById('debug-cash').textContent = '$' + cash.toLocaleString();
+             document.getElementById('debug-negative-weeks').textContent = negativeBalanceWeeks;
+             document.getElementById('debug-transactions').textContent = transactionLog.length;
+             document.getElementById('debug-loans').textContent = Object.keys(activeLoans).length;
+             document.getElementById('debug-history').textContent = gameHistory.length;
+         }
+         
+         function resetNegativeBalance() {
+             if (confirm('Reset NSF status and negative balance counter?')) {
+                 negativeBalanceWeeks = 0;
+                 hasShownNSFWarning = false;
+                 enableAdvanceButton();
+                 updateAccountStatusWarning();
+                 updateDebugDisplay();
+                 alert('NSF status reset successfully');
+             }
+         }
+         
+         function clearTransactions() {
+             if (confirm('Clear all transaction history? This cannot be undone.')) {
+                 transactionLog = [];
+                 updateBankDisplay();
+                 updateDebugDisplay();
+                 alert('Transaction history cleared');
+             }
+         }
+         
+         function resetToWeekOne() {
+             if (confirm('Reset game to Week 1? This will keep current cash and loans but reset time.')) {
+                 week = 1;
+                 gameHistory = [];
+                 addToHistory();
+                 updateDisplay();
+                 updateHistoryDisplay();
+                 updateDebugDisplay();
+                 alert('Game reset to Week 1');
+             }
+         }
+         
+         function resetEntireGame() {
+             if (confirm('RESET ENTIRE GAME? This will restore all values to starting state. This cannot be undone!')) {
+                 if (confirm('Are you absolutely sure? All progress will be lost!')) {
+                     // Reset all game variables
+                     week = 1;
+                     cash = 1000;
+                     currentJob = 'unemployed';
+                     negativeBalanceWeeks = 0;
+                     hasShownNSFWarning = false;
+                     transactionLog = [];
+                     gameHistory = [];
+                     
+                     // Reset loans
+                     activeLoans['student-loan'].currentBalance = 40000;
+                     activeLoans['student-loan'].totalInterestAccrued = 0;
+                     activeLoans['student-loan'].paymentsRemaining = 520;
+                     
+                     // Recalculate loan terms
+                     Object.keys(activeLoans).forEach(loanId => {
+                         recalculateLoanTerms(loanId);
+                     });
+                     
+                     // Initialize history
+                     addToHistory();
+                     
+                     // Update all displays
+                     updateDisplay();
+                     updateLoansDisplay();
+                     updateBankDisplay();
+                     updateHistoryDisplay();
+                     updateDebugDisplay();
+                     enableAdvanceButton();
+                     
+                     alert('Game completely reset to starting state');
+                 }
+             }
          }
          
          // Bank Account Functions
@@ -2955,6 +3316,7 @@
              updateLoansDisplay();
              updateBankDisplay();
              updateHistoryDisplay();
+             updateDebugDisplay();
          };
     </script>
 </body>
