@@ -2893,6 +2893,9 @@
              }
          };
          
+         // Sync cash with checking account balance
+         cash = bankAccounts.checking.balance;
+         
          // Current active account for transactions
          let activeAccount = 'checking';
          
@@ -3062,22 +3065,26 @@
               document.getElementById('student-debt').textContent = '$' + activeLoans['student-loan'].currentBalance.toLocaleString();
               document.getElementById('total-liabilities').textContent = '$' + totalLiabilities.toLocaleString();
              
-             // Net worth calculation
-             const netWorthEl = document.getElementById('net-worth-calc');
-             netWorthEl.textContent = (netWorth >= 0 ? '$' : '-$') + Math.abs(netWorth).toLocaleString();
-             netWorthEl.className = 'financial-value';
-             if (netWorth < 0) {
-                 netWorthEl.classList.add('negative');
-             } else if (netWorth > 0) {
-                 netWorthEl.classList.add('positive');
-             } else {
-                 netWorthEl.classList.add('neutral');
-             }
+             // Update new balance sheet elements
+             document.getElementById('checking-balance-display').textContent = '$' + cash.toLocaleString();
+             document.getElementById('savings-balance-display').textContent = '$' + bankAccounts.savings.balance.toLocaleString();
+             document.getElementById('current-assets-total').textContent = '$' + totalAssets.toLocaleString();
+             document.getElementById('non-current-assets-total').textContent = '$0';
+             document.getElementById('current-liabilities-total').textContent = '$0';
+             document.getElementById('long-term-liabilities-total').textContent = '$' + totalLiabilities.toLocaleString();
+             document.getElementById('owners-equity').textContent = (netWorth >= 0 ? '$' : '-$') + Math.abs(netWorth).toLocaleString();
+             document.getElementById('total-equity').textContent = (netWorth >= 0 ? '$' : '-$') + Math.abs(netWorth).toLocaleString();
+             document.getElementById('total-liab-equity').textContent = '$' + totalAssets.toLocaleString();
              
              // Update income statement
+             document.getElementById('income-week').textContent = week;
              document.getElementById('job-salary').textContent = '$' + salary;
-             document.getElementById('total-income').textContent = '$' + salary;
+             document.getElementById('total-revenue').textContent = '$' + salary;
+             document.getElementById('housing-expense').textContent = '$' + housing.weeklyCost;
+             document.getElementById('loan-payments').textContent = '$200'; // This should be calculated
              document.getElementById('total-expenses').textContent = '$' + expenses;
+             document.getElementById('gross-profit').textContent = (netChange >= 0 ? '$' : '-$') + Math.abs(netChange).toLocaleString();
+             document.getElementById('interest-expense').textContent = '$0';
              
              const netIncomeEl = document.getElementById('net-weekly-income');
              netIncomeEl.textContent = (netChange >= 0 ? '$' : '-$') + Math.abs(netChange);
@@ -3244,7 +3251,8 @@
              const expenses = housing.weeklyCost + 350; // Housing + other living expenses
              
              // Clear old transactions (keep only last 8 weeks)
-             transactionLog = transactionLog.filter(t => t.week > week - 8);
+             bankAccounts.checking.transactions = bankAccounts.checking.transactions.filter(t => t.week > week - 8);
+             bankAccounts.savings.transactions = bankAccounts.savings.transactions.filter(t => t.week > week - 8);
              
              // Record salary income
              if (salary > 0) {
@@ -4047,7 +4055,8 @@
              document.getElementById('debug-week').textContent = week;
              document.getElementById('debug-cash').textContent = '$' + cash.toLocaleString();
              document.getElementById('debug-negative-weeks').textContent = negativeBalanceWeeks;
-             document.getElementById('debug-transactions').textContent = transactionLog.length;
+             const totalTransactions = bankAccounts.checking.transactions.length + bankAccounts.savings.transactions.length;
+             document.getElementById('debug-transactions').textContent = totalTransactions;
              document.getElementById('debug-loans').textContent = Object.keys(activeLoans).length;
              document.getElementById('debug-history').textContent = gameHistory.length;
          }
@@ -4065,7 +4074,8 @@
          
          function clearTransactions() {
              if (confirm('Clear all transaction history? This cannot be undone.')) {
-                 transactionLog = [];
+                 bankAccounts.checking.transactions = [];
+                 bankAccounts.savings.transactions = [];
                  updateBankDisplay();
                  updateDebugDisplay();
                  alert('Transaction history cleared');
@@ -4093,7 +4103,8 @@
                      currentJob = 'unemployed';
                      negativeBalanceWeeks = 0;
                      hasShownNSFWarning = false;
-                     transactionLog = [];
+                     bankAccounts.checking.transactions = [];
+                     bankAccounts.savings.transactions = [];
                      gameHistory = [];
                      
                      // Reset player stats
@@ -4321,56 +4332,83 @@
          }
          
          // Bank Account Functions
-         function addTransaction(type, description, amount, details) {
-             transactionLog.push({
+         function addTransaction(type, description, amount, details, account = 'checking') {
+             const transaction = {
                  week: week,
                  type: type, // 'income', 'expense', 'loan', 'random'
                  description: description,
                  amount: amount,
                  details: details,
-                 balance: cash + amount, // Balance after this transaction
+                 balance: bankAccounts[account].balance + amount, // Balance after this transaction
                  timestamp: new Date().toLocaleString()
-             });
+             };
+             
+             bankAccounts[account].transactions.push(transaction);
+             
+             // Update account balance
+             bankAccounts[account].balance += amount;
+             
+             // Sync cash with checking account balance
+             if (account === 'checking') {
+                 cash = bankAccounts.checking.balance;
+             }
          }
          
          function updateBankDisplay() {
-             // Update account balance
-             document.getElementById('account-balance').textContent = '$' + cash.toLocaleString();
+             // Update account balances
+             document.getElementById('checking-balance').textContent = '$' + bankAccounts.checking.balance.toLocaleString();
+             document.getElementById('savings-balance').textContent = '$' + bankAccounts.savings.balance.toLocaleString();
              
-             // Calculate 8-week totals
-             const last8Weeks = transactionLog.filter(t => t.week > week - 8);
+             // Calculate totals
+             const allTransactions = [...bankAccounts.checking.transactions, ...bankAccounts.savings.transactions];
+             const last8Weeks = allTransactions.filter(t => t.week > week - 8);
              const totalIncome = last8Weeks.filter(t => t.amount > 0).reduce((sum, t) => sum + t.amount, 0);
              const totalExpenses = Math.abs(last8Weeks.filter(t => t.amount < 0).reduce((sum, t) => sum + t.amount, 0));
              const netChange = totalIncome - totalExpenses;
+             const totalAssets = bankAccounts.checking.balance + bankAccounts.savings.balance;
              
-             document.getElementById('total-income-8w').textContent = '$' + totalIncome.toLocaleString();
-             document.getElementById('total-expenses-8w').textContent = '$' + totalExpenses.toLocaleString();
+             // Update bank overview
+             const totalAssetsEl = document.getElementById('total-bank-assets');
+             if (totalAssetsEl) totalAssetsEl.textContent = '$' + totalAssets.toLocaleString();
              
-             const netChangeEl = document.getElementById('net-change-8w');
-             netChangeEl.textContent = (netChange >= 0 ? '+' : '') + '$' + netChange.toLocaleString();
-             netChangeEl.className = 'account-value';
-             if (netChange < 0) netChangeEl.classList.add('negative');
-             else if (netChange > 0) netChangeEl.classList.add('positive');
-             else netChangeEl.classList.add('neutral');
+             const availableCashEl = document.getElementById('available-cash');
+             if (availableCashEl) availableCashEl.textContent = '$' + bankAccounts.checking.balance.toLocaleString();
+             
+             const savingsRateEl = document.getElementById('savings-rate');
+             if (savingsRateEl) {
+                 const savingsRate = totalAssets > 0 ? ((bankAccounts.savings.balance / totalAssets) * 100).toFixed(1) : 0;
+                 savingsRateEl.textContent = savingsRate + '%';
+             }
+             
+             const recentTransactionsEl = document.getElementById('recent-transactions');
+             if (recentTransactionsEl) recentTransactionsEl.textContent = last8Weeks.length + ' transactions';
              
              // Update transactions list
              filterTransactions();
          }
          
          function filterTransactions() {
-             const typeFilter = document.getElementById('transaction-filter').value;
-             const weekRange = parseInt(document.getElementById('week-range-filter').value);
-             const container = document.getElementById('transactions-container');
+             const typeFilter = document.getElementById('transaction-filter');
+             const weekRange = document.getElementById('week-range-filter');
+             const container = document.getElementById('transactions-table-body');
+             
+             if (!typeFilter || !weekRange || !container) return;
+             
+             const typeVal = typeFilter.value;
+             const weekVal = parseInt(weekRange.value);
+             
+             // Get all transactions from both accounts
+             const allTransactions = [...bankAccounts.checking.transactions, ...bankAccounts.savings.transactions];
              
              // Filter transactions
-             let filteredTransactions = transactionLog.filter(t => t.week > week - weekRange);
+             let filteredTransactions = allTransactions.filter(t => t.week > week - weekVal);
              
-             if (typeFilter !== 'all') {
-                 if (typeFilter === 'income') {
+             if (typeVal !== 'all') {
+                 if (typeVal === 'income') {
                      filteredTransactions = filteredTransactions.filter(t => t.amount > 0);
-                 } else if (typeFilter === 'expenses') {
+                 } else if (typeVal === 'expenses') {
                      filteredTransactions = filteredTransactions.filter(t => t.amount < 0 && t.type !== 'loan');
-                 } else if (typeFilter === 'loans') {
+                 } else if (typeVal === 'loans') {
                      filteredTransactions = filteredTransactions.filter(t => t.type === 'loan');
                  }
              }
@@ -4379,31 +4417,42 @@
              filteredTransactions.sort((a, b) => b.week - a.week);
              
              // Update transaction count
-             document.getElementById('transaction-count').textContent = 
-                 filteredTransactions.length + ' transaction' + (filteredTransactions.length !== 1 ? 's' : '');
+             const countEl = document.getElementById('transaction-count');
+             if (countEl) {
+                 countEl.textContent = filteredTransactions.length + ' transaction' + (filteredTransactions.length !== 1 ? 's' : '');
+             }
              
-             // Group by week and render
+             // Render transactions in table format
              container.innerHTML = '';
-             let currentWeek = null;
-             
-             filteredTransactions.forEach(transaction => {
-                 // Add week separator if needed
-                 if (currentWeek !== transaction.week) {
-                     currentWeek = transaction.week;
-                     const separator = document.createElement('div');
-                     separator.className = 'week-separator';
-                     separator.textContent = `Week ${transaction.week}`;
-                     container.appendChild(separator);
-                 }
-                 
-                 // Add transaction item
-                 const transactionEl = createTransactionElement(transaction);
-                 container.appendChild(transactionEl);
-             });
              
              if (filteredTransactions.length === 0) {
-                 container.innerHTML = '<div style="text-align: center; padding: 40px; color: #6c757d;"><p>No transactions found for the selected criteria.</p></div>';
+                 const row = document.createElement('tr');
+                 row.innerHTML = '<td colspan="5" style="text-align: center; padding: 40px; color: #6c757d;">No transactions found for the selected criteria.</td>';
+                 container.appendChild(row);
+                 return;
              }
+             
+             let runningBalance = bankAccounts.checking.balance;
+             
+             filteredTransactions.forEach(transaction => {
+                 const row = document.createElement('tr');
+                 row.className = 'financial-data-row';
+                 
+                 const date = `Week ${transaction.week}`;
+                 const debit = transaction.amount < 0 ? '$' + Math.abs(transaction.amount).toLocaleString() : '';
+                 const credit = transaction.amount > 0 ? '$' + transaction.amount.toLocaleString() : '';
+                 const balance = '$' + transaction.balance.toLocaleString();
+                 
+                 row.innerHTML = `
+                     <td class="account-name">${date}</td>
+                     <td class="account-name">${transaction.description}</td>
+                     <td class="amount-value expense">${debit}</td>
+                     <td class="amount-value revenue">${credit}</td>
+                     <td class="amount-value">${balance}</td>
+                 `;
+                 
+                 container.appendChild(row);
+             });
          }
          
          function createTransactionElement(transaction) {
