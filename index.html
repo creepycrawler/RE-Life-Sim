@@ -1421,7 +1421,6 @@
                                  <option value="income">Income Only</option>
                                  <option value="expenses">Expenses Only</option>
                                  <option value="loans">Loan Payments</option>
-                                 <option value="random">Random Events</option>
                              </select>
                          </div>
                          <div>
@@ -1729,23 +1728,22 @@
              const netChange = salary - expenses;
              cash += netChange;
              
-             // Random events (25% chance)
+             // Random events (25% chance) - affects cash but no bank transactions
              if (Math.random() < 0.25) {
                  const events = [
-                     { text: "Found $50!", effect: 50, desc: "Lucky find" },
-                     { text: "Car repair: -$150", effect: -150, desc: "Unexpected maintenance" },
-                     { text: "Tax refund: +$120", effect: 120, desc: "Government refund" },
-                     { text: "Medical bill: -$80", effect: -80, desc: "Healthcare expense" },
-                     { text: "Side gig: +$100", effect: 100, desc: "Freelance work" },
-                     { text: "Utility spike: -$60", effect: -60, desc: "High electric bill" }
+                     { text: "Found $50!", effect: 50 },
+                     { text: "Car repair: -$150", effect: -150 },
+                     { text: "Tax refund: +$120", effect: 120 },
+                     { text: "Medical bill: -$80", effect: -80 },
+                     { text: "Side gig: +$100", effect: 100 },
+                     { text: "Utility spike: -$60", effect: -60 }
                  ];
                  
                  const event = events[Math.floor(Math.random() * events.length)];
                  cash += event.effect;
                  
-                 // Record random event transaction
-                 const type = event.effect > 0 ? 'income' : 'expense';
-                 addTransaction('random', event.text, event.effect, event.desc);
+                 // Note: Random events no longer create bank transactions
+                 // They are handled as immediate cash adjustments
              }
              
              updateDisplay();
@@ -1790,13 +1788,16 @@
              const loan = activeLoans[loanId];
              if (!loan) return;
              
-             // Use custom payment amount if set, otherwise calculate minimum
+             // Calculate payment amount for the selected frequency
+             let paymentAmount;
              if (loan.customPaymentAmount) {
-                 loan.weeklyPayment = convertPaymentToWeekly(loan.customPaymentAmount, loan.paymentFrequency);
+                 paymentAmount = loan.customPaymentAmount;
              } else {
-                 const minPayment = calculateLoanPayment(loan.currentBalance, loan.interestRate, loan.currentTermYears, loan.paymentFrequency);
-                 loan.weeklyPayment = convertPaymentToWeekly(minPayment, loan.paymentFrequency);
+                 paymentAmount = calculateLoanPayment(loan.currentBalance, loan.interestRate, loan.currentTermYears, loan.paymentFrequency);
              }
+             
+             // Store the actual payment amount (not converted to weekly)
+             loan.weeklyPayment = paymentAmount;
              
              // Recalculate payments remaining based on current settings
              const periodsPerYear = loan.paymentFrequency === 'weekly' ? 52 : loan.paymentFrequency === 'biweekly' ? 26 : 12;
@@ -1824,26 +1825,43 @@
          function processLoanPayments() {
              Object.values(activeLoans).forEach(loan => {
                  if (loan.currentBalance > 0 && loan.paymentsRemaining > 0) {
-                     // Calculate weekly interest
+                     // Calculate weekly interest (always applied)
                      const weeklyInterestRate = loan.interestRate / 52;
                      const interestPayment = loan.currentBalance * weeklyInterestRate;
                      
                      // Add interest to current balance
                      loan.currentBalance += interestPayment;
                      
-                     // Apply weekly payment
-                     const actualPayment = Math.min(loan.weeklyPayment, loan.currentBalance);
-                     loan.currentBalance -= actualPayment;
-                     loan.paymentsRemaining--;
-                     
-                     // Reduce cash
-                     cash -= actualPayment;
-                     
-                     // Record transaction for interest
+                     // Record interest transaction
                      addTransaction('loan', `${loan.name} - Interest`, -interestPayment, 'Weekly interest charge');
                      
-                     // Record transaction for payment
-                     addTransaction('loan', `${loan.name} - Payment`, -actualPayment, 'Scheduled loan payment');
+                     // Check if payment is due this week based on frequency
+                     let paymentDue = false;
+                     
+                     if (loan.paymentFrequency === 'weekly') {
+                         paymentDue = true;
+                     } else if (loan.paymentFrequency === 'biweekly') {
+                         // Payment due every 2 weeks
+                         paymentDue = (week % 2 === 1); // Pay on odd weeks (1, 3, 5, etc.)
+                     } else if (loan.paymentFrequency === 'monthly') {
+                         // Payment due approximately once per month (every 4.33 weeks, simplified to every 4 weeks)
+                         paymentDue = (week % 4 === 1); // Pay on weeks 1, 5, 9, 13, etc.
+                     }
+                     
+                     if (paymentDue) {
+                         // Apply payment
+                         const actualPayment = Math.min(loan.weeklyPayment, loan.currentBalance);
+                         loan.currentBalance -= actualPayment;
+                         loan.paymentsRemaining--;
+                         
+                         // Reduce cash
+                         cash -= actualPayment;
+                         
+                         // Record payment transaction
+                         const frequencyText = loan.paymentFrequency === 'weekly' ? 'Weekly' : 
+                                              loan.paymentFrequency === 'biweekly' ? 'Bi-weekly' : 'Monthly';
+                         addTransaction('loan', `${loan.name} - Payment`, -actualPayment, `${frequencyText} loan payment`);
+                     }
                  }
              });
          }
@@ -1893,16 +1911,34 @@
              const activeLoansList = Object.values(activeLoans).filter(loan => loan.currentBalance > 0);
              
              const totalLoanDebt = activeLoansList.reduce((sum, loan) => sum + loan.currentBalance, 0);
-             const totalWeeklyPayments = activeLoansList.reduce((sum, loan) => sum + loan.weeklyPayment, 0);
+             
+             // Calculate effective weekly payment (what actually gets paid per week on average)
+             const totalEffectiveWeeklyPayments = activeLoansList.reduce((sum, loan) => {
+                 let effectiveWeeklyPayment = 0;
+                 if (loan.paymentFrequency === 'weekly') {
+                     effectiveWeeklyPayment = loan.weeklyPayment;
+                 } else if (loan.paymentFrequency === 'biweekly') {
+                     effectiveWeeklyPayment = loan.weeklyPayment / 2; // Every other week
+                 } else if (loan.paymentFrequency === 'monthly') {
+                     effectiveWeeklyPayment = loan.weeklyPayment / 4; // Once per 4 weeks
+                 }
+                 return sum + effectiveWeeklyPayment;
+             }, 0);
+             
              const weeklyInterest = activeLoansList.reduce((sum, loan) => {
                  const weeklyRate = loan.interestRate / 52;
                  return sum + (loan.currentBalance * weeklyRate);
              }, 0);
+             
+             // Calculate average years remaining weighted by loan balance
              const avgYearsRemaining = activeLoansList.length > 0 ? 
-                 activeLoansList.reduce((sum, loan) => sum + (loan.paymentsRemaining / 52), 0) / activeLoansList.length : 0;
+                 activeLoansList.reduce((sum, loan) => {
+                     const periodsPerYear = loan.paymentFrequency === 'weekly' ? 52 : loan.paymentFrequency === 'biweekly' ? 26 : 12;
+                     return sum + (loan.paymentsRemaining / periodsPerYear);
+                 }, 0) / activeLoansList.length : 0;
              
              document.getElementById('total-debt').textContent = '$' + totalLoanDebt.toLocaleString();
-             document.getElementById('total-weekly-payments').textContent = '$' + Math.round(totalWeeklyPayments).toLocaleString();
+             document.getElementById('total-weekly-payments').textContent = '$' + Math.round(totalEffectiveWeeklyPayments).toLocaleString();
              document.getElementById('weekly-interest').textContent = '$' + Math.round(weeklyInterest).toLocaleString();
              document.getElementById('avg-years-remaining').textContent = avgYearsRemaining.toFixed(1) + ' years';
              document.getElementById('total-loans-count').textContent = activeLoansList.length + ' loan' + (activeLoansList.length !== 1 ? 's' : '');
@@ -1940,13 +1976,17 @@
              
              const frequencyText = loan.paymentFrequency === 'weekly' ? '/week' : 
                                   loan.paymentFrequency === 'biweekly' ? '/biweekly' : '/month';
-             const paymentAmount = convertWeeklyToFrequency(loan.weeklyPayment, loan.paymentFrequency);
+             const paymentAmount = loan.weeklyPayment; // Now stored as the actual payment amount for the frequency
+             
+             // Calculate years remaining based on payment frequency
+             const periodsPerYear = loan.paymentFrequency === 'weekly' ? 52 : loan.paymentFrequency === 'biweekly' ? 26 : 12;
+             const yearsRemaining = (loan.paymentsRemaining / periodsPerYear).toFixed(1);
              
              div.innerHTML = `
                  <div class="loan-list-info">
                      <div class="loan-list-name">${loan.name}</div>
                      <div class="loan-list-details">
-                         ${(loan.interestRate * 100).toFixed(2)}% APR • ${(loan.paymentsRemaining / 52).toFixed(1)} years left • ${loan.lender}
+                         ${(loan.interestRate * 100).toFixed(2)}% APR • ${yearsRemaining} years left • ${loan.lender}
                      </div>
                  </div>
                  <div class="loan-list-amount">
@@ -2054,7 +2094,7 @@
              const progressPercent = ((loan.originalAmount - loan.currentBalance) / loan.originalAmount) * 100;
              const frequencyText = loan.paymentFrequency === 'weekly' ? 'Weekly' : 
                                   loan.paymentFrequency === 'biweekly' ? 'Bi-weekly' : 'Monthly';
-             const currentPaymentAmount = convertWeeklyToFrequency(loan.weeklyPayment, loan.paymentFrequency);
+             const currentPaymentAmount = loan.weeklyPayment; // Now stored as actual payment amount
              const minimumPayment = calculateLoanPayment(loan.currentBalance, loan.interestRate, loan.maxTermYears, loan.paymentFrequency);
              
              return `
@@ -2155,8 +2195,8 @@
                                  <div class="detail-value">$${Math.round(currentPaymentAmount).toLocaleString()}</div>
                              </div>
                              <div class="detail-item">
-                                 <div class="detail-label">Weekly Payment</div>
-                                 <div class="detail-value">$${Math.round(loan.weeklyPayment).toLocaleString()}</div>
+                                 <div class="detail-label">Effective Weekly Cost</div>
+                                 <div class="detail-value">$${Math.round(loan.paymentFrequency === 'weekly' ? loan.weeklyPayment : loan.paymentFrequency === 'biweekly' ? loan.weeklyPayment / 2 : loan.weeklyPayment / 4).toLocaleString()}</div>
                              </div>
                              <div class="detail-item">
                                  <div class="detail-label">Payments Remaining</div>
@@ -2331,8 +2371,8 @@
                      filteredTransactions = filteredTransactions.filter(t => t.amount > 0);
                  } else if (typeFilter === 'expenses') {
                      filteredTransactions = filteredTransactions.filter(t => t.amount < 0 && t.type !== 'loan');
-                 } else {
-                     filteredTransactions = filteredTransactions.filter(t => t.type === typeFilter);
+                 } else if (typeFilter === 'loans') {
+                     filteredTransactions = filteredTransactions.filter(t => t.type === 'loan');
                  }
              }
              
@@ -2375,11 +2415,11 @@
              let icon, iconClass, amountClass;
              if (transaction.amount > 0) {
                  icon = '+';
-                 iconClass = transaction.type === 'random' ? 'random' : 'income';
+                 iconClass = 'income';
                  amountClass = 'positive';
              } else {
                  icon = '-';
-                 iconClass = transaction.type === 'loan' ? 'loan' : (transaction.type === 'random' ? 'random' : 'expense');
+                 iconClass = transaction.type === 'loan' ? 'loan' : 'expense';
                  amountClass = 'negative';
              }
              
