@@ -11,6 +11,7 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             margin: 0;
+            font-size: 0.75rem; /* Reduced by 25% from default 1rem */
         }
         
         .container {
@@ -96,11 +97,11 @@
              75% { transform: translateX(2px); }
          }
         
-                 h1 {
-             margin: 0;
-             font-size: 2rem;
-             font-weight: 300;
-         }
+                                   h1 {
+              margin: 0;
+              font-size: 2.67rem; /* Compensated for body font-size reduction */
+              font-weight: 300;
+          }
          
          /* Mobile Menu Button */
          .mobile-menu-btn {
@@ -130,14 +131,14 @@
              background: linear-gradient(135deg, #27ae60 0%, #2ecc71 100%);
              border: none;
              color: white;
-             padding: 12px 24px;
+             padding: 1rem 2rem; /* Adjusted for smaller base font */
              border-radius: 8px;
              font-weight: 600;
              cursor: pointer;
              transition: all 0.3s ease;
              text-transform: uppercase;
              letter-spacing: 1px;
-             font-size: 14px;
+             font-size: 1rem; /* Maintain readable button text */
              margin: 0;
              width: auto;
          }
@@ -255,14 +256,14 @@
         .btn {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 15px 30px;
+            padding: 1.33rem 2rem; /* Adjusted for smaller base font */
             border: none;
             border-radius: 8px;
-            font-size: 18px;
+            font-size: 1.2rem; /* Maintain readable button text */
             font-weight: 600;
             cursor: pointer;
             width: 100%;
-            margin: 15px 0;
+            margin: 1.33rem 0;
             transition: all 0.3s ease;
             text-transform: uppercase;
             letter-spacing: 1px;
@@ -1515,7 +1516,6 @@
                     <span></span>
                     <span></span>
                 </button>
-                <h1>Corporate Climber</h1>
                 <div class="game-stats">
                     <div class="mini-stat">
                         <div class="mini-stat-label">Week</div>
