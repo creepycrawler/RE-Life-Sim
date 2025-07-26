@@ -1085,6 +1085,229 @@
              color: #6c757d;
              font-size: 0.9rem;
          }
+
+         /* Financial Statement Table Styles */
+         .financial-statement {
+             width: 100%;
+             border-collapse: collapse;
+             margin: 30px 0;
+             background: white;
+             box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+             border-radius: 8px;
+             overflow: hidden;
+         }
+
+         .financial-statement thead {
+             background: linear-gradient(135deg, #2c3e50 0%, #3498db 100%);
+             color: white;
+         }
+
+         .statement-title {
+             font-size: 1.4rem;
+             font-weight: 700;
+             text-align: center;
+             padding: 20px;
+             text-transform: uppercase;
+             letter-spacing: 1px;
+         }
+
+         .statement-subtitle {
+             font-size: 1rem;
+             font-weight: 500;
+             text-align: center;
+             padding: 10px 20px;
+             font-style: italic;
+             opacity: 0.9;
+         }
+
+         .account-header, .amount-header {
+             background: #34495e;
+             color: white;
+             font-weight: 600;
+             text-align: center;
+             padding: 15px;
+             font-size: 1rem;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+         }
+
+         .amount-header {
+             text-align: right;
+             width: 150px;
+         }
+
+         .section-header-row th {
+             background: #ecf0f1;
+             color: #2c3e50;
+             font-weight: 700;
+             text-align: left;
+             padding: 15px 20px;
+             font-size: 1.1rem;
+             text-transform: uppercase;
+             letter-spacing: 1px;
+             border-top: 2px solid #bdc3c7;
+         }
+
+         .subsection-header-row th {
+             background: #f8f9fa;
+             color: #495057;
+             font-weight: 600;
+             text-align: left;
+             padding: 12px 20px;
+             font-size: 0.95rem;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+             font-style: italic;
+         }
+
+         .financial-data-row {
+             border-bottom: 1px solid #e9ecef;
+         }
+
+         .financial-data-row:hover {
+             background: #f8f9fa;
+         }
+
+         .account-name {
+             padding: 12px 20px;
+             color: #495057;
+             font-weight: 500;
+             border-right: 1px solid #e9ecef;
+         }
+
+         .amount-value {
+             padding: 12px 20px;
+             text-align: right;
+             font-weight: 600;
+             font-family: 'Courier New', monospace;
+             color: #2c3e50;
+         }
+
+         .amount-value.revenue {
+             color: #27ae60;
+         }
+
+         .amount-value.expense {
+             color: #e74c3c;
+         }
+
+         .amount-value.liability {
+             color: #e74c3c;
+         }
+
+         .amount-value.equity {
+             color: #8e44ad;
+         }
+
+         .subtotal-row {
+             border-top: 1px solid #bdc3c7;
+             border-bottom: 2px solid #bdc3c7;
+             background: #f1f2f6;
+         }
+
+         .subtotal-label {
+             padding: 12px 20px;
+             color: #2c3e50;
+             font-weight: 600;
+             font-style: italic;
+             border-right: 1px solid #bdc3c7;
+         }
+
+         .subtotal-value {
+             padding: 12px 20px;
+             text-align: right;
+             font-weight: 700;
+             font-family: 'Courier New', monospace;
+             color: #2c3e50;
+             background: #ecf0f1;
+         }
+
+         .total-row {
+             border-top: 2px solid #2c3e50;
+             border-bottom: 3px solid #2c3e50;
+             background: #ddd6fe;
+         }
+
+         .total-label {
+             padding: 15px 20px;
+             color: #2c3e50;
+             font-weight: 700;
+             font-size: 1.05rem;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+             border-right: 2px solid #2c3e50;
+         }
+
+         .total-value {
+             padding: 15px 20px;
+             text-align: right;
+             font-weight: 700;
+             font-family: 'Courier New', monospace;
+             color: #2c3e50;
+             font-size: 1.1rem;
+             background: #c7d2fe;
+         }
+
+         .total-value.revenue {
+             color: #27ae60;
+         }
+
+         .total-value.expense {
+             color: #e74c3c;
+         }
+
+         .total-value.liability {
+             color: #e74c3c;
+         }
+
+         .total-value.equity {
+             color: #8e44ad;
+         }
+
+         .grand-total-row {
+             border-top: 3px solid #2c3e50;
+             border-bottom: 4px solid #2c3e50;
+             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+             color: white;
+         }
+
+         .grand-total-label {
+             padding: 18px 20px;
+             font-weight: 700;
+             font-size: 1.15rem;
+             text-transform: uppercase;
+             letter-spacing: 1px;
+             border-right: 3px solid white;
+         }
+
+         .grand-total-value {
+             padding: 18px 20px;
+             text-align: right;
+             font-weight: 700;
+             font-family: 'Courier New', monospace;
+             font-size: 1.2rem;
+         }
+
+         @media (max-width: 768px) {
+             .financial-statement {
+                 margin: 20px 0;
+                 font-size: 0.9rem;
+             }
+
+             .statement-title {
+                 font-size: 1.2rem;
+                 padding: 15px;
+             }
+
+             .account-name, .amount-value, .subtotal-label, .subtotal-value, 
+             .total-label, .total-value, .grand-total-label, .grand-total-value {
+                 padding: 10px 15px;
+             }
+
+             .amount-header {
+                 width: 120px;
+             }
+         }
          
          .debug-btn {
              background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
@@ -1835,145 +2058,223 @@
         
                  <!-- Balance Page -->
          <div id="balance-page" class="page">
-             <!-- Balance Sheet Title -->
-             <div style="text-align: center; margin-bottom: 30px;">
-                 <h2 style="color: #2c3e50; margin: 0; font-size: 1.5rem;">Balance Sheet</h2>
-                 <p style="color: #6c757d; margin: 5px 0 0 0;">As of Week <span id="balance-week">1</span></p>
-             </div>
-             
-             <!-- Traditional Balance Sheet Layout -->
-             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin-bottom: 30px;">
-                 <!-- Assets Column -->
-                 <div class="balance-section">
-                     <div class="section-header">ASSETS</div>
-                     <div class="section-content">
-                         <div class="financial-row">
-                             <span class="financial-label">Cash & Cash Equivalents</span>
-                             <span class="financial-value" id="balance-cash">$1,000</span>
-                         </div>
-                         <div class="financial-row">
-                             <span class="financial-label">Savings Account</span>
-                             <span class="financial-value">$0</span>
-                         </div>
-                         <div class="financial-row">
-                             <span class="financial-label">Investments</span>
-                             <span class="financial-value">$0</span>
-                         </div>
-                         <div class="financial-row">
-                             <span class="financial-label">Personal Property</span>
-                             <span class="financial-value">$0</span>
-                         </div>
-                         <div class="financial-row total">
-                             <span class="financial-label"><strong>TOTAL ASSETS</strong></span>
-                             <span class="financial-value" id="total-assets"><strong>$1,000</strong></span>
-                         </div>
-                     </div>
-                 </div>
-                 
-                 <!-- Liabilities Column -->
-                 <div class="balance-section">
-                     <div class="section-header">LIABILITIES</div>
-                     <div class="section-content">
-                         <div class="financial-row">
-                             <span class="financial-label">Student Loans</span>
-                             <span class="financial-value negative" id="student-debt">$40,000</span>
-                         </div>
-                         <div class="financial-row">
-                             <span class="financial-label">Credit Cards</span>
-                             <span class="financial-value">$0</span>
-                         </div>
-                         <div class="financial-row">
-                             <span class="financial-label">Other Debts</span>
-                             <span class="financial-value">$0</span>
-                         </div>
-                         <div class="financial-row">
-                             <span class="financial-label"></span>
-                             <span class="financial-value"></span>
-                         </div>
-                         <div class="financial-row total">
-                             <span class="financial-label"><strong>TOTAL LIABILITIES</strong></span>
-                             <span class="financial-value negative" id="total-liabilities"><strong>$40,000</strong></span>
-                         </div>
-                     </div>
-                 </div>
-             </div>
-             
-             <!-- Net Worth -->
-             <div class="balance-section">
-                 <div class="section-header">NET WORTH</div>
-                 <div class="section-content">
-                     <div class="financial-row total" style="font-size: 1.2rem;">
-                         <span class="financial-label"><strong>NET WORTH (Assets - Liabilities)</strong></span>
-                         <span class="financial-value" id="net-worth-calc"><strong>-$39,000</strong></span>
-                     </div>
-                 </div>
-             </div>
-             
-             <!-- Income Statement Title -->
-             <div style="text-align: center; margin: 40px 0 30px 0;">
-                 <h2 style="color: #2c3e50; margin: 0; font-size: 1.5rem;">Income Statement</h2>
-                 <p style="color: #6c757d; margin: 5px 0 0 0;">Weekly Period</p>
-             </div>
-             
+             <!-- Balance Sheet -->
+             <table class="financial-statement">
+                 <thead>
+                     <tr>
+                         <th colspan="2" class="statement-title">BALANCE SHEET</th>
+                     </tr>
+                     <tr>
+                         <th colspan="2" class="statement-subtitle">As of Week <span id="balance-week">1</span></th>
+                     </tr>
+                     <tr>
+                         <th class="account-header">Account</th>
+                         <th class="amount-header">Amount</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr class="section-header-row">
+                         <th colspan="2" class="section-title">ASSETS</th>
+                     </tr>
+                     <tr class="subsection-header-row">
+                         <th colspan="2" class="subsection-title">Current Assets</th>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Cash and Cash Equivalents</td>
+                         <td class="amount-value" id="balance-cash">$1,000</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Checking Account</td>
+                         <td class="amount-value" id="checking-balance-display">$1,000</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Savings Account</td>
+                         <td class="amount-value" id="savings-balance-display">$0</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Short-term Investments</td>
+                         <td class="amount-value">$0</td>
+                     </tr>
+                     <tr class="subtotal-row">
+                         <td class="subtotal-label">Total Current Assets</td>
+                         <td class="subtotal-value" id="current-assets-total">$1,000</td>
+                     </tr>
+                     <tr class="subsection-header-row">
+                         <th colspan="2" class="subsection-title">Non-Current Assets</th>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Personal Property</td>
+                         <td class="amount-value">$0</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Long-term Investments</td>
+                         <td class="amount-value">$0</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Other Assets</td>
+                         <td class="amount-value">$0</td>
+                     </tr>
+                     <tr class="subtotal-row">
+                         <td class="subtotal-label">Total Non-Current Assets</td>
+                         <td class="subtotal-value" id="non-current-assets-total">$0</td>
+                     </tr>
+                     <tr class="total-row">
+                         <td class="total-label">TOTAL ASSETS</td>
+                         <td class="total-value" id="total-assets">$1,000</td>
+                     </tr>
+                     <tr class="section-header-row">
+                         <th colspan="2" class="section-title">LIABILITIES</th>
+                     </tr>
+                     <tr class="subsection-header-row">
+                         <th colspan="2" class="subsection-title">Current Liabilities</th>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Accounts Payable</td>
+                         <td class="amount-value">$0</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Credit Card Debt</td>
+                         <td class="amount-value">$0</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Short-term Loans</td>
+                         <td class="amount-value">$0</td>
+                     </tr>
+                     <tr class="subtotal-row">
+                         <td class="subtotal-label">Total Current Liabilities</td>
+                         <td class="subtotal-value" id="current-liabilities-total">$0</td>
+                     </tr>
+                     <tr class="subsection-header-row">
+                         <th colspan="2" class="subsection-title">Long-Term Liabilities</th>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Student Loans</td>
+                         <td class="amount-value liability" id="student-debt">$40,000</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Mortgage Payable</td>
+                         <td class="amount-value">$0</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Other Long-term Debt</td>
+                         <td class="amount-value">$0</td>
+                     </tr>
+                     <tr class="subtotal-row">
+                         <td class="subtotal-label">Total Long-Term Liabilities</td>
+                         <td class="subtotal-value liability" id="long-term-liabilities-total">$40,000</td>
+                     </tr>
+                     <tr class="total-row">
+                         <td class="total-label">TOTAL LIABILITIES</td>
+                         <td class="total-value liability" id="total-liabilities">$40,000</td>
+                     </tr>
+                     <tr class="section-header-row">
+                         <th colspan="2" class="section-title">EQUITY</th>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Owner's Equity</td>
+                         <td class="amount-value equity" id="owners-equity">-$39,000</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Retained Earnings</td>
+                         <td class="amount-value">$0</td>
+                     </tr>
+                     <tr class="total-row">
+                         <td class="total-label">TOTAL EQUITY</td>
+                         <td class="total-value equity" id="total-equity">-$39,000</td>
+                     </tr>
+                     <tr class="grand-total-row">
+                         <td class="grand-total-label">TOTAL LIABILITIES + EQUITY</td>
+                         <td class="grand-total-value" id="total-liab-equity">$1,000</td>
+                     </tr>
+                 </tbody>
+             </table>
+
              <!-- Income Statement -->
-             <div class="balance-section">
-                 <div class="section-header">INCOME</div>
-                 <div class="section-content">
-                     <div class="financial-row">
-                         <span class="financial-label">Salary Income</span>
-                         <span class="financial-value positive" id="job-salary">$0</span>
-                     </div>
-                     <div class="financial-row">
-                         <span class="financial-label">Investment Income</span>
-                         <span class="financial-value">$0</span>
-                     </div>
-                     <div class="financial-row">
-                         <span class="financial-label">Other Income</span>
-                         <span class="financial-value">$0</span>
-                     </div>
-                     <div class="financial-row total">
-                         <span class="financial-label"><strong>TOTAL INCOME</strong></span>
-                         <span class="financial-value positive" id="total-income"><strong>$0</strong></span>
-                     </div>
-                 </div>
-             </div>
-             
-             <div class="balance-section">
-                 <div class="section-header">EXPENSES</div>
-                 <div class="section-content">
-                     <div class="financial-row">
-                         <span class="financial-label">Living Expenses</span>
-                         <span class="financial-value negative">$500</span>
-                     </div>
-                     <div class="financial-row">
-                         <span class="financial-label">Student Loan Payment</span>
-                         <span class="financial-value negative">$200</span>
-                     </div>
-                     <div class="financial-row">
-                         <span class="financial-label">Transportation</span>
-                         <span class="financial-value">$0</span>
-                     </div>
-                     <div class="financial-row">
-                         <span class="financial-label">Entertainment</span>
-                         <span class="financial-value">$0</span>
-                     </div>
-                     <div class="financial-row total">
-                         <span class="financial-label"><strong>TOTAL EXPENSES</strong></span>
-                         <span class="financial-value negative" id="total-expenses"><strong>$700</strong></span>
-                     </div>
-                 </div>
-             </div>
-             
-             <!-- Net Income -->
-             <div class="balance-section">
-                 <div class="section-header">NET INCOME</div>
-                 <div class="section-content">
-                     <div class="financial-row total" style="font-size: 1.2rem;">
-                         <span class="financial-label"><strong>NET WEEKLY INCOME (Income - Expenses)</strong></span>
-                         <span class="financial-value" id="net-weekly-income"><strong>-$700</strong></span>
-                     </div>
-                 </div>
-             </div>
+             <table class="financial-statement">
+                 <thead>
+                     <tr>
+                         <th colspan="2" class="statement-title">INCOME STATEMENT</th>
+                     </tr>
+                     <tr>
+                         <th colspan="2" class="statement-subtitle">For the Week Ended Week <span id="income-week">1</span></th>
+                     </tr>
+                     <tr>
+                         <th class="account-header">Account</th>
+                         <th class="amount-header">Amount</th>
+                     </tr>
+                 </thead>
+                 <tbody>
+                     <tr class="section-header-row">
+                         <th colspan="2" class="section-title">REVENUE</th>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Salary Income</td>
+                         <td class="amount-value revenue" id="job-salary">$0</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Investment Income</td>
+                         <td class="amount-value revenue">$0</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Other Income</td>
+                         <td class="amount-value revenue">$0</td>
+                     </tr>
+                     <tr class="total-row">
+                         <td class="total-label">TOTAL REVENUE</td>
+                         <td class="total-value revenue" id="total-revenue">$0</td>
+                     </tr>
+                     <tr class="section-header-row">
+                         <th colspan="2" class="section-title">EXPENSES</th>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Cost of Living</td>
+                         <td class="amount-value expense">$500</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Housing Expenses</td>
+                         <td class="amount-value expense" id="housing-expense">$150</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Loan Payments</td>
+                         <td class="amount-value expense" id="loan-payments">$200</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Transportation</td>
+                         <td class="amount-value expense">$0</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Entertainment</td>
+                         <td class="amount-value expense">$0</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Other Expenses</td>
+                         <td class="amount-value expense">$0</td>
+                     </tr>
+                     <tr class="total-row">
+                         <td class="total-label">TOTAL EXPENSES</td>
+                         <td class="total-value expense" id="total-expenses">$850</td>
+                     </tr>
+                     <tr class="section-header-row">
+                         <th colspan="2" class="section-title">OPERATING INCOME</th>
+                     </tr>
+                     <tr class="subtotal-row">
+                         <td class="subtotal-label">Gross Profit (Revenue - Expenses)</td>
+                         <td class="subtotal-value" id="gross-profit">-$850</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Interest Expense</td>
+                         <td class="amount-value expense" id="interest-expense">$0</td>
+                     </tr>
+                     <tr class="financial-data-row">
+                         <td class="account-name">Tax Expense</td>
+                         <td class="amount-value expense">$0</td>
+                     </tr>
+                     <tr class="grand-total-row">
+                         <td class="grand-total-label">NET INCOME</td>
+                         <td class="grand-total-value" id="net-weekly-income">-$850</td>
+                     </tr>
+                 </tbody>
+             </table>
          </div>
          
          <!-- Loans Page -->
