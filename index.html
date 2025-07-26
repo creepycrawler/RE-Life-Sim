@@ -812,6 +812,34 @@
              padding: 10px 0;
              margin-bottom: 10px;
          }
+         
+         /* Cost Analysis Styles */
+         .cost-analysis-notice {
+             background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+             border: 2px solid #dee2e6;
+             border-radius: 12px;
+             padding: 20px;
+             margin-bottom: 20px;
+         }
+         
+         .cost-notice-header {
+             text-align: center;
+             margin-bottom: 20px;
+             padding-bottom: 15px;
+             border-bottom: 1px solid #dee2e6;
+         }
+         
+         .cost-highlight {
+             background: white;
+             border: 1px solid #dee2e6;
+             border-radius: 8px;
+             padding: 15px;
+             box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+         }
+         
+         .detail-value.warning {
+             color: #dc3545 !important;
+         }
         
                  /* Balance Sheet Grid for Mobile */
          @media (max-width: 768px) {
@@ -1570,7 +1598,8 @@
                  paymentsRemaining: 520, // 10 years * 52 weeks
                  type: 'student', // 'student', 'auto', 'mortgage', 'personal'
                  lender: 'Federal Student Aid',
-                 accountNumber: '****1234'
+                 accountNumber: '****1234',
+                 totalInterestAccrued: 0 // Track total interest accumulated over time
              }
          };
         
@@ -1822,18 +1851,77 @@
              }
          }
          
+         function calculateLoanLifetimeCost(loan) {
+             // Calculate total amount that will be paid over the life of the loan
+             const totalPayments = loan.weeklyPayment * loan.paymentsRemaining;
+             
+             // Total interest is total payments minus remaining principal
+             const totalInterestRemaining = totalPayments - loan.currentBalance;
+             
+             // Total cost is original amount plus all interest (past and future)
+             const totalLifetimeCost = loan.originalAmount + loan.totalInterestAccrued + totalInterestRemaining;
+             
+             // Total interest over lifetime
+             const totalLifetimeInterest = loan.totalInterestAccrued + totalInterestRemaining;
+             
+             return {
+                 totalLifetimeCost: totalLifetimeCost,
+                 totalLifetimeInterest: totalLifetimeInterest,
+                 totalInterestRemaining: totalInterestRemaining,
+                 totalPaymentsRemaining: totalPayments,
+                 interestAccruedSoFar: loan.totalInterestAccrued,
+                 principalRemaining: loan.currentBalance
+             };
+         }
+         
+         function calculateInterestSavings(loan, extraPayment) {
+             // Calculate how much interest would be saved with an extra payment
+             // This is a simplified calculation for demonstration
+             const currentMonthlyPayment = convertWeeklyToFrequency(loan.weeklyPayment, loan.paymentFrequency);
+             const newBalance = loan.currentBalance - extraPayment;
+             const periodsPerYear = loan.paymentFrequency === 'weekly' ? 52 : loan.paymentFrequency === 'biweekly' ? 26 : 12;
+             
+             // Calculate months saved (simplified)
+             const currentTimeToPayoff = loan.paymentsRemaining;
+             const newTimeToPayoff = Math.ceil(calculateLoanPaymentPeriods(newBalance, loan.interestRate, currentMonthlyPayment, loan.paymentFrequency));
+             const periodsSaved = Math.max(0, currentTimeToPayoff - newTimeToPayoff);
+             
+             // Estimate interest saved
+             const averageBalance = (loan.currentBalance + newBalance) / 2;
+             const periodRate = loan.interestRate / periodsPerYear;
+             const interestSaved = averageBalance * periodRate * periodsSaved;
+             
+             return {
+                 periodsSaved: periodsSaved,
+                 interestSaved: interestSaved,
+                 newPayoffTime: newTimeToPayoff
+             };
+         }
+         
+         function calculateLoanPaymentPeriods(principal, annualRate, payment, frequency) {
+             const periodsPerYear = frequency === 'weekly' ? 52 : frequency === 'biweekly' ? 26 : 12;
+             const periodRate = annualRate / periodsPerYear;
+             
+             if (periodRate === 0) return principal / payment;
+             
+             // Calculate number of payments needed
+             const periods = -Math.log(1 - (principal * periodRate) / payment) / Math.log(1 + periodRate);
+             return periods;
+         }
+         
          function processLoanPayments() {
              Object.values(activeLoans).forEach(loan => {
                  if (loan.currentBalance > 0 && loan.paymentsRemaining > 0) {
-                     // Calculate weekly interest (always applied)
+                     // Calculate and accumulate weekly interest (does not affect cash)
                      const weeklyInterestRate = loan.interestRate / 52;
-                     const interestPayment = loan.currentBalance * weeklyInterestRate;
+                     const weeklyInterest = loan.currentBalance * weeklyInterestRate;
                      
-                     // Add interest to current balance
-                     loan.currentBalance += interestPayment;
+                     // Add interest to loan balance (capitalizes interest)
+                     loan.currentBalance += weeklyInterest;
                      
-                     // Record interest transaction
-                     addTransaction('loan', `${loan.name} - Interest`, -interestPayment, 'Weekly interest charge');
+                     // Track total interest accumulated for display purposes
+                     if (!loan.totalInterestAccrued) loan.totalInterestAccrued = 0;
+                     loan.totalInterestAccrued += weeklyInterest;
                      
                      // Check if payment is due this week based on frequency
                      let paymentDue = false;
@@ -1849,15 +1937,15 @@
                      }
                      
                      if (paymentDue) {
-                         // Apply payment
+                         // Apply payment (reduces loan balance and cash)
                          const actualPayment = Math.min(loan.weeklyPayment, loan.currentBalance);
                          loan.currentBalance -= actualPayment;
                          loan.paymentsRemaining--;
                          
-                         // Reduce cash
+                         // Reduce cash only when payment is actually made
                          cash -= actualPayment;
                          
-                         // Record payment transaction
+                         // Record only the payment transaction (not interest)
                          const frequencyText = loan.paymentFrequency === 'weekly' ? 'Weekly' : 
                                               loan.paymentFrequency === 'biweekly' ? 'Bi-weekly' : 'Monthly';
                          addTransaction('loan', `${loan.name} - Payment`, -actualPayment, `${frequencyText} loan payment`);
@@ -2097,6 +2185,9 @@
              const currentPaymentAmount = loan.weeklyPayment; // Now stored as actual payment amount
              const minimumPayment = calculateLoanPayment(loan.currentBalance, loan.interestRate, loan.maxTermYears, loan.paymentFrequency);
              
+             // Calculate lifetime costs
+             const lifetimeCosts = calculateLoanLifetimeCost(loan);
+             
              return `
                  <!-- Loan Overview -->
                  <div class="loan-detail-section">
@@ -2135,6 +2226,64 @@
                              </div>
                              <div class="progress-bar" style="height: 12px;">
                                  <div class="progress-fill" style="width: ${progressPercent}%"></div>
+                             </div>
+                         </div>
+                     </div>
+                 </div>
+                 
+                 <!-- Loan Cost Analysis -->
+                 <div class="loan-detail-section">
+                     <div class="loan-detail-header">💰 Loan Cost Analysis</div>
+                     <div class="loan-detail-content">
+                         <div class="cost-analysis-notice">
+                             <div class="cost-notice-header">
+                                 <h4 style="margin: 0; color: #2c3e50;">Total Effective Cost of This Loan</h4>
+                                 <p style="margin: 5px 0 0 0; color: #6c757d; font-size: 14px;">Understanding the true cost of borrowing</p>
+                             </div>
+                             <div class="detail-grid" style="margin: 20px 0;">
+                                 <div class="detail-item cost-highlight">
+                                     <div class="detail-label">Original Loan Amount</div>
+                                     <div class="detail-value">$${loan.originalAmount.toLocaleString()}</div>
+                                 </div>
+                                 <div class="detail-item cost-highlight">
+                                     <div class="detail-label">Total Lifetime Interest</div>
+                                     <div class="detail-value negative">$${Math.round(lifetimeCosts.totalLifetimeInterest).toLocaleString()}</div>
+                                 </div>
+                                 <div class="detail-item cost-highlight">
+                                     <div class="detail-label">Total Effective Cost</div>
+                                     <div class="detail-value warning" style="font-size: 20px; font-weight: bold;">$${Math.round(lifetimeCosts.totalLifetimeCost).toLocaleString()}</div>
+                                 </div>
+                                 <div class="detail-item cost-highlight">
+                                     <div class="detail-label">Cost Multiplier</div>
+                                     <div class="detail-value warning">${(lifetimeCosts.totalLifetimeCost / loan.originalAmount).toFixed(2)}x</div>
+                                 </div>
+                             </div>
+                             <div style="background: #fff3cd; border: 1px solid #ffeaa7; border-radius: 8px; padding: 15px; margin: 15px 0;">
+                                 <div style="font-weight: 600; color: #856404; margin-bottom: 8px;">💡 Key Insights:</div>
+                                 <ul style="margin: 0; padding-left: 20px; color: #856404; font-size: 14px;">
+                                     <li>You will pay <strong>$${Math.round(lifetimeCosts.totalLifetimeInterest).toLocaleString()}</strong> in total interest over the life of this loan</li>
+                                     <li>Interest accrued so far: <strong>$${Math.round(lifetimeCosts.interestAccruedSoFar).toLocaleString()}</strong></li>
+                                     <li>Remaining interest to pay: <strong>$${Math.round(lifetimeCosts.totalInterestRemaining).toLocaleString()}</strong></li>
+                                     <li>Every dollar borrowed costs you <strong>$${(lifetimeCosts.totalLifetimeCost / loan.originalAmount).toFixed(2)}</strong> total</li>
+                                 </ul>
+                             </div>
+                         </div>
+                         <div class="detail-grid" style="margin-top: 20px;">
+                             <div class="detail-item">
+                                 <div class="detail-label">Interest Accrued to Date</div>
+                                 <div class="detail-value negative">$${Math.round(lifetimeCosts.interestAccruedSoFar).toLocaleString()}</div>
+                             </div>
+                             <div class="detail-item">
+                                 <div class="detail-label">Remaining Interest</div>
+                                 <div class="detail-value negative">$${Math.round(lifetimeCosts.totalInterestRemaining).toLocaleString()}</div>
+                             </div>
+                             <div class="detail-item">
+                                 <div class="detail-label">Principal Remaining</div>
+                                 <div class="detail-value">$${Math.round(lifetimeCosts.principalRemaining).toLocaleString()}</div>
+                             </div>
+                             <div class="detail-item">
+                                 <div class="detail-label">Payments Remaining Value</div>
+                                 <div class="detail-value">$${Math.round(lifetimeCosts.totalPaymentsRemaining).toLocaleString()}</div>
                              </div>
                          </div>
                      </div>
@@ -2207,12 +2356,12 @@
                                  <div class="detail-value">${(loan.paymentsRemaining / 52).toFixed(1)} years</div>
                              </div>
                              <div class="detail-item">
-                                 <div class="detail-label">Weekly Interest</div>
-                                 <div class="detail-value negative">$${((loan.currentBalance * loan.interestRate) / 52).toFixed(2)}</div>
+                                 <div class="detail-label">Weekly Interest Rate</div>
+                                 <div class="detail-value">${((loan.interestRate / 52) * 100).toFixed(4)}%</div>
                              </div>
                              <div class="detail-item">
-                                 <div class="detail-label">Total Interest Remaining</div>
-                                 <div class="detail-value negative">$${Math.round((loan.weeklyPayment * loan.paymentsRemaining) - loan.currentBalance).toLocaleString()}</div>
+                                 <div class="detail-label">Interest This Week</div>
+                                 <div class="detail-value negative">$${((loan.currentBalance * loan.interestRate) / 52).toFixed(2)}</div>
                              </div>
                          </div>
                      </div>
