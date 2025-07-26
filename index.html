@@ -1170,7 +1170,7 @@
 
          .account-name {
              padding: 12px 20px;
-             color: #FFF;
+             color: #495057;
              font-weight: 500;
              border-right: 1px solid #e9ecef;
          }
@@ -4349,6 +4349,7 @@
          
          // Bank Account Functions
          function addTransaction(type, description, amount, details, account = 'checking') {
+             const now = new Date();
              const transaction = {
                  week: week,
                  type: type, // 'income', 'expense', 'loan', 'random'
@@ -4356,7 +4357,8 @@
                  amount: amount,
                  details: details,
                  balance: bankAccounts[account].balance + amount, // Balance after this transaction
-                 timestamp: new Date().toLocaleString()
+                 timestamp: now.toLocaleString(),
+                 sortTimestamp: now.getTime() // For proper sorting
              };
              
              bankAccounts[account].transactions.push(transaction);
@@ -4436,8 +4438,15 @@
                  }
              }
              
-             // Sort by week (newest first)
-             filteredTransactions.sort((a, b) => b.week - a.week);
+             // Sort by week and timestamp (newest first)
+             filteredTransactions.sort((a, b) => {
+                 // First sort by week (newest first)
+                 if (b.week !== a.week) {
+                     return b.week - a.week;
+                 }
+                 // If same week, sort by timestamp (newest first)
+                 return (b.sortTimestamp || 0) - (a.sortTimestamp || 0);
+             });
              
              // Update transaction count
              const countEl = document.getElementById('transaction-count');
