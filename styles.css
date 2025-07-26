@@ -122,6 +122,10 @@ header h1 {
     text-transform: uppercase;
     letter-spacing: 0.5px;
     will-change: transform, background-color;
+    touch-action: manipulation;
+    -webkit-tap-highlight-color: rgba(0,0,0,0);
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 .btn.primary {
@@ -316,5 +320,19 @@ header h1 {
     
     .balance-sheet h2 {
         padding: 1rem;
+    }
+    
+    /* Better mobile button */
+    .btn.large {
+        padding: 1.5rem 2rem;
+        font-size: 1.1rem;
+        min-height: 60px;
+        width: 100%;
+    }
+    
+    .job-selection select {
+        font-size: 1.1rem;
+        padding: 1.2rem;
+        min-height: 60px;
     }
 }
