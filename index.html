@@ -1464,6 +1464,132 @@
                  padding: 15px;
              }
          }
+
+         /* Loan Application Styles */
+         .loan-offer-card {
+             background: white;
+             border: 2px solid #e9ecef;
+             border-radius: 12px;
+             padding: 20px;
+             margin-bottom: 20px;
+             transition: all 0.3s ease;
+             box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+         }
+
+         .loan-offer-card:hover {
+             border-color: #667eea;
+             transform: translateY(-2px);
+             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.15);
+         }
+
+         .loan-offer-header {
+             display: flex;
+             justify-content: space-between;
+             align-items: flex-start;
+             margin-bottom: 10px;
+         }
+
+         .loan-offer-title {
+             font-size: 1.3rem;
+             font-weight: 700;
+             color: #2c3e50;
+         }
+
+         .loan-offer-amount {
+             font-size: 1.2rem;
+             font-weight: 700;
+             color: #27ae60;
+             background: #d4edda;
+             padding: 8px 15px;
+             border-radius: 8px;
+         }
+
+         .loan-offer-bank {
+             color: #667eea;
+             font-weight: 600;
+             margin-bottom: 10px;
+             font-size: 1.1rem;
+         }
+
+         .loan-offer-description {
+             color: #6c757d;
+             margin-bottom: 20px;
+             line-height: 1.4;
+         }
+
+         .loan-offer-terms {
+             background: #f8f9fa;
+             border-radius: 8px;
+             padding: 15px;
+             margin-bottom: 20px;
+         }
+
+         .loan-term {
+             display: flex;
+             justify-content: space-between;
+             align-items: center;
+             margin-bottom: 8px;
+         }
+
+         .loan-term:last-child {
+             margin-bottom: 0;
+         }
+
+         .term-label {
+             color: #495057;
+             font-weight: 500;
+         }
+
+         .term-value {
+             color: #2c3e50;
+             font-weight: 600;
+             font-family: 'Courier New', monospace;
+         }
+
+         .accept-loan-btn {
+             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+             color: white;
+             border: none;
+             padding: 12px 25px;
+             border-radius: 8px;
+             font-weight: 600;
+             cursor: pointer;
+             transition: all 0.3s ease;
+             text-transform: uppercase;
+             letter-spacing: 0.5px;
+             width: 100%;
+         }
+
+         .accept-loan-btn:hover {
+             transform: translateY(-1px);
+             box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+         }
+
+         .back-btn {
+             background: #6c757d;
+             color: white;
+             border: none;
+             padding: 8px 15px;
+             border-radius: 6px;
+             font-weight: 500;
+             cursor: pointer;
+             transition: all 0.3s ease;
+         }
+
+         .back-btn:hover {
+             background: #5a6268;
+         }
+
+         @media (max-width: 768px) {
+             .loan-offer-header {
+                 flex-direction: column;
+                 align-items: flex-start;
+             }
+
+             .loan-offer-amount {
+                 margin-top: 8px;
+             }
+         }
          
          .debug-btn {
              background: linear-gradient(135deg, #17a2b8 0%, #138496 100%);
@@ -2125,16 +2251,16 @@
             </div>
         </div>
         
-                 <!-- Menu Navigation -->
-         <div class="menu">
-             <button class="menu-item active" onclick="showPage('job')">Job</button>
-             <button class="menu-item" onclick="showPage('balance')">Balance</button>
-             <button class="menu-item" onclick="showPage('loans')">Loans</button>
-             <button class="menu-item" onclick="showPage('bank')">Bank</button>
-             <button class="menu-item" onclick="showPage('player')">Player</button>
-             <button class="menu-item" onclick="showPage('history')">History</button>
-             <button class="menu-item debug-tab" onclick="showPage('debug')">Debug</button>
-         </div>
+                                     <!-- Menu Navigation -->
+                    <div class="menu">
+                        <button class="menu-item active" onclick="showPage('player')">Player</button>
+                        <button class="menu-item" onclick="showPage('job')">Job</button>
+                        <button class="menu-item" onclick="showPage('balance')">Balance</button>
+                        <button class="menu-item" onclick="showPage('loans')">Loans</button>
+                        <button class="menu-item" onclick="showPage('bank')">Bank</button>
+                        <button class="menu-item" onclick="showPage('history')">History</button>
+                        <button class="menu-item debug-tab" onclick="showPage('debug')">Debug</button>
+                    </div>
          
          <!-- Mobile Menu Overlay -->
          <div id="mobile-menu-overlay" class="mobile-menu-overlay">
@@ -2144,26 +2270,26 @@
                      <button class="mobile-menu-close" onclick="toggleMobileMenu()">&times;</button>
                  </div>
                  <div class="mobile-menu-items">
-                     <button class="mobile-menu-item active" onclick="showPage('job'); toggleMobileMenu()">
-                         <span class="menu-icon">💼</span>
-                         <span>Job</span>
-                     </button>
-                     <button class="mobile-menu-item" onclick="showPage('balance'); toggleMobileMenu()">
-                         <span class="menu-icon">📊</span>
-                         <span>Balance</span>
-                     </button>
-                     <button class="mobile-menu-item" onclick="showPage('loans'); toggleMobileMenu()">
-                         <span class="menu-icon">🏦</span>
-                         <span>Loans</span>
-                     </button>
-                     <button class="mobile-menu-item" onclick="showPage('bank'); toggleMobileMenu()">
-                         <span class="menu-icon">💳</span>
-                         <span>Bank</span>
-                     </button>
-                     <button class="mobile-menu-item" onclick="showPage('player'); toggleMobileMenu()">
-                         <span class="menu-icon">👤</span>
-                         <span>Player</span>
-                     </button>
+                                             <button class="mobile-menu-item active" onclick="showPage('player'); toggleMobileMenu()">
+                            <span class="menu-icon">👤</span>
+                            <span>Player</span>
+                        </button>
+                        <button class="mobile-menu-item" onclick="showPage('job'); toggleMobileMenu()">
+                            <span class="menu-icon">💼</span>
+                            <span>Job</span>
+                        </button>
+                        <button class="mobile-menu-item" onclick="showPage('balance'); toggleMobileMenu()">
+                            <span class="menu-icon">📊</span>
+                            <span>Balance</span>
+                        </button>
+                        <button class="mobile-menu-item" onclick="showPage('loans'); toggleMobileMenu()">
+                            <span class="menu-icon">🏦</span>
+                            <span>Loans</span>
+                        </button>
+                        <button class="mobile-menu-item" onclick="showPage('bank'); toggleMobileMenu()">
+                            <span class="menu-icon">💳</span>
+                            <span>Bank</span>
+                        </button>
                      <button class="mobile-menu-item" onclick="showPage('history'); toggleMobileMenu()">
                          <span class="menu-icon">📈</span>
                          <span>History</span>
@@ -2177,7 +2303,7 @@
          </div>
         
         <!-- Job Page -->
-        <div id="job-page" class="page active">
+        <div id="job-page" class="page">
             <div class="controls">
                 <div class="form-group">
                     <label for="job-select">Current Job (Emergency Fallback):</label>
@@ -2514,6 +2640,10 @@
                                  <span class="action-icon">📊</span>
                                  <span>Payoff Calculator</span>
                              </button>
+                             <button onclick="showLoanApplications()" class="action-btn">
+                                 <span class="action-icon">💳</span>
+                                 <span>Apply for Loan</span>
+                             </button>
                          </div>
                      </div>
                  </div>
@@ -2726,7 +2856,7 @@
          </div>
          
          <!-- Player Page -->
-         <div id="player-page" class="page">
+         <div id="player-page" class="page active">
              <!-- Player Title -->
              <div style="text-align: center; margin-bottom: 30px;">
                  <h2 style="color: #2c3e50; margin: 0; font-size: 1.5rem;">👤 Player Profile</h2>
@@ -3069,6 +3199,9 @@
          let pendingApplication = null; // Stores the job being applied for
          let jobApplicationResult = null; // Stores the result after a week
          
+         // Loan application system
+         let availableLoans = [];
+         
          // Job title and salary ranges for random generation
          const jobTitles = [
              'Customer Service Rep', 'Sales Associate', 'Data Entry Clerk', 'Administrative Assistant',
@@ -3185,6 +3318,17 @@
                 page.classList.remove('active');
             });
             document.getElementById(pageName + '-page').classList.add('active');
+            
+            // Initialize specific pages when first shown
+            if (pageName === 'history') {
+                updateHistoryDisplay();
+            } else if (pageName === 'loans') {
+                updateLoansDisplay();
+            } else if (pageName === 'bank') {
+                updateBankDisplay();
+            } else if (pageName === 'player') {
+                updatePlayerDisplay();
+            }
         }
         
         function toggleMobileMenu() {
@@ -5094,6 +5238,193 @@
                      container.appendChild(jobCard);
                  });
              }
+         }
+
+         // Loan application system functions
+         function generateAvailableLoans() {
+             const loanTypes = [
+                 {
+                     name: 'Personal Loan',
+                     description: 'Flexible personal financing for your needs',
+                     minAmount: 1000,
+                     maxAmount: 15000,
+                     interestRange: [0.08, 0.18], // 8-18% annual
+                     termRange: [1, 5] // 1-5 years
+                 },
+                 {
+                     name: 'Auto Loan',
+                     description: 'Financing for vehicle purchase',
+                     minAmount: 5000,
+                     maxAmount: 35000,
+                     interestRange: [0.04, 0.12], // 4-12% annual
+                     termRange: [2, 7] // 2-7 years
+                 },
+                 {
+                     name: 'Home Improvement Loan',
+                     description: 'Fund your home renovation projects',
+                     minAmount: 2000,
+                     maxAmount: 25000,
+                     interestRange: [0.06, 0.15], // 6-15% annual
+                     termRange: [2, 10] // 2-10 years
+                 },
+                 {
+                     name: 'Credit Line',
+                     description: 'Revolving credit for ongoing expenses',
+                     minAmount: 500,
+                     maxAmount: 10000,
+                     interestRange: [0.12, 0.25], // 12-25% annual
+                     termRange: [1, 3] // 1-3 years
+                 },
+                 {
+                     name: 'Debt Consolidation Loan',
+                     description: 'Combine multiple debts into one payment',
+                     minAmount: 3000,
+                     maxAmount: 40000,
+                     interestRange: [0.07, 0.16], // 7-16% annual
+                     termRange: [2, 7] // 2-7 years
+                 }
+             ];
+             
+             availableLoans = [];
+             
+             // Generate 3 random loan offers
+             for (let i = 0; i < 3; i++) {
+                 const loanType = loanTypes[Math.floor(Math.random() * loanTypes.length)];
+                 const amount = Math.floor(Math.random() * (loanType.maxAmount - loanType.minAmount + 1)) + loanType.minAmount;
+                 const interestRate = Math.random() * (loanType.interestRange[1] - loanType.interestRange[0]) + loanType.interestRange[0];
+                 const termYears = Math.floor(Math.random() * (loanType.termRange[1] - loanType.termRange[0] + 1)) + loanType.termRange[0];
+                 
+                 const loan = {
+                     id: 'loan-offer-' + Date.now() + '-' + i,
+                     name: loanType.name,
+                     description: loanType.description,
+                     amount: amount,
+                     interestRate: interestRate,
+                     termYears: termYears,
+                     bank: generateBankName()
+                 };
+                 
+                 availableLoans.push(loan);
+             }
+         }
+         
+         function generateBankName() {
+             const bankNames = [
+                 'First National Bank', 'Capital Credit Union', 'Community Bank', 
+                 'Metro Financial', 'United Bank', 'Regional Trust Bank',
+                 'Liberty Credit Union', 'Heritage Bank', 'Apex Financial'
+             ];
+             return bankNames[Math.floor(Math.random() * bankNames.length)];
+         }
+         
+         function showLoanApplications() {
+             // Generate new loan offers
+             generateAvailableLoans();
+             
+             // Hide loans overview and show loan applications
+             document.getElementById('loans-overview').style.display = 'none';
+             document.getElementById('loans-list-container').style.display = 'none';
+             
+             let loanAppsContainer = document.getElementById('loan-applications-container');
+             if (!loanAppsContainer) {
+                 loanAppsContainer = document.createElement('div');
+                 loanAppsContainer.id = 'loan-applications-container';
+                 document.getElementById('loans-page').appendChild(loanAppsContainer);
+             }
+             
+             loanAppsContainer.style.display = 'block';
+             loanAppsContainer.innerHTML = '';
+             
+             // Header
+             const header = document.createElement('div');
+             header.innerHTML = `
+                 <div style="margin-bottom: 30px;">
+                     <button onclick="hideLoanApplications()" class="back-btn">← Back to Loans</button>
+                     <h2 style="color: #2c3e50; margin: 10px 0 0 0; font-size: 1.5rem;">💳 Available Loan Offers</h2>
+                     <p style="color: #6c757d; margin: 5px 0 0 0;">Choose from these pre-approved loan offers</p>
+                 </div>
+             `;
+             loanAppsContainer.appendChild(header);
+             
+             // Loan offers
+             availableLoans.forEach(loan => {
+                 const monthlyPayment = calculateLoanPayment(loan.amount, loan.interestRate, loan.termYears, 'monthly');
+                 const weeklyPayment = monthlyPayment / 4.33; // Convert to weekly
+                 const totalInterest = (monthlyPayment * loan.termYears * 12) - loan.amount;
+                 
+                 const loanCard = document.createElement('div');
+                 loanCard.className = 'loan-offer-card';
+                 loanCard.innerHTML = `
+                     <div class="loan-offer-header">
+                         <div class="loan-offer-title">${loan.name}</div>
+                         <div class="loan-offer-amount">$${loan.amount.toLocaleString()}</div>
+                     </div>
+                     <div class="loan-offer-bank">${loan.bank}</div>
+                     <div class="loan-offer-description">${loan.description}</div>
+                     <div class="loan-offer-terms">
+                         <div class="loan-term">
+                             <span class="term-label">Interest Rate:</span>
+                             <span class="term-value">${(loan.interestRate * 100).toFixed(2)}% APR</span>
+                         </div>
+                         <div class="loan-term">
+                             <span class="term-label">Term:</span>
+                             <span class="term-value">${loan.termYears} years</span>
+                         </div>
+                         <div class="loan-term">
+                             <span class="term-label">Weekly Payment:</span>
+                             <span class="term-value">$${weeklyPayment.toFixed(2)}</span>
+                         </div>
+                         <div class="loan-term">
+                             <span class="term-label">Total Interest:</span>
+                             <span class="term-value">$${totalInterest.toLocaleString()}</span>
+                         </div>
+                     </div>
+                     <button class="accept-loan-btn" onclick="acceptLoan('${loan.id}')">Accept Loan</button>
+                 `;
+                 loanAppsContainer.appendChild(loanCard);
+             });
+         }
+         
+         function hideLoanApplications() {
+             document.getElementById('loan-applications-container').style.display = 'none';
+             document.getElementById('loans-overview').style.display = 'block';
+             document.getElementById('loans-list-container').style.display = 'block';
+         }
+         
+         function acceptLoan(loanId) {
+             const loan = availableLoans.find(l => l.id === loanId);
+             if (!loan) return;
+             
+             // Create new loan entry
+             const newLoanId = 'loan-' + Date.now();
+             activeLoans[newLoanId] = {
+                 name: loan.name,
+                 originalBalance: loan.amount,
+                 currentBalance: loan.amount,
+                 interestRate: loan.interestRate,
+                 termYears: loan.termYears,
+                 paymentFrequency: 'weekly',
+                 customPaymentAmount: null,
+                 totalInterestAccrued: 0,
+                 bank: loan.bank
+             };
+             
+             // Add loan amount to checking account
+             addTransaction('income', `${loan.name} - Loan Disbursement`, loan.amount, `Loan from ${loan.bank}`);
+             
+             // Recalculate loan terms
+             recalculateLoanTerms(newLoanId);
+             
+             // Update displays
+             updateLoansDisplay();
+             updateBankDisplay();
+             updateDisplay();
+             
+             // Hide loan applications
+             hideLoanApplications();
+             
+             // Show confirmation
+             alert(`🎉 Loan Approved!\n\n${loan.name} for $${loan.amount.toLocaleString()}\nFrom: ${loan.bank}\n\nFunds have been deposited to your checking account.\nWeekly payments will begin next week.`);
          }
 
          // Banking navigation functions
