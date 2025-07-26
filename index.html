@@ -1418,9 +1418,95 @@
              }
          }
     </style>
-</head>
-<body>
-    <div class="container">
+  </head>
+  <body>
+    <!-- Character Creation Screen -->
+    <div id="character-creation" class="welcome-screen">
+        <div class="welcome-container">
+            <!-- Welcome Header -->
+            <div class="welcome-header">
+                <h1>🎓 Welcome to Corporate Climber</h1>
+                <p>Your journey to financial success starts here!</p>
+            </div>
+            
+            <!-- Character Creation Form -->
+            <div class="creation-form">
+                <h2>Create Your Character</h2>
+                
+                <!-- Name Input -->
+                <div class="form-group">
+                    <label for="player-name">Your Name:</label>
+                    <input type="text" id="player-name" placeholder="Enter your name" maxlength="20">
+                </div>
+                
+                <!-- College Degree Selection -->
+                <div class="form-group">
+                    <label for="college-degree">College Degree:</label>
+                    <select id="college-degree">
+                        <option value="">Select your degree...</option>
+                        <option value="business">Business Administration</option>
+                        <option value="computer-science">Computer Science</option>
+                        <option value="engineering">Engineering</option>
+                    </select>
+                </div>
+                
+                <!-- Difficulty Selection -->
+                <div class="form-group">
+                    <label>Choose Your Challenge:</label>
+                    <div class="difficulty-options">
+                        <div class="difficulty-card easy" onclick="selectDifficulty('easy')">
+                            <div class="difficulty-icon">🟢</div>
+                            <div class="difficulty-name">Easy</div>
+                            <div class="difficulty-goal">Earn $1,000,000 by Year 10</div>
+                            <div class="difficulty-details">Relaxed pace, moderate goals</div>
+                        </div>
+                        <div class="difficulty-card medium" onclick="selectDifficulty('medium')">
+                            <div class="difficulty-icon">🟡</div>
+                            <div class="difficulty-name">Medium</div>
+                            <div class="difficulty-goal">Earn $2,500,000 by Year 8</div>
+                            <div class="difficulty-details">Balanced challenge, good rewards</div>
+                        </div>
+                        <div class="difficulty-card hard" onclick="selectDifficulty('hard')">
+                            <div class="difficulty-icon">🔴</div>
+                            <div class="difficulty-name">Hard</div>
+                            <div class="difficulty-goal">Earn $5,000,000 by Year 6</div>
+                            <div class="difficulty-details">Intense pressure, maximum rewards</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Start Game Button -->
+                <button id="start-game-btn" onclick="startGame()" class="start-btn" disabled>
+                    Start Your Journey
+                </button>
+            </div>
+            
+            <!-- Game Objectives -->
+            <div class="objectives-section">
+                <h3>📋 Game Objectives</h3>
+                <div class="objectives-grid">
+                    <div class="objective-item">
+                        <div class="objective-icon">💰</div>
+                        <div class="objective-text">Build wealth through smart financial decisions</div>
+                    </div>
+                    <div class="objective-item">
+                        <div class="objective-icon">📈</div>
+                        <div class="objective-text">Advance your career and increase income</div>
+                    </div>
+                    <div class="objective-item">
+                        <div class="objective-icon">🏠</div>
+                        <div class="objective-text">Balance lifestyle choices with financial goals</div>
+                    </div>
+                    <div class="objective-item">
+                        <div class="objective-icon">🎯</div>
+                        <div class="objective-text">Reach your net worth target within the time limit</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container" id="main-game" style="display: none;">
         <!-- Header with basic stats -->
         <div class="header">
             <div class="header-left">
@@ -1829,76 +1915,151 @@
          
          <!-- Bank Account Page -->
          <div id="bank-page" class="page">
-             <!-- Bank Account Title -->
-             <div style="text-align: center; margin-bottom: 30px;">
-                 <h2 style="color: #2c3e50; margin: 0; font-size: 1.5rem;">Bank Account Summary</h2>
-                 <p style="color: #6c757d; margin: 5px 0 0 0;">Transaction history for the past 8 weeks</p>
-             </div>
-             
-             <!-- Account Summary -->
-             <div class="balance-section" style="margin-bottom: 30px;">
-                 <div class="section-header">Account Overview</div>
-                 <div class="section-content">
-                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
-                         <div class="account-stat">
-                             <div class="account-label">Current Balance</div>
-                             <div class="account-value" id="account-balance">$1,000</div>
+             <!-- Bank Overview -->
+             <div id="bank-overview">
+                 <!-- Bank Title -->
+                 <div style="text-align: center; margin-bottom: 30px;">
+                     <h2 style="color: #2c3e50; margin: 0; font-size: 1.5rem;">🏦 Banking Dashboard</h2>
+                     <p style="color: #6c757d; margin: 5px 0 0 0;">Manage your accounts and view transactions</p>
+                 </div>
+                 
+                 <!-- Account Cards -->
+                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; margin-bottom: 30px;">
+                     <!-- Checking Account -->
+                     <div class="bank-account-card" onclick="showAccountDetail('checking')">
+                         <div class="account-header">
+                             <div class="account-icon">💳</div>
+                             <div class="account-info">
+                                 <div class="account-name">Checking Account</div>
+                                 <div class="account-number">****1234</div>
+                             </div>
+                             <div class="account-balance" id="checking-balance">$1,000</div>
                          </div>
-                         <div class="account-stat">
-                             <div class="account-label">Total Income (8 weeks)</div>
-                             <div class="account-value positive" id="total-income-8w">$0</div>
+                         <div class="account-description">
+                             Primary account for daily transactions and expenses
                          </div>
-                         <div class="account-stat">
-                             <div class="account-label">Total Expenses (8 weeks)</div>
-                             <div class="account-value negative" id="total-expenses-8w">$0</div>
+                         <div class="account-actions">
+                             <span class="view-details">View Details →</span>
                          </div>
-                         <div class="account-stat">
-                             <div class="account-label">Net Change (8 weeks)</div>
-                             <div class="account-value" id="net-change-8w">$0</div>
+                     </div>
+                     
+                     <!-- Savings Account -->
+                     <div class="bank-account-card" onclick="showAccountDetail('savings')">
+                         <div class="account-header">
+                             <div class="account-icon">🏦</div>
+                             <div class="account-info">
+                                 <div class="account-name">Savings Account</div>
+                                 <div class="account-number">****5678</div>
+                             </div>
+                             <div class="account-balance" id="savings-balance">$0</div>
+                         </div>
+                         <div class="account-description">
+                             Save for the future and earn interest on your deposits
+                         </div>
+                         <div class="account-actions">
+                             <span class="view-details">View Details →</span>
+                         </div>
+                     </div>
+                 </div>
+                 
+                 <!-- Total Banking Summary -->
+                 <div class="balance-section">
+                     <div class="section-header">Banking Summary</div>
+                     <div class="section-content">
+                         <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px;">
+                             <div class="account-stat">
+                                 <div class="account-label">Total Assets</div>
+                                 <div class="account-value" id="total-bank-assets">$1,000</div>
+                             </div>
+                             <div class="account-stat">
+                                 <div class="account-label">Available Cash</div>
+                                 <div class="account-value" id="available-cash">$1,000</div>
+                             </div>
+                             <div class="account-stat">
+                                 <div class="account-label">Savings Rate</div>
+                                 <div class="account-value" id="savings-rate">0%</div>
+                             </div>
+                             <div class="account-stat">
+                                 <div class="account-label">Recent Activity</div>
+                                 <div class="account-value" id="recent-transactions">0 transactions</div>
+                             </div>
                          </div>
                      </div>
                  </div>
              </div>
              
-             <!-- Transaction Filter -->
-             <div class="balance-section" style="margin-bottom: 20px;">
-                 <div class="section-content" style="padding: 15px;">
-                     <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
-                         <div>
-                             <label style="font-weight: 600; margin-right: 10px;">Filter:</label>
-                             <select id="transaction-filter" onchange="filterTransactions()" 
-                                     style="padding: 8px; border: 2px solid #dee2e6; border-radius: 6px;">
-                                 <option value="all">All Transactions</option>
-                                 <option value="income">Income Only</option>
-                                 <option value="expenses">Expenses Only</option>
-                                 <option value="loans">Loan Payments</option>
-                             </select>
-                         </div>
-                         <div>
-                             <label style="font-weight: 600; margin-right: 10px;">Week Range:</label>
-                             <select id="week-range-filter" onchange="filterTransactions()"
-                                     style="padding: 8px; border: 2px solid #dee2e6; border-radius: 6px;">
-                                 <option value="8">Last 8 Weeks</option>
-                                 <option value="4">Last 4 Weeks</option>
-                                 <option value="2">Last 2 Weeks</option>
-                                 <option value="1">This Week</option>
-                             </select>
+             <!-- Account Detail View -->
+             <div id="bank-account-detail" style="display: none;">
+                 <!-- Back button and header -->
+                 <div style="margin-bottom: 30px;">
+                     <button onclick="showBankOverview()" class="back-btn">
+                         ← Back to Banking
+                     </button>
+                     <h2 id="account-detail-title" style="color: #2c3e50; margin: 10px 0 0 0; font-size: 1.5rem;">Account Details</h2>
+                 </div>
+                 
+                 <!-- Account Balance -->
+                 <div class="balance-section" style="margin-bottom: 30px;">
+                     <div class="section-header">Account Balance</div>
+                     <div class="section-content">
+                         <div style="text-align: center; padding: 20px;">
+                             <div style="font-size: 2rem; font-weight: 700; color: #2c3e50;" id="detail-account-balance">$1,000</div>
+                             <div style="color: #6c757d; margin-top: 5px;">Available Balance</div>
                          </div>
                      </div>
                  </div>
-             </div>
-             
-             <!-- Transactions List -->
-             <div class="balance-section">
-                 <div class="section-header">
-                     <div style="display: flex; justify-content: space-between; align-items: center;">
-                         <span>Recent Transactions</span>
-                         <span id="transaction-count" style="font-size: 0.9rem; opacity: 0.8;">0 transactions</span>
+                 
+                 <!-- Transaction Filter -->
+                 <div class="balance-section" style="margin-bottom: 20px;">
+                     <div class="section-content" style="padding: 15px;">
+                         <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                             <div>
+                                 <label style="font-weight: 600; margin-right: 10px;">Filter:</label>
+                                 <select id="transaction-filter" onchange="filterTransactions()" 
+                                         style="padding: 8px; border: 2px solid #dee2e6; border-radius: 6px;">
+                                     <option value="all">All Transactions</option>
+                                     <option value="income">Income Only</option>
+                                     <option value="expenses">Expenses Only</option>
+                                     <option value="loans">Loan Payments</option>
+                                 </select>
+                             </div>
+                             <div>
+                                 <label style="font-weight: 600; margin-right: 10px;">Week Range:</label>
+                                 <select id="week-range-filter" onchange="filterTransactions()"
+                                         style="padding: 8px; border: 2px solid #dee2e6; border-radius: 6px;">
+                                     <option value="8">Last 8 Weeks</option>
+                                     <option value="4">Last 4 Weeks</option>
+                                     <option value="2">Last 2 Weeks</option>
+                                     <option value="1">This Week</option>
+                                 </select>
+                             </div>
+                         </div>
                      </div>
                  </div>
-                 <div class="section-content" style="padding: 0;">
-                     <div id="transactions-container">
-                         <!-- Transactions will be populated by JavaScript -->
+                 
+                 <!-- Transactions Table -->
+                 <div class="balance-section">
+                     <div class="section-header">
+                         <div style="display: flex; justify-content: space-between; align-items: center;">
+                             <span>Transaction History</span>
+                             <span id="transaction-count" style="font-size: 0.9rem; opacity: 0.8;">0 transactions</span>
+                         </div>
+                     </div>
+                     <div class="section-content" style="padding: 0; overflow-x: auto;">
+                         <table class="transactions-table">
+                             <thead>
+                                 <tr>
+                                     <th>Date</th>
+                                     <th>Description</th>
+                                     <th>Debit</th>
+                                     <th>Credit</th>
+                                     <th>Balance</th>
+                                 </tr>
+                             </thead>
+                             <tbody id="transactions-table-body">
+                                 <!-- Transactions will be populated by JavaScript -->
+                             </tbody>
+                         </table>
                      </div>
                  </div>
              </div>
@@ -2216,15 +2377,37 @@
     <script>
                  // Simple game state
          let week = 1;
-         let cash = 1000;
+         let cash = 1000; // Synced with checking account balance
          let currentJob = 'unemployed';
          
          // History tracking
          let gameHistory = [];
          let currentTimeRange = 4;
          
-         // Transaction tracking (keep last 8 weeks)
-         let transactionLog = [];
+         // Banking system
+         let bankAccounts = {
+             checking: {
+                 name: 'Checking Account',
+                 balance: 1000,
+                 transactions: []
+             },
+             savings: {
+                 name: 'Savings Account', 
+                 balance: 0,
+                 transactions: []
+             }
+         };
+         
+         // Current active account for transactions
+         let activeAccount = 'checking';
+         
+         // Character creation
+         let gameStarted = false;
+         let playerProfile = {
+             name: '',
+             degree: '',
+             difficulty: 'easy'
+         };
          
          // Negative balance tracking
          let negativeBalanceWeeks = 0; // Consecutive weeks with negative balance
