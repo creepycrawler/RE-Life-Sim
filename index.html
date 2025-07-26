@@ -1317,6 +1317,20 @@
                      </div>
                  </div>
                  
+                 <!-- Account Status Warning -->
+                 <div id="account-status-warning" style="display: none; margin-bottom: 30px;">
+                     <div style="background: #f8d7da; border: 2px solid #dc3545; border-radius: 8px; padding: 20px;">
+                         <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 10px;">
+                             <span style="font-size: 24px;">⚠️</span>
+                             <h3 style="margin: 0; color: #721c24;">Account Overdrawn</h3>
+                         </div>
+                         <p style="margin: 0; color: #721c24;" id="account-warning-text">
+                             Your account has been negative for <span id="negative-weeks-count">0</span> week(s). 
+                             <span id="nsf-status-text"></span>
+                         </p>
+                     </div>
+                 </div>
+                 
                  <!-- Loans List -->
                  <div class="balance-section">
                      <div class="section-header">
@@ -1582,6 +1596,10 @@
          // Transaction tracking (keep last 8 weeks)
          let transactionLog = [];
          
+         // Negative balance tracking
+         let negativeBalanceWeeks = 0; // Consecutive weeks with negative balance
+         let hasShownNSFWarning = false; // Prevent multiple warnings per week
+         
          // Loan system
          let activeLoans = {
              'student-loan': {
@@ -1672,6 +1690,16 @@
              document.getElementById('header-cash').textContent = '$' + cash.toLocaleString();
              document.getElementById('header-job').textContent = jobs[currentJob].name;
              
+             // Color coding for header cash
+             const headerCashElement = document.getElementById('header-cash');
+             if (cash >= 0) {
+                 headerCashElement.style.color = '#28a745'; // Green for positive
+                 headerCashElement.style.fontWeight = '600';
+             } else {
+                 headerCashElement.style.color = '#dc3545'; // Red for negative
+                 headerCashElement.style.fontWeight = '700';
+             }
+             
              // Update job page
              document.getElementById('quick-income').textContent = '$' + salary;
              const quickChangeEl = document.getElementById('quick-change');
@@ -1722,7 +1750,7 @@
                  netIncomeEl.classList.add('neutral');
              }
              
-             // Color coding for header cash (net worth)
+             // Color coding for header cash (net worth) - Note: This is overridden by the cash color coding above
              const headerCashEl = document.getElementById('header-cash');
              if (netWorth < -30000) {
                  headerCashEl.style.color = '#ff6b6b';
@@ -1731,9 +1759,112 @@
              } else {
                  headerCashEl.style.color = 'white';
              }
+             
+             // Update account status warning if on loans page
+             updateAccountStatusWarning();
          }
         
-                 function advanceWeek() {
+                 function handleNegativeBalanceChecks() {
+             // Reset warning flag for new week
+             hasShownNSFWarning = false;
+             
+             if (cash < 0) {
+                 negativeBalanceWeeks++;
+                 
+                 // Show NSF warning and charge fee on first negative week
+                 if (negativeBalanceWeeks === 1) {
+                     showNSFWarning();
+                     chargeNSFFee();
+                 }
+                 
+                 // Disable advance button if negative for 2+ weeks
+                 if (negativeBalanceWeeks >= 2) {
+                     disableAdvanceButton();
+                 }
+             } else {
+                 // Reset counter if balance is positive
+                 negativeBalanceWeeks = 0;
+                 enableAdvanceButton();
+             }
+         }
+         
+         function showNSFWarning() {
+             if (hasShownNSFWarning) return;
+             hasShownNSFWarning = true;
+             
+             const warningMessage = `
+                 ⚠️ INSUFFICIENT FUNDS WARNING ⚠️
+                 
+                 Your account balance is negative: $${cash.toLocaleString()}
+                 
+                 • A $50 NSF (Non-Sufficient Funds) fee has been charged
+                 • If your balance remains negative for another week, you won't be able to advance time
+                 • Pay off debts or find additional income to restore your account
+                 
+                 Please manage your finances carefully!
+             `;
+             
+             alert(warningMessage);
+         }
+         
+         function chargeNSFFee() {
+             const nsfFee = 50;
+             cash -= nsfFee;
+             
+             // Record NSF fee transaction
+             addTransaction('expense', 'NSF Fee', -nsfFee, 'Non-sufficient funds penalty');
+             
+             console.log(`NSF fee of $${nsfFee} charged. New balance: $${cash}`);
+         }
+         
+         function disableAdvanceButton() {
+             const btn = document.getElementById('advance-btn');
+             if (btn) {
+                 btn.disabled = true;
+                 btn.textContent = 'Account Overdrawn - Fix Balance First';
+                 btn.style.background = '#dc3545';
+                 btn.style.cursor = 'not-allowed';
+                 btn.title = 'Your account has been negative for 2+ weeks. Restore positive balance to continue.';
+             }
+         }
+         
+         function enableAdvanceButton() {
+             const btn = document.getElementById('advance-btn');
+             if (btn && btn.disabled) {
+                 btn.disabled = false;
+                 btn.textContent = 'Advance 1 Week';
+                 btn.style.background = '';
+                 btn.style.cursor = 'pointer';
+                 btn.title = '';
+             }
+         }
+         
+         function updateAccountStatusWarning() {
+             const warningDiv = document.getElementById('account-status-warning');
+             const negativeWeeksSpan = document.getElementById('negative-weeks-count');
+             const statusTextSpan = document.getElementById('nsf-status-text');
+             
+             if (negativeBalanceWeeks > 0) {
+                 warningDiv.style.display = 'block';
+                 negativeWeeksSpan.textContent = negativeBalanceWeeks;
+                 
+                 if (negativeBalanceWeeks === 1) {
+                     statusTextSpan.textContent = 'NSF fee has been charged. Restore positive balance to avoid account suspension.';
+                 } else {
+                     statusTextSpan.textContent = 'Account suspended - cannot advance time until balance is positive.';
+                 }
+             } else {
+                 warningDiv.style.display = 'none';
+             }
+         }
+         
+         function advanceWeek() {
+             // Prevent advancing if account has been negative for 2+ weeks
+             if (negativeBalanceWeeks >= 2) {
+                 alert('Cannot advance time while account is overdrawn for multiple weeks. Please restore positive balance first.');
+                 return;
+             }
+             
              week++;
              const salary = jobs[currentJob].salary;
              const expenses = 700;
@@ -1778,6 +1909,9 @@
              updateDisplay();
              updateLoansDisplay();
              updateBankDisplay();
+             
+             // Check for negative balance and handle NSF fees
+             handleNegativeBalanceChecks();
              
              // Add to history
              addToHistory();
@@ -1984,6 +2118,13 @@
              updateLoansDisplay();
              updateBankDisplay();
              
+             // Check if payment helped restore positive balance
+             if (negativeBalanceWeeks >= 2 && cash >= 0) {
+                 negativeBalanceWeeks = 0;
+                 enableAdvanceButton();
+                 alert('Account restored! You can now advance time again.');
+             }
+             
              return actualPayment;
          }
          
@@ -1993,6 +2134,20 @@
              
              // Update loan list
              updateLoansList();
+             
+             // Update loan detail page if it's currently visible
+             const loanDetailSection = document.getElementById('loan-detail');
+             if (loanDetailSection && loanDetailSection.style.display !== 'none') {
+                 // Find which loan is currently being viewed and refresh it
+                 const titleElement = document.getElementById('loan-detail-title');
+                 if (titleElement) {
+                     const loanName = titleElement.textContent.replace(' Details', '');
+                     const currentLoan = Object.values(activeLoans).find(loan => loan.name === loanName);
+                     if (currentLoan) {
+                         showLoanDetail(currentLoan.id);
+                     }
+                 }
+             }
          }
          
          function updateLoansOverview() {
@@ -2030,6 +2185,9 @@
              document.getElementById('weekly-interest').textContent = '$' + Math.round(weeklyInterest).toLocaleString();
              document.getElementById('avg-years-remaining').textContent = avgYearsRemaining.toFixed(1) + ' years';
              document.getElementById('total-loans-count').textContent = activeLoansList.length + ' loan' + (activeLoansList.length !== 1 ? 's' : '');
+             
+             // Update account status warning
+             updateAccountStatusWarning();
          }
          
          function updateLoansList() {
